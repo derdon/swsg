@@ -4,9 +4,10 @@ import sys
 from os import path
 
 from argparse import ArgumentParser
-
+from texttable import Texttable
+from py.io import TerminalWriter
 from swsg import __version__
-from swsg.projects import Project
+from swsg.projects import Project, iter_projects
 
 '''
 swsg-cli quickstart
@@ -18,6 +19,18 @@ swsg-cli quickstart
 '''
 
 # TODO: more output so that the user can see something happens
+
+def list_projects(args):
+    terminal_writer = TerminalWriter()
+    terminal_width = terminal_writer.fullwidth
+    table = Texttable(max_width=terminal_width)
+    table.header(['Name', 'Path', 'Created', 'Last modified'])
+    for p in iter_projects():
+        table.add_row([
+            p.name, p.path,
+            p.created.strftime('%c'), p.last_modified.strftime('%c')
+        ])
+    print table.draw()
 
 def init_project(args):
     project = Project(args.project_directory, args.name)
@@ -45,6 +58,9 @@ def parse_args(argv=sys.argv[1:]):
         '-v', '--version', action='version', version='%(prog)s ' + __version__
     )
     subparsers = parser.add_subparsers()
+
+    list_parser = subparsers.add_parser('list')
+    list_parser.set_defaults(func=list_projects)
 
     init_parser = subparsers.add_parser('init')
     init_parser.add_argument('name')
