@@ -1,15 +1,12 @@
 - important:
   - add the method ``remove`` to the class ``Project`` which removes not only
     its corresponding directories, but also its entry in the projects file
-
-- General:
   - logging
 
 - documentation (not required for 0.1)
-  - a seperate repo for the doc!
+  - a seperate branch for the doc!
   - tell the user that the filename extensions do matter!
-  - design
-    - use the Vollkorn font
+  - explain how to use the CLI
   - explain how to subclass ``swsg.Project`` to alter paths like
     ``swsg.Project.source_dir``
   - explain how to add custom template languages by subclassing
@@ -34,8 +31,7 @@
 - CSS (Design / Style):
   - support the following css constructors (and of course, CSS itself...):
     - clevercss
-    - Sass
-    - use a special function of the template engine to make this possible!
+    - provide a function for the templates to make this possible!
 
 - sources:
   - virtual folders (directories), implemented as a datastructure (JSON):
@@ -56,12 +52,13 @@
     - makes it possible to offer handy functions which yield the hierarchical
       structure with titles and targets so one can use these values in a
       template engine in navigations
-  - support re-ordering and moving via D&D
-  - create a new folder with a button or the context menu
 
 - GUI:
   - multiple files (doesn't matter if content files, *.css or templates) can be
     opened via multiple tabs
+  - source structure
+    - support re-ordering and moving via D&D
+    - create a new folder with a button or the context menu
   - menu bar:
     - Projects
       - New project...
