@@ -89,7 +89,7 @@ setup(
         'Intended Audience :: Developers',
         'Operating System :: OS Independent',
         'Topic :: Internet :: WWW/HTTP :: Dynamic Content',
-        'Topic :: Text Processing'
+        'Topic :: Text Processing',
         'Topic :: Text Processing :: Markup'
     ],
     entry_points = {
