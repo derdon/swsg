@@ -66,10 +66,12 @@ class Project(object):
         template_language = self.config.get(
             self.CONFIG_SECTION, 'template language'
         )
+        TemplateClass = {
+            'simple': SimpleTemplate
+        }[template_language]
         for template_name in os.listdir(self.template_dir):
             filename = os.path.join(self.template_dir, template_name)
-            # TODO: use the desired class instead of relying on SimpleTemplate
-            yield SimpleTemplate(self, filename)
+            yield TemplateClass(self, filename)
 
     def update_projects_file(self, new_created=False):
         now = datetime.now()
