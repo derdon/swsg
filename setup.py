@@ -16,8 +16,8 @@ Features
   if-conditions -> only the simple template language is supported yet.
 - supports clevercss_ beside the usual CSS as a markup language for the
   stylesheets -> not yet!
-- provides multiple interfaces: until now, only a CLI is implemented, others are
-  planned:
+- provides multiple interfaces: until now, only a CLI is implemented, but others
+  are planned:
 
   - PIDA_-Plugin
   - web interface

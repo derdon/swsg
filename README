@@ -13,8 +13,8 @@ Features
   if-conditions -> only the simple template language is supported yet.
 - supports clevercss and sass beside the usual CSS as a markup language for the
   stylesheets -> not yet!
-- provides multiple interfaces: until now, only a CLI is implemented, others are
-  planned:
+- provides multiple interfaces: until now, only a CLI is implemented, but others
+  are planned:
     - PIDA-Plugin (PIDA: http://pida.co.uk/)
     - web interface
     - possibly a GTK+ or Qt application, but I think using the PIDA-Plugin is
