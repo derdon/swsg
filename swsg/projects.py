@@ -140,8 +140,7 @@ class Project(object):
             fp.write(template.text)
         self.update_projects_file()
 
-def iter_projects():
-    'Yield all ``Project`` instances which can be found in the projects file'
+def list_project_instances():
+    #'get all ``Project`` instances which can be found in the projects file'
     with contextlib.closing(shelve.open(PROJECTS_FILE_NAME)) as projects:
-        for project in projects.itervalues():
-            yield project
+        return list(projects.itervalues())
