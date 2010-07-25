@@ -30,9 +30,6 @@
 - Templates:
   - add support for the template engines Jinja2, Mako, and Genshi
   - drop support for SimpleTemplate as soon as possible!
-  - support the following languages for templates:
-    - (X)HTML
-    - HAML
 
 - CSS (Design / Style):
   - support the following css constructors (and of course, CSS itself...):
@@ -90,3 +87,4 @@
   - add example projects
   - man page for the CLI of swsg; is the -h --help option not enough?!
   - provide more interfaces (GTK+, Qt, CLI, (curses), (web), PIDA-Plugin)
+  - support HAML beside usual HTML for the templates
