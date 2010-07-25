@@ -88,8 +88,7 @@ class Project(object):
             self.created = now
         self.last_modified = now
         with contextlib.closing(shelve.open(PROJECTS_FILE_NAME)) as projects:
-            for project in projects:
-                projects[self.project_dir] = self
+            projects[self.project_dir] = self
 
     def read_config(self):
         with open(self.config_filename) as fp:
@@ -136,3 +135,9 @@ class Project(object):
         with open(filename, 'w') as fp:
             fp.write(template.text)
         self.update_projects_file()
+
+def iter_projects():
+    'Yield all ``Project`` instances which can be found in the projects file'
+    with contextlib.closing(shelve.open(PROJECTS_FILE_NAME)) as projects:
+        for project in projects.itervalues():
+            yield project
