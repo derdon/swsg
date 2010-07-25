@@ -24,6 +24,8 @@ Requirements
 - Python -> http://python.org/download
   - either version 2.7 or version 2.6 with the python package argparse
     (http://pypi.python.org/pypi/argparse) installed
+- texttable -> http://pypi.python.org/pypi/texttable/
+- py -> http://pypi.python.org/pypi/py
 - at least one of the following markup languages, installed as a python package:
   - ReST (the corresponding python package is called "docutils")
       -> http://pypi.python.org/pypi/docutils

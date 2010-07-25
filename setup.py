@@ -27,35 +27,34 @@ Features
 Requirements
 ============
 - either Python 2.7 or Python 2.6 with the python package argparse_ installed
+- texttable_
+- `py`_
 - at least one of the following markup languages:
-  - ReST (the corresponding python package is called docutils_)
-  - `markdown (PyPI)`_
-  - `creole (PyPI)`_
-  - `textile (PyPI)`_
+
+  - ReST_
+  - markdown_
+  - creole_
+  - textile_
 - optional: one or more of the following template engines, also installed as
   python packages:
-  - `jinja2 (PyPI)`_
-  - `mako (PyPI)`_
-  - `genshi (PyPI)`_
+
+  - `jinja2`_
+  - `mako`_
+  - `genshi`_
 
 .. _ReST: http://docutils.sourceforge.net/rst.html
 .. _SR: http://bitbucket.org/tiax/sr/overview
-.. _Markdown: http://daringfireball.net/projects/markdown/
-.. _Creole: http://www.wikicreole.org/
-.. _Textile: http://textile.thresholdstate.com/
-.. _Jinja2: http://jinja.pocoo.org/2/
-.. _Mako: http://www.makotemplates.org/
+.. _markdown: http://daringfireball.net/projects/markdown/
+.. _creole: http://www.wikicreole.org/
+.. _textile: http://textile.thresholdstate.com/
+.. _jinja2: http://jinja.pocoo.org/2/
+.. _mako: http://www.makotemplates.org/
 .. _Genshi: http://genshi.edgewall.org/
 .. _clevercss: http://sandbox.pocoo.org/clevercss/
 .. _PIDA: http://pida.co.uk/
-.. _argparse: http://pypi.python.org/pypi/argparse
-.. _docutils: http://pypi.python.org/pypi/docutils
-.. _markdown (PyPI): http://pypi.python.org/pypi/Markdown
-.. _creole (PyPI): http://pypi.python.org/pypi/creole
-.. _textile (PyPI): http://pypi.python.org/pypi/textile
-.. _jinja2 (PyPI): http://pypi.python.org/pypi/Jinja2/
-.. _mako (PyPI): http://pypi.python.org/pypi/Mako
-.. _genshi (PyPI): http://pypi.python.org/pypi/Genshi
+.. _argparse: http://code.google.com/p/argparse/
+.. _texttable: http://pypi.python.org/pypi/texttable
+.. _py: http://pypi.python.org/pypi/py
 '''
 
 from setuptools import setup
@@ -72,7 +71,7 @@ setup(
     url='http://github.com/derdon/swsg',
     license='WTFPL',
     packages=['swsg'],
-    install_requires=['docutils'],
+    install_requires=['docutils', 'py', 'texttable'],
     extras_require={
         'markdown': ['markdown'],
         'textile': ['textile'],
