@@ -1,0 +1,62 @@
+About
+swsg (static web site generator) is a tool to create static websites using
+human-readable markup languages like ReST. It was highly-inspired by SR
+(http://bitbucket.org/tiax/sr/overview). The advantage of SWSG against directly
+using (X)HTML files is that you have one (or more) templates and do not
+have to rewrite every your main layout on ebery single site. You can concentrate
+on the main content: the text; the content is seperated from the templates.
+
+Features
+- supports many markup languages: Markdown, Creole, Textile, ReST
+- supports many template engines: Jinja2, Mako, Genshi, and also a very simple
+  template language for those who do not need control structures like loops or
+  if-conditions -> only the simple template language is supported yet.
+- supports clevercss and sass beside the usual CSS as a markup language for the
+  stylesheets -> not yet!
+- provides multiple interfaces: until now, only a CLI is implemented, others are
+  planned:
+    - PIDA-Plugin (PIDA: http://pida.co.uk/)
+    - web interface
+    - possibly a GTK+ or Qt application, but I think using the PIDA-Plugin is
+      more comfortable
+
+Requirements
+- Python -> http://python.org/download
+  - either version 2.7 or version 2.6 with the python package argparse
+    (http://pypi.python.org/pypi/argparse) installed
+- at least one of the following markup languages, installed as a python package:
+  - ReST (the corresponding python package is called "docutils")
+      -> http://pypi.python.org/pypi/docutils
+  - markdown -> http://pypi.python.org/pypi/Markdown
+  - creole -> http://pypi.python.org/pypi/creole
+  - textile -> http://pypi.python.org/pypi/textile
+- optional: one or more of the following template engines, also installed as
+  python packages:
+  - Jinja2 -> http://pypi.python.org/pypi/Jinja2/
+  - Mako -> http://pypi.python.org/pypi/Mako
+  - Genshi -> http://pypi.python.org/pypi/Genshi
+
+Installation
+There are currently two ways to install SWSG on your system, whereas both of
+them need administrator previleges to be performed (to make it clear: only one
+of the following actions is necessary!):
+1. enter "python setup.py install" in a terminal (the file setup.py is the file
+   which can be found in the same directory as this README file)
+2. Use easy_install (http://packages.python.org/distribute/easy_install.html) by
+   typing "easy_install swsg"
+
+Usage
+See http://github.com/derdon/swfg/wiki for a detailed documentation.
+
+License
+WTFPL, see COPYING in this folder for details.
+
+Bugs
+If you find a bug, please search for an existing issue that matches your problem
+before opening a new issue to avoid duplicates. Bug reports can be written at
+http://github.com/derdon/swsg/issues/
+
+Contact
+github account: http://github.com/derdon
+email: liedtke.simon@googlemail.com
+Jabber: derdon@jabber.ccc.de

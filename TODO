@@ -1,0 +1,92 @@
+- important:
+  - add the method ``remove`` to the class ``Project`` which removes not only
+    its corresponding directories, but also its entry in the projects file
+
+- General:
+  - logging
+
+- documentation (not required for 0.1)
+  - a seperate repo for the doc!
+  - tell the user that the filename extensions do matter!
+  - design
+    - use the Vollkorn font
+  - explain how to subclass ``swsg.Project`` to alter paths like
+    ``swsg.Project.source_dir``
+  - explain how to add custom template languages by subclassing
+    ``swsg.templates.BaseTemplate``
+  - only an idea: adding custom markup languages by subclassing
+    ``swsg.sources.Source``?
+
+- Preferences
+  - project-dependent configuration (config.ini in the project directory):
+    - markup language
+    - template language / engine
+    - template language dependent configuration -> seperate section for each
+      template engine
+  - global configuration (saved in the environment variable $XDG_CONFIG_HOME if
+    it exists, otherwise in $HOME/.config):
+    - default configuration for new projects
+
+- Templates:
+  - add support for the template engines Jinja2, Mako, and Genshi
+  - drop support for SimpleTemplate as soon as possible!
+  - support the following languages for templates:
+    - (X)HTML
+    - HAML
+
+- CSS (Design / Style):
+  - support the following css constructors (and of course, CSS itself...):
+    - clevercss
+    - Sass
+    - use a special function of the template engine to make this possible!
+
+- sources:
+  - virtual folders (directories), implemented as a datastructure (JSON):
+    - example content::
+
+        [
+          "source 1",
+	  {"folder 1":
+	    ["source 1.1", "source 1.2"]
+	  },
+	  "source 2",
+	  "source 3",
+	  {"folder 2":
+	    {"folder 2.1": ["source 2.1"]}
+	  }
+        ]
+
+    - makes it possible to offer handy functions which yield the hierarchical
+      structure with titles and targets so one can use these values in a
+      template engine in navigations
+  - support re-ordering and moving via D&D
+  - create a new folder with a button or the context menu
+
+- GUI:
+  - multiple files (doesn't matter if content files, *.css or templates) can be
+    opened via multiple tabs
+  - menu bar:
+    - Projects
+      - New project...
+      - Open project...
+    - Preview
+      - live-preview (with emphasis on *live*!)
+        - open the file index.(x)html **with the user's standard webbrowser**
+    - Render
+    - Preferences
+
+- low priority:
+  - i18n support
+  - store and reload a backup
+  - trash bin for Projects, Templates and Sources
+    - the classes ``Project``, ``Template``, and ``Source`` get the property
+      (a getter) ``exists``
+    - there are two additional properties:
+      - the setter ``delete`` sets the attribute ``exists`` to ``False``
+      - the setter ``undelete`` sets the attribute ``exists`` to ``True``
+      -> log a warning if the user tries to do one of the following actions:
+           - delete an already deleted object
+	   - undelete an existing object
+  - add example projects
+  - man page for the CLI of swsg; is the -h --help option not enough?!
+  - provide more interfaces (GTK+, Qt, CLI, (curses), (web), PIDA-Plugin)
