@@ -1,7 +1,3 @@
-from setuptools import setup
-
-from swsg import __version__
-
 '''
 About
 =====
@@ -61,6 +57,10 @@ Requirements
 .. _mako (PyPI): http://pypi.python.org/pypi/Mako
 .. _genshi (PyPI): http://pypi.python.org/pypi/Genshi
 '''
+
+from setuptools import setup
+
+from swsg import __version__
 
 setup(
     name='swsg',
