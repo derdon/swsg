@@ -7,7 +7,7 @@ from argparse import ArgumentParser
 from texttable import Texttable
 from py.io import TerminalWriter
 from swsg import __version__
-from swsg.projects import Project, iter_projects
+from swsg.projects import Project, list_project_instances
 
 '''
 swsg-cli quickstart
@@ -25,12 +25,13 @@ def list_projects(args):
     terminal_width = terminal_writer.fullwidth
     table = Texttable(max_width=terminal_width)
     table.header(['Name', 'Path', 'Created', 'Last modified'])
-    for p in iter_projects():
+    projects = list_project_instances()
+    for p in projects:
         table.add_row([
             p.name, p.path,
             p.created.strftime('%c'), p.last_modified.strftime('%c')
         ])
-    print table.draw()
+    print table.draw() if projects else "no project created yet"
 
 def init_project(args):
     project = Project(args.project_directory, args.name)
