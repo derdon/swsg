@@ -19,6 +19,8 @@ class Project(object):
 
     def __init__(self, path, name):
         self.path = os.path.abspath(path)
+        # TODO: be aware of non-ASCII characters in ``name`` and filter only
+        # the ASCII characters -> ask Trundle for his nice function :)
         self.name = name
         self.config = SafeConfigParser()
 
@@ -43,24 +45,11 @@ class Project(object):
         
         '''
         self.make_project_directories()
-        self.config.add_section(self.CONFIG_SECTION)
-        default_settings = [
-            ('markup language', 'rest'),
-            ('template language', 'simple')
-        ]
-        for option, value in default_settings:
-            self.config.set(self.CONFIG_SECTION, option, value)
-        with open(os.path.join(self.project_dir, 'config.ini'), 'w') as fp:
-            self.config.write(fp)
+        self.reset_config()
         self.read_config()
         self.update_projects_file(new_created=True)
 
     def make_project_directories(self):
-        # TODO: add a warning in this not-yet-existing docstring which says that
-        #       this method should usually not be called by the users;
-        #       Project.init is responsible for this task
-        # TODO: be aware of unusual characters in ``project_name`` like umlauts
-        #       -> filter only ASCII characters
         for path_name in (self.source_dir, self.template_dir, self.output_dir):
             os.makedirs(path_name)
 
@@ -95,8 +84,21 @@ class Project(object):
             self.config.readfp(fp)
 
     def reset_config(self):
-        # TODO: see ``Project.init``
-        raise NotImplementedError
+        options = ['markup language', 'template language']
+        default_values = ['rest', 'simple']
+        default_settings = izip(options, default_values)
+        try:
+            self.config.add_section(self.CONFIG_SECTION)
+        except DuplicateSectionError:
+            # the sectiion does already exist, so it will be removed including
+            # all its entries
+            self.config.remove_section(self.CONFIG_SECTION)
+            for option in options:
+                self.config.remove_option(self.CONFIG_SECTION, option)
+        for option, value in default_settings:
+            self.config.set(self.CONFIG_SECTION, option, value)
+        with open(os.path.join(self.project_dir, 'config.ini'), 'w') as fp:
+            self.config.write(fp)
 
     def update_config(self, markup_language=None, template_language=None):
         '''Set the values for "markup language" and "template language" to
