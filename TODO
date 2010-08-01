@@ -1,10 +1,22 @@
-- important:
-  - add the method ``remove`` to the class ``Project`` which removes not only
-    its corresponding directories, but also its entry in the projects file
-  - logging
+- important
+  - logging:
+    - use the awesome pocoo lib Logbook!
+    - write the decorator ``log_function`` and test it
+    - critical, error, warning, info, debug -> print both to stderr and a file
+    - notice -> only stderr and no timestamp
+  - add an ASCII progress bar to visualize the rendering process
+    -> new dependency: progressbar package (PyPI)
+  - new global option for swsg-cli: -l --logfile (defaults to - which means
+    stdout)
+  - add the classmethod ``remove`` to the class ``Project`` which removes not
+    only its corresponding directories, but also its entry in the projects file
 
-- documentation (not required for 0.1)
-  - a seperate branch for the doc!
+- General
+  - provide more interfaces (GTK+, Qt, CLI, (curses), (web), PIDA-Plugin)
+  - add example projects
+
+- documentation
+  - a seperate repo for the doc which uses swsg itself to be generated!
   - tell the user that the filename extensions do matter!
   - explain how to use the CLI
   - explain how to subclass ``swsg.Project`` to alter paths like
@@ -25,6 +37,8 @@
     - default configuration for new projects
 
 - Templates:
+  - functions ``sitemap`` gets the parameters depth, exclude
+  - function ``breadcrumbs``
   - add support for the template engines Jinja2, Mako, and Genshi
   - drop support for SimpleTemplate as soon as possible!
 
@@ -81,7 +95,5 @@
       -> log a warning if the user tries to do one of the following actions:
            - delete an already deleted object
 	   - undelete an existing object
-  - add example projects
   - man page for the CLI of swsg; is the -h --help option not enough?!
-  - provide more interfaces (GTK+, Qt, CLI, (curses), (web), PIDA-Plugin)
   - support HAML beside usual HTML for the templates
