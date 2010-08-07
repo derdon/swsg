@@ -1,4 +1,3 @@
-from os import path
 from tempfile import NamedTemporaryFile
 
 import py.test
@@ -7,6 +6,7 @@ from swsg.sources import (Source, render_rest, render_creole, render_textile,
 
 from temp_utils import TemporaryProject
 
+
 def test_source_render():
     project = TemporaryProject()
     with project as p:
@@ -14,17 +14,17 @@ def test_source_render():
         source = p.add_source('**text**')
         assert source.render() == u'<p><strong>text</strong></p>\n'
 
+
 def test_source_init():
     # trying to give a non-exeisting file should raise an IOError
     py.test.raises(IOError, 's = Source("doesnotexist.rest")')
     # trying to use a markup language which does not exist should raise a
     # ValueError
     with NamedTemporaryFile() as temp_fp:
-        temp_filename = temp_fp.name
         py.test.raises(
             ValueError,
-            's = Source(temp_filename + "invalid markup language")'
-        )
+            's = Source(temp_fp.name + "invalid markup language")')
+
 
 def test_render_rest():
     r'''

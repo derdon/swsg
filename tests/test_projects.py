@@ -13,6 +13,7 @@ from swsg.sources import Source
 
 from temp_utils import TemporaryProject
 
+
 def test_make_project_directories():
     project = TemporaryProject()
     with project as p:
@@ -24,11 +25,12 @@ def test_make_project_directories():
         assert path.exists(path_join('templates'))
         assert path.exists(path_join('output'))
 
+
 def test_update_projects_file():
     project = TemporaryProject()
     with project as p:
         p.make_project_directories()
-        
+
         assert p.created is None
         assert p.last_modified is None
 
@@ -41,6 +43,7 @@ def test_update_projects_file():
 
         assert isinstance(p.created, datetime)
         assert isinstance(p.last_modified, datetime)
+
 
 def test_local_config():
     project = TemporaryProject()
@@ -64,18 +67,21 @@ def test_local_config():
         assert get('markup language') == 'rest'
         assert get('template language') == 'simple'
 
+
 def test_update_config():
     project = TemporaryProject()
     with project as p:
         p.init()
-        p.update_config(markup_language='markdown',template_language='jinja2')
+        p.update_config(markup_language='markdown', template_language='jinja2')
         section = 'local configuration'
         assert p.config.get(section, 'markup language') == 'markdown'
         assert p.config.get(section, 'template language') == 'jinja2'
 
-# TODO: test ``Project.render``
+
 def test_render_project():
+    # TODO: test ``Project.render``
     pass
+
 
 def test_save_template():
     project = TemporaryProject()

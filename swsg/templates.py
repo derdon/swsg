@@ -3,6 +3,7 @@ from os import path
 
 from swsg.sources import Source
 
+
 class BaseTemplate(object):
     def __init__(self, project, filename):
         self.project = project
@@ -36,6 +37,7 @@ class BaseTemplate(object):
     def render(self, source):
         raise NotImplementedError
 
+
 class SimpleTemplate(BaseTemplate):
     '''
     Render templates as described in :pep:`0292`
@@ -47,21 +49,21 @@ class SimpleTemplate(BaseTemplate):
             # get the "pure" filename of the source, i.e. no absolute path
             # and no file extension
             source_title = path.splitext(path.split(source.filename)[1])[0]
-            yield (
-                source,
-                template.safe_substitute(
-                    title=source_title,
-                    content=rendered_source_text
-                )
-            )
+            rendered_template = template.safe_substitute(
+                title=source_title,
+                content=rendered_source_text)
+            yield source, rendered_template
+
 
 class MakoTemplate(BaseTemplate):
     def render(self, source):
         raise NotImplementedError
 
+
 class Jinja2Template(BaseTemplate):
     def render(self, source):
         raise NotImplementedError
+
 
 class GenshiTemplate(BaseTemplate):
     def render(self, source):

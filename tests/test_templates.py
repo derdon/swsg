@@ -1,10 +1,8 @@
-from swsg.sources import Source
-from swsg.templates import SimpleTemplate
-
 from temp_utils import TemporaryProject
 
 TEMPLATE_TEXT = u'''sources: temp-source.rest
 <html><body><h1>{title}</h1><p>{content}</p></body></html>'''
+
 
 def test_simple_template():
     project = TemporaryProject()
@@ -20,20 +18,22 @@ def test_simple_template():
                   u'<p>some <strong>important</strong> text</p>\n'
                 u'</p>'
               u'</body>'
-            u'</html>'
-        )
+            u'</html>')
         template = p.add_template(html_text)
         for source, output in template.render():
             assert output == expected_result
 
-# FIXME: test the following functions only if the package mako, jinja2 or genshi
-#        is installec, respectively.
+# FIXME: test the following functions only if the package mako, jinja2 or
+#        genshi is installec, respectively.
+
 
 def test_mako_template():
     pass
 
+
 def test_jinja2_template():
     pass
+
 
 def test_genshi_template():
     pass

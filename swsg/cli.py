@@ -6,19 +6,17 @@ from os import path
 from argparse import ArgumentParser
 from texttable import Texttable
 from py.io import TerminalWriter
+
 from swsg import __version__
 from swsg.projects import Project, list_project_instances
 
-'''
-swsg-cli quickstart
+# TODO: new subcommand ``quickstart``:
+# swsg-cli quickstart
+#    -> ask for the following values:
+#           - configuration values (markup language, template language)
+#           - project name
+#           - project path
 
-    -> ask for the following values:
-           - configuration values (markup language, template language)
-           - project name
-           - project path
-'''
-
-# TODO: more output so that the user can see something happens
 
 def list_projects(args):
     terminal_writer = TerminalWriter()
@@ -29,26 +27,29 @@ def list_projects(args):
     for p in projects:
         table.add_row([
             p.name, p.path,
-            p.created.strftime('%c'), p.last_modified.strftime('%c')
-        ])
+            p.created.strftime('%c'), p.last_modified.strftime('%c')])
     print table.draw() if projects else "no project created yet"
+
 
 def init_project(args):
     project = Project(args.project_directory, args.name)
     project.init()
+
 
 def change_config(args):
     # the project's directory is the current working directory
     project = Project(*path.split(path.abspath(path.curdir)))
     project.update_config(
         markup_language=args.markup_language,
-        template_language=args.template_language
-    )
+        template_language=args.template_language)
+
 
 def render(args):
     # the project's directory is the current working directory
+    # TODO: add a progressbar
     project = Project(*path.split(path.abspath(path.curdir)))
     project.render()
+
 
 def parse_args(argv=sys.argv[1:]):
     # TODO: add help strings to each argument
@@ -56,8 +57,7 @@ def parse_args(argv=sys.argv[1:]):
     #       which groups the help message by subarguments
     parser = ArgumentParser()
     parser.add_argument(
-        '-v', '--version', action='version', version='%(prog)s ' + __version__
-    )
+        '-v', '--version', action='version', version='%(prog)s ' + __version__)
     subparsers = parser.add_subparsers()
 
     list_parser = subparsers.add_parser('list')
@@ -78,6 +78,7 @@ def parse_args(argv=sys.argv[1:]):
     render_parser.set_defaults(func=render)
 
     return parser.parse_args(argv)
+
 
 def main(argv=sys.argv[1:]):
     args = parse_args(argv)

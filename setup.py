@@ -11,18 +11,18 @@ seperated from the templates.
 Features
 ========
 - supports many markup languages: Markdown_, Creole_, Textile_, ReST_
-- supports many template engines: Jinja2_, Mako_, Genshi_, and also a very simple
-  template language for those who do not need control structures like loops or
-  if-conditions -> only the simple template language is supported yet.
+- supports many template engines: Jinja2_, Mako_, Genshi_, and also a very
+  simple template language for those who do not need control structures like
+  loops or if-conditions -> only the simple template language is supported yet.
 - supports clevercss_ beside the usual CSS as a markup language for the
   stylesheets -> not yet!
-- provides multiple interfaces: until now, only a CLI is implemented, but others
-  are planned:
+- provides multiple interfaces: until now, only a CLI is implemented, but
+  others are planned:
 
   - PIDA_-Plugin
   - web interface
-  - possibly a GTK+ or Qt application, but I think using the PIDA-Plugin is more
-    comfortable
+  - possibly a GTK+ or Qt application, but I think using the PIDA-Plugin is
+    more comfortable
 
 Requirements
 ============
@@ -61,9 +61,12 @@ from setuptools import setup
 
 from swsg import __version__
 
+short_description = (
+    'SWSG (Static WebSite Generator) is a tool to generate static HTML pages.')
+
 setup(
     name='swsg',
-    description='SWSG (Static WebSite Generator) is a tool to generate static HTML pages.',
+    description=short_description,
     long_description=__doc__,
     version=__version__,
     author='Simon Liedtke',
@@ -77,8 +80,7 @@ setup(
         'textile': ['textile'],
         'creole': ['creole'],
         'mako': ['mako'],
-        'jinja2': ['jinja2']
-    },
+        'jinja2': ['jinja2']},
     classifiers=[
         'Development Status :: 3 - Alpha',
         'Environment :: Console',
@@ -89,11 +91,8 @@ setup(
         'Operating System :: OS Independent',
         'Topic :: Internet :: WWW/HTTP :: Dynamic Content',
         'Topic :: Text Processing',
-        'Topic :: Text Processing :: Markup'
-    ],
-    entry_points = {
+        'Topic :: Text Processing :: Markup'],
+    entry_points={
         'console_scripts': [
             'swsg-cli = swsg.cli:main',
-         ]
-    }
-)
+         ]})

@@ -21,10 +21,11 @@ except ImportError:
 
 from log_functions import log_missing_package
 
+
 class Source(object):
     POSSIBLE_MARKUP_LANGUAGES = frozenset(
-        ['rest', 'creole', 'textile', 'markdown']
-    )
+        ['rest', 'creole', 'textile', 'markdown'])
+
     def __init__(self, filename):
         self.filename = filename
         # the markup language is the filename extension without the dot. For
@@ -54,26 +55,28 @@ class Source(object):
     def render(self):
         # FIXME: normalize output so that the user can decide whether HTML or
         # XHTML will be used
-        render_func = {
+        markups = {
             'rest': render_rest,
             'creole': render_creole,
             'textile': render_textile,
-            'markdown': render_markdown
-        }[self.markup_language]
+            'markdown': render_markdown}
+        render_func = markups[self.markup_language]
         return render_func(self.text)
+
 
 def render_rest(text):
     return rest(text, writer_name='html')['body']
 
+
 def render_creole(text):
-    return creole2html.HtmlEmitter(
-        creole.Parser(text).parse()
-    ).emit()
+    return creole2html.HtmlEmitter(creole.Parser(text).parse()).emit()
+
 
 def render_textile(text):
     # the function textile.textile adds a tab character at the start of the
     # output, so we remove it to normalize the return value
     return textile(text).lstrip('\t')
+
 
 def render_markdown(text):
     return markdown(text, output_format='xhtml')
