@@ -1,13 +1,11 @@
 - important
   - logging:
-    - use the awesome pocoo lib Logbook!
     - critical, error, warning, info, debug -> print both to stderr and a file
     - notice -> only stderr and no timestamp
   - add an ASCII progress bar to visualize the rendering process
     -> new dependency: progressbar package (PyPI)
   - new global option for swsg-cli: -l --logfile (defaults to - which means
     stdout)
-  - remove swsg/utils.py
 
 - General
   - provide more interfaces (GTK+, Qt, CLI, (curses), (web), PIDA-Plugin)
