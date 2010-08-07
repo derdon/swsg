@@ -36,9 +36,7 @@ class Source(object):
                 '{0} is not an allowed value for "markup_language"; '
                 'possible valid values are: {1}'.format(
                     self.markup_language,
-                    self.POSSIBLE_MARKUP_LANGUAGES
-                )
-            )
+                    self.POSSIBLE_MARKUP_LANGUAGES))
         elif self.markup_language not in installed_markups:
             if self.markup_language == 'rest':
                 missing_package = 'docutils'
