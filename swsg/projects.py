@@ -2,17 +2,18 @@ import os
 import shelve
 import contextlib
 from datetime import datetime
-from functools import partial
 from itertools import izip
-from ConfigParser import SafeConfigParser
+from ConfigParser import SafeConfigParser, DuplicateSectionError
 
+from swsg import swsg_logger as logger
 from swsg.templates import SimpleTemplate
+from swsg.sources import Source
 
 XDG_DATA_HOME = os.getenv(
-    'XDG_DATA_HOME', os.path.expanduser(os.path.join('~', '.local', 'share'))
-)
+    'XDG_DATA_HOME', os.path.expanduser(os.path.join('~', '.local', 'share')))
 PROJECT_DATA_DIR = os.path.join(XDG_DATA_HOME, 'swsg')
 PROJECTS_FILE_NAME = os.path.join(PROJECT_DATA_DIR, 'projects.shelve')
+
 
 class Project(object):
     CONFIG_SECTION = 'local configuration'
@@ -42,7 +43,7 @@ class Project(object):
     def init(self):
         '''create the specific project directory and add a configuration file
         with default values
-        
+
         '''
         self.make_project_directories()
         self.reset_config()
@@ -50,6 +51,7 @@ class Project(object):
         self.update_projects_file(new_created=True)
 
     def make_project_directories(self):
+        logger.info('creating project directories')
         for path_name in (self.source_dir, self.template_dir, self.output_dir):
             os.makedirs(path_name)
 
@@ -64,11 +66,10 @@ class Project(object):
     def templates(self):
         self.read_config()
         template_language = self.config.get(
-            self.CONFIG_SECTION, 'template language'
-        )
-        TemplateClass = {
-            'simple': SimpleTemplate
-        }[template_language]
+            self.CONFIG_SECTION, 'template language')
+        templates = {
+            'simple': SimpleTemplate}
+        TemplateClass = templates[template_language]
         for template_name in os.listdir(self.template_dir):
             filename = os.path.join(self.template_dir, template_name)
             yield TemplateClass(self, filename)
@@ -86,6 +87,7 @@ class Project(object):
             self.config.readfp(fp)
 
     def reset_config(self):
+        logger.info('resetting the configuration file')
         options = ['markup language', 'template language']
         default_values = ['rest', 'simple']
         default_settings = izip(options, default_values)
@@ -93,10 +95,11 @@ class Project(object):
             self.config.add_section(self.CONFIG_SECTION)
         except DuplicateSectionError:
             # the sectiion does already exist, so it will be removed including
-            # all its entries
+            # all its entries before adding it as a new section
             self.config.remove_section(self.CONFIG_SECTION)
             for option in options:
                 self.config.remove_option(self.CONFIG_SECTION, option)
+            self.config.add_section(self.CONFIG_SECTION)
         for option, value in default_settings:
             self.config.set(self.CONFIG_SECTION, option, value)
         with open(os.path.join(self.project_dir, 'config.ini'), 'w') as fp:
@@ -107,13 +110,15 @@ class Project(object):
         ``markup_language`` or ``template_language``, respectively. If one of
         the arguments is None (the default), its corresponding value in the
         configuration file won't change.
-        
+
         '''
         self.read_config()
         options = ('markup language', 'template language')
         values = (markup_language, template_language)
         for option, value in izip(options, values):
             if value is not None:
+                logger.info('setting the option {0} to the value {1}'.format(
+                    option, value))
                 self.config.set(self.CONFIG_SECTION, option, value)
         with open(self.config_filename, 'w') as fp:
             self.config.write(fp)
@@ -140,7 +145,9 @@ class Project(object):
             fp.write(template.text)
         self.update_projects_file()
 
+
 def list_project_instances():
-    #'get all ``Project`` instances which can be found in the projects file'
+    # 'get all ``Project`` instances which can be found in the projects file'
     with contextlib.closing(shelve.open(PROJECTS_FILE_NAME)) as projects:
+        # FIXME: why don't you simply use ``return projects.values()``?
         return list(projects.itervalues())

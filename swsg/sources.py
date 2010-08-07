@@ -19,7 +19,7 @@ try:
 except ImportError:
     pass
 
-from log_functions import log_missing_package
+from swsg import swsg_logger as logger
 
 
 class Source(object):
@@ -42,7 +42,8 @@ class Source(object):
                 missing_package = 'docutils'
             else:
                 missing_package = self.markup_language
-            log_missing_package(missing_package)
+            logger.critical('The package "{0}" is not installed.'.format(
+                missing_package))
 
         with open(filename) as fp:
             self.text = fp.read()
