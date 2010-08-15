@@ -1,17 +1,18 @@
-- important (to be done before the 0.1 release)
-  - logging:
-    - critical, error, warning, info, debug -> print both to stderr and a file
-    - notice -> only stderr and no timestamp
+- important (required for the 0.1.0 release)
   - add an ASCII progress bar to visualize the rendering process
     -> new dependency: progressbar package (PyPI)
        -> setup.py, README
-  - fix all TODO and FIXME comments in the *.py files!
+  - fix all important TODO and FIXME comments in the *.py files!
 
 - General
   - provide more interfaces (GTK+, Qt, CLI, (curses), (web), PIDA-Plugin)
   - add example projects
 
-- documentation
+- Testing
+  - test all logging calls
+  - test the CLI
+
+- Documentation
   - a seperate repo for the doc which uses swsg itself to be generated!
   - tell the user that the filename extensions do matter!
   - explain how to use the CLI
@@ -63,6 +64,12 @@
       structure with titles and targets so one can use these values in a
       template engine in navigations
 
+- CLI:
+  - new subcommand ``quickstart`` -> ask for the following values:
+    - configuration values (markup language, template language)
+    - project name
+    - project path
+
 - GUI:
   - multiple files (doesn't matter if content files, *.css or templates) can be
     opened via multiple tabs
@@ -80,8 +87,6 @@
     - Preferences
 
 - low priority:
-  - i18n support
-  - store and reload a backup
   - trash bin for Projects, Templates and Sources
     - the classes ``Project``, ``Template``, and ``Source`` get the property
       (a getter) ``exists``
@@ -92,4 +97,7 @@
            - delete an already deleted object
            - undelete an existing object
   - man page for the CLI of swsg; is the -h --help option not enough?!
+  - add Windows support (logging)
+  - i18n support
+  - store and reload a backup
   - support HAML beside usual HTML for the templates
