@@ -57,12 +57,14 @@ Requirements
 .. _py: http://pypi.python.org/pypi/py
 '''
 
+from __future__ import print_function
+
 from setuptools import setup
 
-from swsg import __version__
+from swsg import __version__, LOGFILE
 
 short_description = (
-    'SWSG (Static Web Site Generator) is a tool to generate static HTML pages.')
+    'SWSG (Static Web Site Generator) is a tool to generate static web pages.')
 
 setup(
     name='swsg',
@@ -96,3 +98,7 @@ setup(
         'console_scripts': [
             'swsg-cli = swsg.cli:main',
          ]})
+
+# create an empty logfile
+with open(LOGFILE, 'w'):
+    print('Creating {0}'.format(LOGFILE))
