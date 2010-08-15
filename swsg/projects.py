@@ -5,13 +5,10 @@ from datetime import datetime
 from itertools import izip
 from ConfigParser import SafeConfigParser, DuplicateSectionError
 
-from swsg import swsg_logger as logger
+from swsg import swsg_logger as logger, PROJECT_DATA_DIR
 from swsg.templates import SimpleTemplate
 from swsg.sources import Source
 
-XDG_DATA_HOME = os.getenv(
-    'XDG_DATA_HOME', os.path.expanduser(os.path.join('~', '.local', 'share')))
-PROJECT_DATA_DIR = os.path.join(XDG_DATA_HOME, 'swsg')
 PROJECTS_FILE_NAME = os.path.join(PROJECT_DATA_DIR, 'projects.shelve')
 
 
