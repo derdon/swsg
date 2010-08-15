@@ -62,7 +62,7 @@ from setuptools import setup
 from swsg import __version__
 
 short_description = (
-    'SWSG (Static WebSite Generator) is a tool to generate static HTML pages.')
+    'SWSG (Static Web Site Generator) is a tool to generate static HTML pages.')
 
 setup(
     name='swsg',
