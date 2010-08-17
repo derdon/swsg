@@ -18,7 +18,8 @@ class BaseTemplate(object):
         # splitted up by commas to get the file names which belong to the given
         # template
         if first_line.startswith('sources:'):
-            self.source_names = first_line.lstrip('sources:').strip().split(',')
+            self.source_names = (
+                first_line.lstrip('sources:').strip().split(','))
             self.text = rest
         else:
             self.source_names = []
