@@ -1,3 +1,4 @@
+import codecs
 import string
 from os import path
 
@@ -8,7 +9,7 @@ class BaseTemplate(object):
     def __init__(self, project, filename):
         self.project = project
         self.filename = filename
-        with open(self.filename) as fp:
+        with codecs.open(self.filename, 'r', 'utf-8') as fp:
             first_line = fp.readline()
             rest = fp.read()
         # the directive "sources" is optional. Therefore, the first line is
