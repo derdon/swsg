@@ -1,4 +1,5 @@
 from os import path
+import codecs
 
 from docutils.core import publish_parts as rest
 installed_markups = set(['rest'])
@@ -45,7 +46,7 @@ class Source(object):
             logger.critical('The package "{0}" is not installed.'.format(
                 missing_package))
 
-        with open(filename) as fp:
+        with codecs.open(filename, 'r', 'utf-8') as fp:
             self.text = fp.read()
 
     def __repr__(self):
