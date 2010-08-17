@@ -65,7 +65,7 @@ from swsg import __version__, LOGFILE as DEFAULT_LOGFILE
 
 
 class LogfileCreater(Command):
-    'a setup.py command to create an empty log file in the default location'
+    'a setup.py command to create an empty log file in the desired location'
     user_options = [
         ('log-file=', 'l', 'the name of the log file'),
     ]
