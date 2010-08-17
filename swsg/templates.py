@@ -41,9 +41,7 @@ class BaseTemplate(object):
 
 
 class SimpleTemplate(BaseTemplate):
-    '''
-    Render templates as described in :pep:`0292`
-    '''
+    'Render templates as described in :pep:`0292`'
     def render(self):
         for source in self.sources:
             rendered_source_text = source.render()
