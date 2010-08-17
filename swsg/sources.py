@@ -53,8 +53,8 @@ class Source(object):
         return '{0} "{1}"'.format(self.__class__.__name__, self.filename)
 
     def render(self):
-        # FIXME: normalize output so that the user can decide whether HTML or
-        # XHTML will be used
+        # FIXME: normalize output so that the user can decide whether to use
+        # HTML or XHTML
         markups = {
             'rest': render_rest,
             'creole': render_creole,
