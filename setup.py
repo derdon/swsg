@@ -59,9 +59,27 @@ Requirements
 
 from __future__ import print_function
 
-from setuptools import setup
+from setuptools import Command, setup
 
-from swsg import __version__, LOGFILE
+from swsg import __version__, LOGFILE as DEFAULT_LOGFILE
+
+
+class LogfileCreater(Command):
+    'a setup.py command to create an empty log file in the default location'
+    user_options = [
+        ('log-file=', 'l', 'the name of the log file'),
+    ]
+
+    def initialize_options(self):
+        self.log_file = DEFAULT_LOGFILE
+
+    def finalize_options(self):
+        pass
+
+    def run(self):
+        'create an empty logfile'
+        with open(self.log_file, 'w') as f:
+            print('Creating {0}'.format(f.name))
 
 short_description = (
     'SWSG (Static Web Site Generator) is a tool to generate static web pages.')
@@ -95,10 +113,11 @@ setup(
         'Topic :: Text Processing',
         'Topic :: Text Processing :: Markup'],
     entry_points={
+        'distutils.commands': [
+            'init = __main__:LogfileCreater',
+        ],
         'console_scripts': [
             'swsg-cli = swsg.cli:main',
-         ]})
-
-# create an empty logfile
-with open(LOGFILE, 'w'):
-    print('Creating {0}'.format(LOGFILE))
+         ],
+    },
+)
