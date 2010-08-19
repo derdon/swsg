@@ -88,6 +88,7 @@ def test_save_template():
         template = SimpleTemplate(project, template_filename)
         p.save_template(template)
 
-        assert template_filename == path.join(p.template_dir, template.filename)
+        assert template_filename == path.join(
+            p.template_dir, template.filename)
         with open(template_filename) as f:
             assert template.text == f.read()
