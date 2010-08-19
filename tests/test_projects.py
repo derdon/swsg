@@ -1,15 +1,10 @@
-import tempfile
-import shutil
 from os import path
-from StringIO import StringIO
 from functools import partial
 from datetime import datetime
 from ConfigParser import SafeConfigParser, NoSectionError
 
 import py
-from swsg.projects import Project
 from swsg.templates import SimpleTemplate
-from swsg.sources import Source
 
 from temp_utils import TemporaryProject
 
