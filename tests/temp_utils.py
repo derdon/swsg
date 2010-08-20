@@ -37,8 +37,6 @@ class TemporaryProject(Project):
     def add_template(self, text):
         template_filename = path.join(
             self.project.template_dir, 'temp-template')
-        template_language = self.project.config.get(
-                'local configuration', 'template language')
         with open(template_filename, 'w') as fp:
             fp.write(text)
         return SimpleTemplate(self.project, template_filename)
