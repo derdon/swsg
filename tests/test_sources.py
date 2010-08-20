@@ -41,8 +41,8 @@ u'<p><a class="reference external" href="http://example.com">example</a></p>\n'
 >>> render_rest(u'`example <http://example.com>`_')
 u'<p><a class="reference external" href="http://example.com">example</a></p>\n'
     '''
+    py.test.importorskip('docutils')
 
-# FIXME: test only if `creole` is installed
 def test_render_creole():
     r'''
 >>> render_creole(u'test')
@@ -50,8 +50,8 @@ u'<p>test</p>\n'
 >>> render_creole(u'test\ntest')
 u'<p>test test</p>\n'
     '''
+    py.test.importorskip('creole')
 
-# FIXME: test only if `textile` is installed
 def test_render_textile():
     r'''
 >>> render_textile('_This_ is a *test.*')
@@ -61,8 +61,8 @@ def test_render_textile():
 >>> render_textile('Link to "Slashdot":http://slashdot.org/')
 '<p>Link to <a href="http://slashdot.org/">Slashdot</a></p>'
     '''
+    py.test.importorskip('textile')
 
-# FIXME: test only if `markdown` is installed
 def test_render_markdown():
     r'''
 >>> render_markdown('[Slashdot](http://slashdot.org/ "Slashdot - News for nerds, stuff that matters")')
@@ -72,3 +72,4 @@ u'<hr />'
 >>> render_markdown('![Python](http://python.org/community/logos/python-logo.png "The Python Logo")')
 u'<p><img alt="Python" src="http://python.org/community/logos/python-logo.png" title="The Python Logo" /></p>'
     '''
+    py.test.importorskip('markdown')
