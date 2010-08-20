@@ -43,6 +43,7 @@ u'<p><a class="reference external" href="http://example.com">example</a></p>\n'
     '''
     py.test.importorskip('docutils')
 
+
 def test_render_creole():
     r'''
 >>> render_creole(u'test')
@@ -51,6 +52,7 @@ u'<p>test</p>\n'
 u'<p>test test</p>\n'
     '''
     py.test.importorskip('creole')
+
 
 def test_render_textile():
     r'''
@@ -62,6 +64,7 @@ def test_render_textile():
 '<p>Link to <a href="http://slashdot.org/">Slashdot</a></p>'
     '''
     py.test.importorskip('textile')
+
 
 def test_render_markdown():
     r'''
