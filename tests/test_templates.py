@@ -1,3 +1,5 @@
+import py.test
+
 from temp_utils import TemporaryProject
 
 TEMPLATE_TEXT = u'''sources: temp-source.rest
@@ -23,17 +25,14 @@ def test_simple_template():
         for source, output in template.render():
             assert output == expected_result
 
-# FIXME: test the following functions only if the package mako, jinja2 or
-#        genshi is installec, respectively.
-
 
 def test_mako_template():
-    pass
+    py.test.importorskip('mako')
 
 
 def test_jinja2_template():
-    pass
+    py.test.importorskip('jinja2')
 
 
 def test_genshi_template():
-    pass
+    py.test.importorskip('genshi')
