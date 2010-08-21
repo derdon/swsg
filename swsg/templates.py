@@ -5,6 +5,8 @@ from os import path
 from swsg.sources import Source
 
 
+SUPPORTED_TEMPLATE_ENGINES = frozenset(['simple', 'mako', 'jinja2', 'genshi'])
+
 class BaseTemplate(object):
     def __init__(self, project, filename):
         self.project = project

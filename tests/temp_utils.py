@@ -8,7 +8,8 @@ from os import path
 
 from swsg.projects import Project
 from swsg.sources import Source
-from swsg.templates import SimpleTemplate
+from swsg.templates import (SUPPORTED_TEMPLATE_ENGINES,
+    SimpleTemplate, MakoTemplate, Jinja2Template, GenshiTemplate)
 
 
 class TemporaryProject(Project):
@@ -25,18 +26,27 @@ class TemporaryProject(Project):
     def __exit__(self, exc_type, exc_value, traceback):
         shutil.rmtree(self.temp_dir)
 
-    def add_source(self, text):
-        markup = self.project.config.get(
-                'local configuration', 'markup language')
+    def add_source(self, text, markup='rest'):
         source_filename = path.join(
             self.project.source_dir, 'temp-source.{0}'.format(markup))
         with open(source_filename, 'w') as fp:
             fp.write(text)
         return Source(source_filename)
 
-    def add_template(self, text):
+    def add_template(self, text, template_engine='simple'):
         template_filename = path.join(
             self.project.template_dir, 'temp-template')
         with open(template_filename, 'w') as fp:
             fp.write(text)
-        return SimpleTemplate(self.project, template_filename)
+        try:
+            TemplateClass = {
+                'simple': SimpleTemplate,
+                'mako': MakoTemplate,
+                'jinja2': Jinja2Template,
+                'genshi': GenshiTemplate}[template_engine]
+        except KeyError:
+            raise ValueError(
+                'the argument "template_engine" must '
+                'be one of the following value: {0}'.format(
+                    ', '.join(SUPPORTED_TEMPLATE_ENGINES)))
+        return TemplateClass(self.project, template_filename)
