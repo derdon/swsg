@@ -1,4 +1,3 @@
-import codecs
 import string
 from os import path
 
@@ -7,20 +6,25 @@ from swsg.sources import Source
 
 SUPPORTED_TEMPLATE_ENGINES = frozenset(['simple', 'mako', 'jinja2', 'genshi'])
 
+
 class BaseTemplate(object):
-    def __init__(self, project, filename):
-        self.project = project
+    def __init__(self, source_dir, filename):
+        '''
+        Abstract base class for implementing template classes.
+        '''
+        self.source_dir = source_dir
         self.filename = filename
-        with codecs.open(self.filename, 'r', 'utf-8') as fp:
-            first_line = fp.readline()
-            rest = fp.read()
+        with open(self.filename) as fp:
+            first_line = fp.readline().decode('utf-8')
+            rest = fp.read().decode('utf-8')
         # the directive "sources" is optional. Therefore, the first line is
         # checked whether it starts whith the string "sources:". If it does,
         # the string after "sources:" is first stripped by whitespace and then
         # splitted up by commas to get the file names which belong to the given
         # template
         if first_line.startswith('sources:'):
-            self.source_names = (
+            self.source_names = map(
+                unicode.strip,
                 first_line.lstrip('sources:').strip().split(','))
             self.text = rest
         else:
@@ -33,10 +37,15 @@ class BaseTemplate(object):
     @property
     def sources(self):
         for source_name in self.source_names:
-            filename = path.join(self.project.source_dir, source_name)
+            filename = path.join(self.source_dir, source_name)
+            # the markup language is the filename extension without the dot.
+            # For example, the content of "foo.rest" will be rendered as ReST
+            markup_language = path.splitext(filename)[1].lstrip('.')
             # FIXME: it could be that this filename does not exist, i.e. an
             # IOError will be raised then! -> What should happen in this case?
-            yield Source(filename)
+            with open(filename) as fp:
+                text = fp.read().decode('utf-8')
+            yield source_name, Source(text, markup_language)
 
     def render(self, source):
         raise NotImplementedError
@@ -45,14 +54,11 @@ class BaseTemplate(object):
 class SimpleTemplate(BaseTemplate):
     'Render templates as described in :pep:`0292`'
     def render(self):
-        for source in self.sources:
+        for source_name, source in self.sources:
             rendered_source_text = source.render()
             template = string.Template(self.text)
-            # get the "pure" filename of the source, i.e. no absolute path
-            # and no file extension
-            source_title = path.splitext(path.split(source.filename)[1])[0]
             rendered_template = template.safe_substitute(
-                title=source_title,
+                title=source_name.rsplit('.', 1)[0],
                 content=rendered_source_text)
             yield source, rendered_template
 
