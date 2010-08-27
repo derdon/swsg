@@ -1,29 +1,44 @@
+import string
+import shutil
+import tempfile
+
 import py.test
+from swsg.templates import SimpleTemplate
 
-from temp_utils import TemporaryProject
+SOURCE_FILENAME = u'temp-source.rest'
+SOURCE_TEXT = u'some **important** text'
+TEMPLATE_TEXT = string.Template(u'''sources: $temp_source
+<html><body><h1>{title}</h1><p>{content}</p></body></html>''').safe_substitute(
+    temp_source=SOURCE_FILENAME)
 
-TEMPLATE_TEXT = u'''sources: temp-source.rest
-<html><body><h1>{title}</h1><p>{content}</p></body></html>'''
 
-
-def test_simple_template():
-    project = TemporaryProject()
-    with project as p:
-        p.init()
-        source = p.add_source(u'some **important** text')
-        html_text = TEMPLATE_TEXT.format(title='$title', content='$content')
-        expected_result = (
-            u'<html>'
-              u'<body>'
-                u'<h1>temp-source</h1>'
-                u'<p>'
-                  u'<p>some <strong>important</strong> text</p>\n'
-                u'</p>'
-              u'</body>'
-            u'</html>')
-        template = p.add_template(html_text)
-        for source, output in template.render():
-            assert output == expected_result
+def test_simple_template(tmpdir):
+    template_filename = tempfile.mkstemp()[1]
+    html_text = TEMPLATE_TEXT.format(title='$title', content='$content')
+    # write the template content into the temporary template file
+    with open(template_filename, 'w') as fp:
+        fp.write(html_text)
+    # create the source directory manually
+    tmpdir.ensure('sources', dir=True)
+    source_dir = tmpdir.join('sources')
+    # check if the source directory was created
+    assert source_dir.check()
+    # create a source file and fill it with content
+    with open(str(tmpdir.join('sources', SOURCE_FILENAME)), 'w') as fp:
+        fp.write(SOURCE_TEXT)
+    template = SimpleTemplate(source_dir, template_filename)
+    expected_result = (
+        u'<html>'
+          u'<body>'
+            u'<h1>temp-source</h1>'
+            u'<p>'
+              u'<p>some <strong>important</strong> text</p>\n'
+            u'</p>'
+          u'</body>'
+        u'</html>')
+    source, output = template.render().next()
+    assert output == expected_result
+    shutil.rmtree(tmpdir)
 
 
 def test_mako_template():
