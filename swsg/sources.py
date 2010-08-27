@@ -1,6 +1,3 @@
-from os import path
-import codecs
-
 from docutils.core import publish_parts as rest
 installed_markups = set(['rest'])
 try:
@@ -27,11 +24,9 @@ class Source(object):
     POSSIBLE_MARKUP_LANGUAGES = frozenset(
         ['rest', 'creole', 'textile', 'markdown'])
 
-    def __init__(self, filename):
-        self.filename = filename
-        # the markup language is the filename extension without the dot. For
-        # example, the content of "foo.rest" will be rendered as ReST
-        self.markup_language = path.splitext(filename)[1].lstrip('.')
+    def __init__(self, text, markup_language):
+        self.text = text
+        self.markup_language = markup_language
         if self.markup_language not in self.POSSIBLE_MARKUP_LANGUAGES:
             raise ValueError(
                 '{0} is not an allowed value for "markup_language"; '
@@ -45,9 +40,6 @@ class Source(object):
                 missing_package = self.markup_language
             logger.critical('The package "{0}" is not installed.'.format(
                 missing_package))
-
-        with codecs.open(filename, 'r', 'utf-8') as fp:
-            self.text = fp.read()
 
     def __repr__(self):
         return '{0} "{1}"'.format(self.__class__.__name__, self.filename)
