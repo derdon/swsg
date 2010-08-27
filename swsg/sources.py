@@ -19,20 +19,20 @@ except ImportError:
 
 from swsg import swsg_logger as logger
 
+POSSIBLE_MARKUP_LANGUAGES = frozenset(
+    ['rest', 'creole', 'textile', 'markdown'])
+
 
 class Source(object):
-    POSSIBLE_MARKUP_LANGUAGES = frozenset(
-        ['rest', 'creole', 'textile', 'markdown'])
-
     def __init__(self, text, markup_language):
         self.text = text
         self.markup_language = markup_language
-        if self.markup_language not in self.POSSIBLE_MARKUP_LANGUAGES:
+        if self.markup_language not in POSSIBLE_MARKUP_LANGUAGES:
             raise ValueError(
                 '{0} is not an allowed value for "markup_language"; '
                 'possible valid values are: {1}'.format(
                     self.markup_language,
-                    self.POSSIBLE_MARKUP_LANGUAGES))
+                    POSSIBLE_MARKUP_LANGUAGES))
         elif self.markup_language not in installed_markups:
             if self.markup_language == 'rest':
                 missing_package = 'docutils'
