@@ -1,5 +1,6 @@
 import os
 import shelve
+import codecs
 import contextlib
 from datetime import datetime
 from itertools import izip
@@ -48,16 +49,20 @@ class Project(object):
         self.update_projects_file(new_created=True)
 
     def make_project_directories(self):
-        logger.info('creating project directories')
+        logger.notice('creating project directories')
         for path_name in (self.source_dir, self.template_dir, self.output_dir):
+            logger.info('creating the directory {0}'.format(path_name))
             os.makedirs(path_name)
 
     @property
     def sources(self):
-        self.read_config()
-        markup = self.config.get(self.CONFIG_SECTION, 'markup language')
         for source_name in os.listdir(self.source_dir):
-            yield Source(source_name, markup)
+            # the markup language is the filename extension without the dot.
+            # For example, the content of "foo.rest" will be rendered as ReST
+            markup_language = os.path.splitext(source_name)[1].lstrip('.')
+            with codecs.open(source_name, 'r', 'utf-8') as fp:
+                text = fp.read()
+            yield Source(text, markup_language)
 
     @property
     def templates(self):
@@ -74,17 +79,22 @@ class Project(object):
     def update_projects_file(self, new_created=False):
         now = datetime.now()
         if new_created:
+            logger.notice(
+                'creating the projects file {0}'.format(PROJECTS_FILE_NAME))
             self.created = now
         self.last_modified = now
         with contextlib.closing(shelve.open(PROJECTS_FILE_NAME)) as projects:
+            logger.notice(
+                'updating the projects file {0}'.format(PROJECTS_FILE_NAME))
             projects[self.project_dir] = self
 
     def read_config(self):
+        logger.notice('reading the configuration file')
         with open(self.config_filename) as fp:
             self.config.readfp(fp)
 
     def reset_config(self):
-        logger.info('resetting the configuration file')
+        logger.notice('resetting the configuration file')
         options = ['markup language', 'template language']
         default_values = ['rest', 'simple']
         default_settings = izip(options, default_values)
@@ -122,13 +132,17 @@ class Project(object):
         self.update_projects_file()
 
     def render(self):
+        logger.notice('starting the rendering process')
         for template in self.templates:
             for source, output in template.render():
                 head, tail = os.path.split(source.filename)
                 filename = os.path.splitext(tail)[0]
                 output_path = os.path.join(self.output_dir, filename) + '.html'
-                with open(output_path, 'w') as fp:
+                logger.info('{0} + {1} -> {2}'.format(
+                    source.filename, template.filename, output_path))
+                with codecs.open(output_path, 'w', 'utf-8') as fp:
                     fp.write(output)
+        logger.notice('finishing the rendering process')
 
     def save_source(self, source):
         filename = os.path.join(self.source_dir, source.filename)
@@ -137,6 +151,8 @@ class Project(object):
         self.update_projects_file()
 
     def save_template(self, template):
+        logger.notice('saving the template {0} in the directory {1}'.format(
+            template.filename, self.template_dir))
         filename = os.path.join(self.template_dir, template.filename)
         with open(filename, 'w') as fp:
             fp.write(template.text)
@@ -144,7 +160,6 @@ class Project(object):
 
 
 def list_project_instances():
-    # 'get all ``Project`` instances which can be found in the projects file'
+    'get all ``Project`` instances which can be found in the projects file'
     with contextlib.closing(shelve.open(PROJECTS_FILE_NAME)) as projects:
-        # FIXME: why don't you simply use ``return projects.values()``?
-        return list(projects.itervalues())
+        return projects.values()
