@@ -26,7 +26,7 @@ def test_simple_template(tmpdir):
     # create a source file and fill it with content
     with open(str(tmpdir.join('sources', SOURCE_FILENAME)), 'w') as fp:
         fp.write(SOURCE_TEXT)
-    template = SimpleTemplate(source_dir, template_filename)
+    template = SimpleTemplate(str(source_dir), template_filename)
     assert template.source_names == [SOURCE_FILENAME]
     expected_result = (
         u'<html>'
@@ -42,7 +42,7 @@ def test_simple_template(tmpdir):
     # make sure that there was only one template rendered
     py.test.raises(StopIteration, 'rendered_templates.next()')
     assert output == expected_result
-    shutil.rmtree(tmpdir)
+    shutil.rmtree(str(tmpdir))
 
 
 def test_mako_template():
