@@ -31,7 +31,7 @@ class TemporaryProject(Project):
             self.project.source_dir, 'temp-source.{0}'.format(markup))
         with open(source_filename, 'w') as fp:
             fp.write(text)
-        return Source(source_filename)
+        return Source(text, markup)
 
     def add_template(self, text, template_engine='simple'):
         template_filename = path.join(

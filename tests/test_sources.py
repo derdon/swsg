@@ -16,14 +16,11 @@ def test_source_render():
 
 
 def test_source_init():
-    # trying to give a non-exeisting file should raise an IOError
-    py.test.raises(IOError, 's = Source("doesnotexist.rest")')
     # trying to use a markup language which does not exist should raise a
     # ValueError
-    with NamedTemporaryFile() as temp_fp:
-        py.test.raises(
-            ValueError,
-            's = Source(temp_fp.name + "invalid markup language")')
+    py.test.raises(ValueError, 'Source("", "invalid markup language")')
+    # FIXME: trying to use an uninstalled markup should log a critical error
+    #        message
 
 
 def test_render_rest():
