@@ -41,9 +41,6 @@ class Source(object):
             logger.critical('The package "{0}" is not installed.'.format(
                 missing_package))
 
-    def __repr__(self):
-        return '{0} "{1}"'.format(self.__class__.__name__, self.filename)
-
     def render(self):
         # FIXME: normalize output so that the user can decide whether to use
         # HTML or XHTML
