@@ -27,6 +27,7 @@ def test_simple_template(tmpdir):
     with open(str(tmpdir.join('sources', SOURCE_FILENAME)), 'w') as fp:
         fp.write(SOURCE_TEXT)
     template = SimpleTemplate(source_dir, template_filename)
+    assert template.source_names == [SOURCE_FILENAME]
     expected_result = (
         u'<html>'
           u'<body>'
