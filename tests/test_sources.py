@@ -1,18 +1,11 @@
-from tempfile import NamedTemporaryFile
-
 import py.test
 from swsg.sources import (Source, render_rest, render_creole, render_textile,
         render_markdown)
 
-from temp_utils import TemporaryProject
-
 
 def test_source_render():
-    project = TemporaryProject()
-    with project as p:
-        p.init()
-        source = p.add_source('**text**')
-        assert source.render() == u'<p><strong>text</strong></p>\n'
+    source = Source('**text**', 'rest')
+    assert source.render() == u'<p><strong>text</strong></p>\n'
 
 
 def test_source_init():
