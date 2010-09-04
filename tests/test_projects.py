@@ -10,8 +10,7 @@ from temp_utils import TemporaryProject
 
 
 def test_make_project_directories():
-    project = TemporaryProject()
-    with project as p:
+    with TemporaryProject() as p:
         p.make_project_directories()
         path_join = partial(path.join, p.project_dir)
         assert path.exists(p.path)
@@ -22,8 +21,7 @@ def test_make_project_directories():
 
 
 def test_update_projects_file():
-    project = TemporaryProject()
-    with project as p:
+    with TemporaryProject() as p:
         p.make_project_directories()
 
         assert p.created is None
@@ -64,8 +62,7 @@ def test_local_config():
 
 
 def test_update_config():
-    project = TemporaryProject()
-    with project as p:
+    with TemporaryProject() as p:
         p.init()
         p.update_config(markup_language='markdown', template_language='jinja2')
         section = 'local configuration'
