@@ -1,5 +1,5 @@
 import string
-import shutil
+import os
 import tempfile
 
 import py.test
@@ -42,7 +42,8 @@ def test_simple_template(tmpdir):
     # make sure that there was only one template rendered
     py.test.raises(StopIteration, 'rendered_templates.next()')
     assert output == expected_result
-    shutil.rmtree(str(tmpdir))
+    # remove the temporary template file
+    os.remove(template_filename)
 
 
 def test_mako_template():
