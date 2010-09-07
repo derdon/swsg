@@ -57,6 +57,23 @@ def test_logfile():
     assert args_with_logfile_short.logfile == logfile_name
 
 
+def test_init():
+    # the name of the project is required, so
+    # omitting it will finally raise a SystemExit
+    py.test.raises(SystemExit, "parse_args(['init'])")
+    project_name = 'test project'
+    args_with_default_project_directory = parse_args(['init', project_name])
+    assert args_with_default_project_directory.name == project_name
+    assert args_with_default_project_directory.project_directory == '.'
+    proj_dir = '/my/test/dir'
+    args_with_explicit_project_directory = parse_args(
+        ['init', project_name, '-p', proj_dir])
+    assert args_with_explicit_project_directory.project_directory == proj_dir
+    args_with_explicit_project_directory = parse_args(
+        ['init', project_name, '--project-directory', proj_dir])
+    assert args_with_explicit_project_directory.project_directory == proj_dir
+
+
 def test_change_config():
     args = parse_args(['change-config'])
     assert args.markup_language is None
