@@ -48,6 +48,15 @@ def test_version(capsys):
         assert False
 
 
+def test_logfile():
+    assert not args_without_any_options.logfile
+    logfile_name = 'file.log'
+    args_with_logfile_long = parse_args(['--logfile', logfile_name, 'list'])
+    assert args_with_logfile_long.logfile == logfile_name
+    args_with_logfile_short = parse_args(['-l', logfile_name, 'list'])
+    assert args_with_logfile_short.logfile == logfile_name
+
+
 def test_change_config():
     args = parse_args(['change-config'])
     assert args.markup_language is None
