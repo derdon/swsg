@@ -8,13 +8,12 @@ args_without_any_options = parse_args(['list'])
 
 
 def pytest_generate_tests(metafunc):
-    funcargnames = set(metafunc.funcargnames)
-    supported_stuff = (SUPPORTED_MARKUP_LANGUAGES, SUPPORTED_TEMPLATE_ENGINES)
-    funcarg_is_template = 'template' in funcargnames
-    key = 'template' if funcarg_is_template else 'markup'
-    if set(('markup', 'template')) & funcargnames:
-        for x in supported_stuff[funcarg_is_template]:
-            metafunc.addcall(funcargs={key: x})
+    if 'markup' in metafunc.funcargnames:
+        for m in SUPPORTED_MARKUP_LANGUAGES:
+            metafunc.addcall(funcargs=dict(markup=m))
+    elif 'template' in metafunc.funcargnames:
+        for t in SUPPORTED_TEMPLATE_ENGINES:
+            metafunc.addcall(funcargs=dict(template=t))
 
 
 def test_verbose():
