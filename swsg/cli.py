@@ -1,24 +1,39 @@
 #!/usr/bin/env python
 
+from __future__ import print_function
+
 import sys
+import platform
 from os import path
+from itertools import imap
 
 from argparse import ArgumentParser
 from texttable import Texttable
 from py.io import TerminalWriter
+from logbook import FileHandler, INFO, DEBUG
 
-from swsg import __version__
+from swsg import __version__, swsg_logger as logger, LOGFILE as DEFAULT_LOGFILE
 from swsg.projects import Project, list_project_instances
-
-# TODO: new subcommand ``quickstart``:
-# swsg-cli quickstart
-#    -> ask for the following values:
-#           - configuration values (markup language, template language)
-#           - project name
-#           - project path
+from swsg.sources import SUPPORTED_MARKUP_LANGUAGES
+from swsg.templates import SUPPORTED_TEMPLATE_ENGINES
+from swsg.utils import is_none
 
 
-def list_projects(args):
+def get_logging_handler(args):
+    if args.logfile is None:
+        if platform.system() == 'Windows':
+            # FIXME: use the handler logbook.NTEventLogHandler for windows
+            #        users
+            raise OSError(
+                'Windows is an operating system which is not supported yet. '
+                'Install a POSIX compatible system and try again.')
+        logfile = DEFAULT_LOGFILE
+    else:
+        logfile = args.logfile
+    return FileHandler(logfile)
+
+
+def format_list_of_projects():
     terminal_writer = TerminalWriter()
     terminal_width = terminal_writer.fullwidth
     table = Texttable(max_width=terminal_width)
@@ -28,13 +43,28 @@ def list_projects(args):
         table.add_row([
             p.name, p.path,
             p.created.strftime('%c'), p.last_modified.strftime('%c')])
-    print table.draw() if projects else "no project created yet"
+    return table.draw() if projects else "no project created yet"
+
+
+def print_list_of_projects(args):
+    print(format_list_of_projects())
 
 
 def init_project(args):
     project = Project(args.project_directory, args.name)
     project.init()
 
+def validate_change_config(args):
+    # at least one of the options must be given (otherwise, the file is only
+    # touched but not edited)
+    conf_values = [args.markup_language, args.template_language]
+    if all(imap(is_none, conf_values)):
+        print(
+            'Error: Neither a markup language '
+            'nor a template language was given.',
+            file=sys.stderr)
+        # the exit code 2 is used for CLI errors by convention
+        sys.exit(2)
 
 def change_config(args):
     # the project's directory is the current working directory
@@ -52,37 +82,86 @@ def render(args):
 
 
 def parse_args(argv=sys.argv[1:]):
-    # TODO: add help strings to each argument
     # TODO: improve the help by using the method ``parser.add_argument_group``
     #       which groups the help message by subarguments
     parser = ArgumentParser()
     parser.add_argument(
-        '-v', '--version', action='version', version='%(prog)s ' + __version__)
+        '-v', '--verbose', action='store_true',
+        help=(
+            'Enable verbosity mode (disabled per default). Log more logging '
+            'messages as usual, but no debugging messages.'))
+    parser.add_argument(
+        '-d', '--debug', action='store_true',
+        help=(
+            'Enable debugging mode (disabled per default). This option causes '
+            'SWSG to log as many messages as possible and therefore overrides '
+            'the option "verbose".'))
+    parser.add_argument(
+        '--version', action='version', version='%(prog)s ' + __version__)
+    parser.add_argument('-l', '--logfile')
     subparsers = parser.add_subparsers()
+    list_parser = subparsers.add_parser(
+        'list', help='List all projects in a fancy ASCII table.')
+    list_parser.set_defaults(func=print_list_of_projects)
 
-    list_parser = subparsers.add_parser('list')
-    list_parser.set_defaults(func=list_projects)
-
-    init_parser = subparsers.add_parser('init')
-    init_parser.add_argument('name')
-    init_parser.add_argument('-p', '--project-directory', default='.')
+    init_parser = subparsers.add_parser(
+        'init', help='create and initialize a new project')
+    init_parser.add_argument('name', help='The name of the project')
+    init_parser.add_argument(
+        '-p', '--project-directory', default='.',
+        help=(
+            'The directory where the new project will be created. It must '
+            'already exist before the calling this command.'))
     init_parser.set_defaults(func=init_project)
-
-    config_parser = subparsers.add_parser('change-config')
-    config_parser.add_argument('-m', '--markup-language')
-    config_parser.add_argument('-t', '--template-language')
+    config_parser = subparsers.add_parser(
+        'change-config',
+        help=(
+            'Change project-dependent configuration values. It is recommended '
+            'to use this interface instead of editing the configuration file '
+            'config.ini directly.'))
+    config_parser.add_argument(
+        '-m', '--markup-language', choices=SUPPORTED_MARKUP_LANGUAGES,
+        help=(
+            'The name of the markup language being used. Possible valid values'
+            ' are: {0}'.format(', '.join(SUPPORTED_MARKUP_LANGUAGES))))
+    config_parser.add_argument(
+        '-t', '--template-language', choices=SUPPORTED_TEMPLATE_ENGINES,
+        help=(
+            'The name of the template engine being used. Possible valid values'
+            ' are: {0}'.format(', '.join(SUPPORTED_TEMPLATE_ENGINES))))
     config_parser.set_defaults(func=change_config)
-
-    render_parser = subparsers.add_parser('render')
-    render_parser.add_argument('-f', '--force-all')
+    render_parser = subparsers.add_parser(
+        'render',
+        help=(
+            'Render the templates with their corresponding source files which '
+            'are located in the current project directory.'))
+    # TODO: make this option work!
+    #render_parser.add_argument(
+    #    '-f', '--force-all',
+    #    help=(
+    #        'Render all templates with their corresponding source files. The '
+    #        'default is to only render those files which have been changed '
+    #        'after the last rendering process.'))
     render_parser.set_defaults(func=render)
-
     return parser.parse_args(argv)
+
+
+def set_logging_level(args, logger):
+    if args.verbose:
+        logger.level_name = INFO
+    if args.debug:
+        logger.level_name = DEBUG
+    return logger
 
 
 def main(argv=sys.argv[1:]):
     args = parse_args(argv)
-    args.func(args)
+    if args.func == change_config:
+        validate_change_config(args)
+    local_logger = set_logging_level(args, logger)
+    handler = get_logging_handler(args)
+    with handler.applicationbound(bubble=False):
+        args.func(args)
 
 if __name__ == '__main__':
     main()
