@@ -13,7 +13,6 @@
 
 - Testing
   - test all logging calls
-  - test the CLI
 
 - Documentation
   - a seperate repo for the doc which uses swsg itself to be generated!
