@@ -1,5 +1,5 @@
 import py
-from swsg.cli import parse_args
+from swsg.cli import parse_args, validate_change_config
 from swsg import __version__ as swsg_version
 from swsg.sources import SUPPORTED_MARKUP_LANGUAGES
 from swsg.templates import SUPPORTED_TEMPLATE_ENGINES
@@ -74,8 +74,22 @@ def test_init():
     assert args_with_explicit_project_directory.project_directory == proj_dir
 
 
-def test_change_config():
+def test_change_config(capsys):
     args = parse_args(['change-config'])
+    try:
+        validate_change_config(args)
+    except SystemExit, e:
+        # exit code is 2 because it is a CLI error
+        assert e.code == 2
+        out, err = capsys.readouterr()
+        # there should be no output to STDOUT
+        assert out == u''
+        expected_error_message = (
+            'Error: Neither a markup language '
+            'nor a template language was given.\n')
+        assert err == expected_error_message
+    else:
+        assert False
     assert args.markup_language is None
     assert args.template_language is None
     py.test.raises(
