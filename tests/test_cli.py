@@ -44,6 +44,8 @@ def test_version(capsys):
         # version string is printed to STDERR
         expected_version_string = 'py.test {0}\n'.format(swsg_version)
         assert err == expected_version_string
+    except:
+        assert False
     else:
         assert False
 
@@ -88,6 +90,8 @@ def test_change_config(capsys):
             'Error: Neither a markup language '
             'nor a template language was given.\n')
         assert err == expected_error_message
+    except:
+        assert False
     else:
         assert False
     assert args.markup_language is None
