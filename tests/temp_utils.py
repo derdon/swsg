@@ -26,6 +26,10 @@ class TemporaryProject(Project):
     def __exit__(self, exc_type, exc_value, traceback):
         shutil.rmtree(self.temp_dir)
 
+    def remove(self):
+        'remove the temporary project manually'
+        shutil.rmtree(self.temp_dir)
+
     def add_source(self, text, markup='rest'):
         source_filename = path.join(
             self.project.source_dir, 'temp-source.{0}'.format(markup))
