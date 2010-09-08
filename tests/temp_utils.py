@@ -53,4 +53,4 @@ class TemporaryProject(Project):
                 'the argument "template_engine" must '
                 'be one of the following value: {0}'.format(
                     ', '.join(SUPPORTED_TEMPLATE_ENGINES)))
-        return TemplateClass(self.project, template_filename)
+        return TemplateClass(self.project.source_dir, template_filename)
