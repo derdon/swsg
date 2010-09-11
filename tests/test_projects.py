@@ -87,3 +87,8 @@ def test_save_template(temp_project):
 def test_list_project_instances():
     # TODO: test ``list_project_instances``
     pass
+
+
+def test_remove_project():
+    # TODO: test ``remove_project(project)``
+    pass
