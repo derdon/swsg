@@ -82,3 +82,8 @@ def test_save_template(temp_project):
         temp_project.template_dir, template.filename)
     with open(template_filename) as f:
         assert template.text == f.read()
+
+
+def test_list_project_instances():
+    # TODO: test ``list_project_instances``
+    pass
