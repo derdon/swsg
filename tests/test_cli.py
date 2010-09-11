@@ -114,3 +114,9 @@ def test_template_config(template):
     args = parse_args(['change-config', '-t', template])
     assert args.template_language == template
     assert args.markup_language is None
+
+
+def test_remove_project(tmpdir):
+    py.test.raises(SystemExit, "parse_args(['remove-project'])")
+    args = parse_args(['remove-project', str(tmpdir)])
+    assert args.directory == str(tmpdir)
