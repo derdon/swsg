@@ -6,7 +6,8 @@ from datetime import datetime
 from itertools import izip
 from ConfigParser import SafeConfigParser, DuplicateSectionError
 
-from swsg import swsg_logger as logger, PROJECT_DATA_DIR
+from swsg.loggers import swsg_logger as logger
+from swsg.file_paths import PROJECT_DATA_DIR
 from swsg.templates import SimpleTemplate
 from swsg.sources import Source
 

@@ -12,7 +12,9 @@ from texttable import Texttable
 from py.io import TerminalWriter
 from logbook import FileHandler, INFO, DEBUG
 
-from swsg import __version__, swsg_logger as logger, LOGFILE as DEFAULT_LOGFILE
+from swsg import __version__
+from swsg.loggers import swsg_logger as logger
+from swsg.file_paths import LOGFILE as DEFAULT_LOGFILE
 from swsg.projects import Project, list_project_instances
 from swsg.sources import SUPPORTED_MARKUP_LANGUAGES
 from swsg.templates import SUPPORTED_TEMPLATE_ENGINES
