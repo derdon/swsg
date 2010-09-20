@@ -61,7 +61,8 @@ from __future__ import print_function
 
 from setuptools import Command, setup
 
-from swsg import __version__, LOGFILE as DEFAULT_LOGFILE
+from swsg import __version__
+from swsg.file_paths import LOGFILE as DEFAULT_LOGFILE
 
 
 class LogfileCreater(Command):
