@@ -1,0 +1,5 @@
+- call py.test
+- update __version__ in swsg/__init__.py
+- add a new version number tag to the git repository
+- update CHANGELOG
+- update the PyPi site
