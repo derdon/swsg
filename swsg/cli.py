@@ -73,6 +73,7 @@ def validate_change_config(args):
         # the exit code 2 is used for CLI errors by convention
         sys.exit(2)
 
+
 def change_config(args):
     # the project's directory is the current working directory
     project = Project(*path.split(path.abspath(path.curdir)))
