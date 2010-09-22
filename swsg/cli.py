@@ -56,6 +56,11 @@ def init_project(args):
     project = Project(args.project_directory, args.name)
     project.init()
 
+
+def remove_project(args):
+    raise NotImplementedError
+
+
 def validate_change_config(args):
     # at least one of the options must be given (otherwise, the file is only
     # touched but not edited)
@@ -115,6 +120,10 @@ def parse_args(argv=sys.argv[1:]):
             'The directory where the new project will be created. It must '
             'already exist before the calling this command.'))
     init_parser.set_defaults(func=init_project)
+    remove_parser = subparsers.add_parser(
+        'remove-project', help='remove a project which does already exist')
+    remove_parser.add_argument('project', 'The path to the project directory')
+    remove_parser.set_defaults(func=remove_project)
     config_parser = subparsers.add_parser(
         'change-config',
         help=(
