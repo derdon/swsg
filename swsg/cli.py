@@ -149,13 +149,6 @@ def parse_args(argv=sys.argv[1:]):
         help=(
             'Render the templates with their corresponding source files which '
             'are located in the current project directory.'))
-    # TODO: make this option work!
-    #render_parser.add_argument(
-    #    '-f', '--force-all',
-    #    help=(
-    #        'Render all templates with their corresponding source files. The '
-    #        'default is to only render those files which have been changed '
-    #        'after the last rendering process.'))
     render_parser.set_defaults(func=render)
     return parser.parse_args(argv)
 
