@@ -123,7 +123,9 @@ def parse_args(argv=sys.argv[1:]):
     init_parser.set_defaults(func=init_project)
     remove_parser = subparsers.add_parser(
         'remove-project', help='remove a project which does already exist')
-    remove_parser.add_argument('project', 'The path to the project directory')
+    remove_parser.add_argument(
+        'project',
+        help='The path to the project directory which will be removed')
     remove_parser.set_defaults(func=remove_project)
     config_parser = subparsers.add_parser(
         'change-config',
