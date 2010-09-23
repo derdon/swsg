@@ -146,6 +146,7 @@ class Project(object):
         logger.notice('finishing the rendering process')
 
     def save_source(self, source):
+        # FIXME: source instances do not have the attribute "filename"!
         filename = os.path.join(self.source_dir, source.filename)
         with open(filename, 'w') as fp:
             fp.write(source.text)
