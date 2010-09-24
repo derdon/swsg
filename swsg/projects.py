@@ -82,12 +82,12 @@ class Project(object):
         now = datetime.now()
         if new_created:
             logger.notice(
-                'creating the projects file {0}'.format(PROJECTS_FILE_NAME))
+                'creating the projects file {0}'.format(projects_file_name))
             self.created = now
         self.last_modified = now
-        with contextlib.closing(shelve.open(PROJECTS_FILE_NAME)) as projects:
+        with contextlib.closing(shelve.open(projects_file_name)) as projects:
             logger.notice(
-                'updating the projects file {0}'.format(PROJECTS_FILE_NAME))
+                'updating the projects file {0}'.format(projects_file_name))
             projects[self.project_dir] = self
 
     def read_config(self):
