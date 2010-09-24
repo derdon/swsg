@@ -11,7 +11,7 @@ from swsg.file_paths import PROJECT_DATA_DIR
 from swsg.templates import SimpleTemplate
 from swsg.sources import Source
 
-PROJECTS_FILE_NAME = os.path.join(PROJECT_DATA_DIR, 'projects.shelve')
+DEFAULT_PROJECTS_FILE_NAME = os.path.join(PROJECT_DATA_DIR, 'projects.shelve')
 
 
 class Project(object):
@@ -78,7 +78,7 @@ class Project(object):
             yield TemplateClass(self, filename)
 
     def update_projects_file(self, new_created=False,
-                             projects_file_name=PROJECTS_FILE_NAME):
+                             projects_file_name=DEFAULT_PROJECTS_FILE_NAME):
         now = datetime.now()
         if new_created:
             logger.notice(
@@ -162,7 +162,7 @@ class Project(object):
         self.update_projects_file()
 
 
-def list_project_instances(projects_file=PROJECTS_FILE_NAME):
+def list_project_instances(projects_file=DEFAULT_PROJECTS_FILE_NAME):
     'get all ``Project`` instances which can be found in the projects file'
     with contextlib.closing(shelve.open(projects_file)) as projects:
         return projects.values()
