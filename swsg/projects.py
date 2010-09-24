@@ -7,11 +7,9 @@ from itertools import izip
 from ConfigParser import SafeConfigParser, DuplicateSectionError
 
 from swsg.loggers import swsg_logger as logger
-from swsg.file_paths import PROJECT_DATA_DIR
+from swsg.file_paths import DEFAULT_PROJECTS_FILE_NAME
 from swsg.templates import SimpleTemplate
 from swsg.sources import Source
-
-DEFAULT_PROJECTS_FILE_NAME = os.path.join(PROJECT_DATA_DIR, 'projects.shelve')
 
 
 class Project(object):
