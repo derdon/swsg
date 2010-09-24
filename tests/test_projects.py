@@ -71,6 +71,11 @@ def test_render_project():
     pass
 
 
+def test_save_source(temp_project):
+    # TODO: test ``Project.save_source(source)``
+    pass
+
+
 def test_save_template(temp_project):
     template_filename = path.join(temp_project.template_dir, 'temp-template')
     temp_project.init()
