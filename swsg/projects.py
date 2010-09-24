@@ -77,7 +77,8 @@ class Project(object):
             filename = os.path.join(self.template_dir, template_name)
             yield TemplateClass(self, filename)
 
-    def update_projects_file(self, new_created=False):
+    def update_projects_file(self, new_created=False,
+                             projects_file_name=PROJECTS_FILE_NAME):
         now = datetime.now()
         if new_created:
             logger.notice(
