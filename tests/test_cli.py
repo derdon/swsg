@@ -119,4 +119,4 @@ def test_template_config(template):
 def test_remove_project(tmpdir):
     py.test.raises(SystemExit, "parse_args(['remove-project'])")
     args = parse_args(['remove-project', str(tmpdir)])
-    assert args.directory == str(tmpdir)
+    assert args.path == str(tmpdir)
