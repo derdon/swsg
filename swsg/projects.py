@@ -1,4 +1,5 @@
 import os
+import shutil
 import shelve
 import codecs
 import contextlib
@@ -10,6 +11,10 @@ from swsg.loggers import swsg_logger as logger
 from swsg.file_paths import DEFAULT_PROJECTS_FILE_NAME
 from swsg.templates import SimpleTemplate
 from swsg.sources import Source
+
+
+class NonexistingProject(Exception):
+    pass
 
 
 class Project(object):
@@ -164,3 +169,19 @@ def list_project_instances(projects_file=DEFAULT_PROJECTS_FILE_NAME):
     'get all ``Project`` instances which can be found in the projects file'
     with contextlib.closing(shelve.open(projects_file)) as projects:
         return projects.values()
+
+
+def remove_project(project):
+    '''remove both the project's directory and its entry in the projects file
+
+    '''
+    proj_dir = project.project_dir
+    if project in list_project_instances():
+        shutil.rmtree(projdir)
+        with contextlib.closing(shelve.open(projects_file_name)) as projects:
+            projects.pop(projdir)
+    else:
+        # project does not exist, therefore it cannot be removed
+        raise NonexistingProject(
+            'The project {0} with its belonging '
+            'directory {1} does not exist.'.format(project, projdir))
