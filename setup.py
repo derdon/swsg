@@ -83,7 +83,7 @@ class LogfileAndDirectoryInitializer(install):
 
     def run(self):
         self.initialize_dirs()
-        self.touch_logfile()
+        self.create_empty_logfile()
         install.run(self)
 
 short_description = (
