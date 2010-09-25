@@ -111,7 +111,6 @@ def parse_args(argv=sys.argv[1:]):
     list_parser = subparsers.add_parser(
         'list', help='List all projects in a fancy ASCII table.')
     list_parser.set_defaults(func=print_list_of_projects)
-
     init_parser = subparsers.add_parser(
         'init', help='create and initialize a new project')
     init_parser.add_argument('name', help='The name of the project')
