@@ -79,7 +79,7 @@ class LogfileAndDirectoryInitializer(install):
 
     def create_empty_logfile(self):
         with open(DEFAULT_LOGFILE, 'w') as f:
-            print('Creating {0}'.format(f.name))
+            print('creating the logfile {0}'.format(f.name))
 
     def run(self):
         self.initialize_dirs()
