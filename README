@@ -39,14 +39,9 @@ Requirements
   - Genshi -> http://pypi.python.org/pypi/Genshi
 
 Installation
-There is currently only one way to install SWSG on your system which requires
-two steps to be performed:
-1. (requires administrator / root previleges) enter the following command:
-   "python setup.py install" (the file setup.py is the file which can be found
-   in the same directory as this README file)
-2. (to be called by YOU, not an admin or root!) enter the following command:
-   "python setup.py init"
-That's it! Continue with the next section "Usage" to learn how to use SWSG.
+Enter the command "python setup.py install" (the file setup.py is the file
+which can be found in the same directory as this README file). That's it!
+Continue with the next section "Usage" to learn how to use SWSG.
 
 Usage
 See http://github.com/derdon/swsg/wiki for a detailed documentation.
