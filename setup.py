@@ -59,28 +59,32 @@ Requirements
 
 from __future__ import print_function
 
-from setuptools import Command, setup
+from setuptools.command.install import install
+from setuptools import setup
+
+import os
 
 from swsg import __version__
-from swsg.file_paths import LOGFILE as DEFAULT_LOGFILE
+from swsg.file_paths import LOGFILE as DEFAULT_LOGFILE, PROJECT_DATA_DIR
 
 
-class LogfileCreater(Command):
-    'a setup.py command to create an empty log file in the desired location'
-    user_options = [
-        ('log-file=', 'l', 'the name of the log file'),
-    ]
+class LogfileAndDirectoryInitializer(install):
+    '''create the directories where the projects file and the logging file will
+    be saved if they do not exist yet and create an empty logfile'''
+    def initialize_dirs(self):
+        path = PROJECT_DATA_DIR
+        if not os.path.exists(path):
+            print('creating the directory {0}'.format(path))
+            os.makedirs(path)
 
-    def initialize_options(self):
-        self.log_file = DEFAULT_LOGFILE
-
-    def finalize_options(self):
-        pass
+    def create_empty_logfile(self):
+        with open(DEFAULT_LOGFILE, 'w') as f:
+            print('Creating {0}'.format(f.name))
 
     def run(self):
-        'create an empty logfile'
-        with open(self.log_file, 'w') as f:
-            print('Creating {0}'.format(f.name))
+        self.initialize_dirs()
+        self.touch_logfile()
+        install.run(self)
 
 short_description = (
     'SWSG (Static Web Site Generator) is a tool to generate static web pages.')
@@ -114,11 +118,11 @@ setup(
         'Topic :: Text Processing',
         'Topic :: Text Processing :: Markup'],
     entry_points={
-        'distutils.commands': [
-            'init = __main__:LogfileCreater',
-        ],
         'console_scripts': [
             'swsg-cli = swsg.cli:main',
          ],
+    },
+    cmdclass={
+        'install': LogfileAndDirectoryInitializer
     },
 )
