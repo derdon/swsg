@@ -165,9 +165,9 @@ class Project(object):
         self.update_projects_file()
 
 
-def list_project_instances(projects_file=DEFAULT_PROJECTS_FILE_NAME):
+def list_project_instances(projects_file_name=DEFAULT_PROJECTS_FILE_NAME):
     'get all ``Project`` instances which can be found in the projects file'
-    with contextlib.closing(shelve.open(projects_file)) as projects:
+    with contextlib.closing(shelve.open(projects_file_name)) as projects:
         return projects.values()
 
 
