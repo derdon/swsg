@@ -176,7 +176,7 @@ def remove_project(project, projects_file_name=DEFAULT_PROJECTS_FILE_NAME):
 
     '''
     proj_dir = project.project_dir
-    if project in list_project_instances(projects_file):
+    if project in list_project_instances(projects_file_name):
         shutil.rmtree(projdir)
         with contextlib.closing(shelve.open(projects_file_name)) as projects:
             projects.pop(projdir)
