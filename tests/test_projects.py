@@ -5,38 +5,35 @@ from ConfigParser import SafeConfigParser, NoSectionError
 
 import py
 from swsg.templates import SimpleTemplate
-
-from temp_utils import TemporaryProject
+from swsg.projects import Project, remove_project, NonexistingProject
 
 
 def pytest_funcarg__temp_project(request):
-    p = TemporaryProject()
-    request.addfinalizer(p.remove)
-    return p
+    tmpdir = request.getfuncargvalue('tmpdir')
+    projects_filename = str(tmpdir.join('projects.shelve'))
+    return Project(str(tmpdir), 'test-project', projects_filename)
 
 
 def test_make_project_directories(temp_project):
-    p = temp_project
-    p.make_project_directories()
-    path_join = partial(path.join, p.project_dir)
-    assert path.exists(p.path)
-    assert path.exists(p.project_dir)
+    temp_project.make_project_directories()
+    path_join = partial(path.join, temp_project.project_dir)
+    assert path.exists(temp_project.path)
+    assert path.exists(temp_project.project_dir)
     assert path.exists(path_join('sources'))
     assert path.exists(path_join('templates'))
     assert path.exists(path_join('output'))
 
 
 def test_update_projects_file(temp_project):
-    p = temp_project
-    p.make_project_directories()
-    assert p.created is None
-    assert p.last_modified is None
-    p.update_projects_file()
-    assert p.created is None
-    assert isinstance(p.last_modified, datetime)
-    p.update_projects_file(new_created=True)
-    assert isinstance(p.created, datetime)
-    assert isinstance(p.last_modified, datetime)
+    temp_project.make_project_directories()
+    assert temp_project.created is None
+    assert temp_project.last_modified is None
+    temp_project.update_projects_file()
+    assert temp_project.created is None
+    assert isinstance(temp_project.last_modified, datetime)
+    temp_project.update_projects_file(True)
+    assert isinstance(temp_project.created, datetime)
+    assert isinstance(temp_project.last_modified, datetime)
 
 
 def test_local_config(temp_project):
@@ -58,12 +55,12 @@ def test_local_config(temp_project):
 
 
 def test_update_config(temp_project):
-    p = temp_project
-    p.init()
-    p.update_config(markup_language='markdown', template_language='jinja2')
+    temp_project.init()
+    temp_project.update_config(
+        markup_language='markdown', template_language='jinja2')
     section = 'local configuration'
-    assert p.config.get(section, 'markup language') == 'markdown'
-    assert p.config.get(section, 'template language') == 'jinja2'
+    assert temp_project.config.get(section, 'markup language') == 'markdown'
+    assert temp_project.config.get(section, 'template language') == 'jinja2'
 
 
 def test_render_project():
@@ -71,7 +68,7 @@ def test_render_project():
     pass
 
 
-def test_save_source(temp_project):
+def test_save_source():
     # TODO: test ``Project.save_source(source)``
     pass
 
@@ -89,11 +86,18 @@ def test_save_template(temp_project):
         assert template.text == f.read()
 
 
-def test_list_project_instances():
-    # TODO: test ``list_project_instances``
-    pass
+def test_project_exists(temp_project):
+    assert not temp_project.exists
+    temp_project.init()
+    assert temp_project.exists
 
 
-def test_remove_project():
-    # TODO: test ``remove_project(project)``
-    pass
+def test_remove_project(temp_project):
+    assert not temp_project.exists
+    py.test.raises(
+        NonexistingProject,
+        'remove_project(temp_project)')
+    temp_project.init()
+    assert temp_project.exists
+    remove_project(temp_project)
+    assert not temp_project.exists
