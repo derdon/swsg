@@ -20,7 +20,8 @@ class NonexistingProject(Exception):
 class Project(object):
     CONFIG_SECTION = 'local configuration'
 
-    def __init__(self, path, name):
+    def __init__(self, path, name,
+                 projects_file_name=DEFAULT_PROJECTS_FILE_NAME):
         self.path = os.path.abspath(path)
         # TODO: be aware of non-ASCII characters in ``name`` and filter only
         # the ASCII characters -> ask Trundle for his nice function :)
@@ -38,6 +39,10 @@ class Project(object):
         self.template_dir = os.path.join(self.project_dir, 'templates')
         self.output_dir = os.path.join(self.project_dir, 'output')
         self.config_filename = os.path.join(self.project_dir, 'config.ini')
+        self.projects_file_name = projects_file_name
+
+        # True after the projects file was updated
+        self.updated_projects_file = False
 
     def __repr__(self):
         return '{0} "{1}"'.format(self.__class__.__name__, self.name)
@@ -57,6 +62,21 @@ class Project(object):
         for path_name in (self.source_dir, self.template_dir, self.output_dir):
             logger.info('creating the directory {0}'.format(path_name))
             os.makedirs(path_name)
+
+    @property
+    def exists(self):
+        dir_paths = (
+            self.project_dir, self.source_dir,
+            self.template_dir, self.output_dir
+        )
+        file_paths = (self.config_filename, self.projects_file_name)
+        paths = dir_paths + file_paths
+        return (
+            all(os.path.exists(path) for path in paths) and
+            all(os.path.isdir(dir_path) for dir_path in dir_paths) and
+            all(os.path.isfile(file_path) for file_path in file_paths) and
+            self.updated_projects_file
+        )
 
     @property
     def sources(self):
@@ -80,18 +100,20 @@ class Project(object):
             filename = os.path.join(self.template_dir, template_name)
             yield TemplateClass(self, filename)
 
-    def update_projects_file(self, new_created=False,
-                             projects_file_name=DEFAULT_PROJECTS_FILE_NAME):
+    def update_projects_file(self, new_created=False):
         now = datetime.now()
         if new_created:
             logger.notice(
-                'creating the projects file {0}'.format(projects_file_name))
+                'creating the projects file {0}'.format(
+                    self.projects_file_name))
             self.created = now
         self.last_modified = now
-        with contextlib.closing(shelve.open(projects_file_name)) as projects:
+        with contextlib.closing(shelve.open(self.projects_file_name)) as p:
             logger.notice(
-                'updating the projects file {0}'.format(projects_file_name))
-            projects[self.project_dir] = self
+                'updating the projects file {0}'.format(
+                    self.projects_file_name))
+            p[self.project_dir] = self
+        self.updated_projects_file = True
 
     def read_config(self):
         logger.notice('reading the configuration file')
@@ -134,7 +156,7 @@ class Project(object):
                 self.config.set(self.CONFIG_SECTION, option, value)
         with open(self.config_filename, 'w') as fp:
             self.config.write(fp)
-        self.update_projects_file()
+        self.updated_projects_file = True
 
     def render(self):
         logger.notice('starting the rendering process')
@@ -171,25 +193,15 @@ def list_project_instances(projects_file_name=DEFAULT_PROJECTS_FILE_NAME):
         return projects.values()
 
 
-def project_exists(project, projects_file_name=DEFAULT_PROJECTS_FILE_NAME):
-    '''check if the project is listed in the projects file and if its stored
-    project directory is really a directory and exists'''
-    return (
-        project in list_project_instances() and
-        os.path.exists(project.project_dir) and
-        os.path.isdir(project.project_dir)
-    )
-
-
-def remove_project(project, projects_file_name=DEFAULT_PROJECTS_FILE_NAME):
+def remove_project(project):
     '''remove both the project's directory and its entry in the projects file
 
     '''
     proj_dir = project.project_dir
-    if project_exists(project, projects_file_name):
+    if project.exists:
         shutil.rmtree(proj_dir)
-        with contextlib.closing(shelve.open(projects_file_name)) as projects:
-            projects.pop(proj_dir)
+        with contextlib.closing(shelve.open(project.projects_file_name)) as p:
+            p.pop(proj_dir)
     else:
         # project does not exist, therefore it cannot be removed
         raise NonexistingProject(
