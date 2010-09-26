@@ -1,18 +1,6 @@
-- important (required for the 0.1.0 release)
-  - add an ASCII progress bar to visualize the rendering process
-    -> new dependency: progressbar package (PyPI)
-       -> setup.py, README
-  - fix all important TODO and FIXME comments in the ``*.py`` files!
-  - CLI
-    - rename the argument ``list`` to ``list-projects``
-    - add the argument ``show-status`` which shows the files to be rendered
-
 - General
   - provide more interfaces (GTK+, Qt, CLI, (curses), (web), PIDA-Plugin)
   - add example projects
-
-- Testing
-  - test all logging calls
 
 - Documentation
   - a seperate repo for the doc which uses swsg itself to be generated!
