@@ -111,7 +111,7 @@ def parse_args(argv=sys.argv[1:]):
     parser.add_argument('-l', '--logfile')
     subparsers = parser.add_subparsers()
     list_parser = subparsers.add_parser(
-        'list', help='List all projects in a fancy ASCII table.')
+        'list-projects', help='List all projects in a fancy ASCII table.')
     list_parser.set_defaults(func=print_list_of_projects)
     init_parser = subparsers.add_parser(
         'init', help='create and initialize a new project')

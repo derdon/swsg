@@ -5,6 +5,6 @@
     -> new dependency: progressbar package (PyPI)
        -> mention it in the files setup.py and README
 - CLI
-  [ ] rename the argument "list" to "list-projects"
+  [X] rename the argument "list" to "list-projects"
   [ ] add the argument "show-status" (or simply "status") which shows the files
       to be rendered

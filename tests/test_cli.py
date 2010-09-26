@@ -4,7 +4,7 @@ from swsg import __version__ as swsg_version
 from swsg.sources import SUPPORTED_MARKUP_LANGUAGES
 from swsg.templates import SUPPORTED_TEMPLATE_ENGINES
 
-args_without_any_options = parse_args(['list'])
+args_without_any_options = parse_args(['list-projects'])
 
 
 def pytest_generate_tests(metafunc):
@@ -18,17 +18,17 @@ def pytest_generate_tests(metafunc):
 
 def test_verbose():
     assert not args_without_any_options.verbose
-    args_with_verbose_short = parse_args(['-v', 'list'])
+    args_with_verbose_short = parse_args(['-v', 'list-projects'])
     assert args_with_verbose_short.verbose
-    args_with_verbose_long = parse_args(['--verbose', 'list'])
+    args_with_verbose_long = parse_args(['--verbose', 'list-projects'])
     assert args_with_verbose_long.verbose
 
 
 def test_debug():
     assert not args_without_any_options.debug
-    args_with_debug_short = parse_args(['-d', 'list'])
+    args_with_debug_short = parse_args(['-d', 'list-projects'])
     assert args_with_debug_short.debug
-    args_with_debug_long = parse_args(['--debug', 'list'])
+    args_with_debug_long = parse_args(['--debug', 'list-projects'])
     assert args_with_debug_long.debug
 
 
@@ -53,9 +53,10 @@ def test_version(capsys):
 def test_logfile():
     assert not args_without_any_options.logfile
     logfile_name = 'file.log'
-    args_with_logfile_long = parse_args(['--logfile', logfile_name, 'list'])
+    args_with_logfile_long = parse_args(
+        ['--logfile', logfile_name, 'list-projects'])
     assert args_with_logfile_long.logfile == logfile_name
-    args_with_logfile_short = parse_args(['-l', logfile_name, 'list'])
+    args_with_logfile_short = parse_args(['-l', logfile_name, 'list-projects'])
     assert args_with_logfile_short.logfile == logfile_name
 
 
