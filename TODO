@@ -19,6 +19,8 @@
   - project-dependent configuration (config.ini in the project directory):
     - template language dependent configuration -> seperate section for each
       template engine
+    - boolean config item: guess markup language by filetype?
+      -> use the configuration value if set to False
   - global configuration (saved in the environment variable $XDG_CONFIG_HOME if
     it exists, otherwise in $HOME/.config):
     - default configuration for new projects
