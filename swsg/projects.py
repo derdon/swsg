@@ -187,11 +187,11 @@ def remove_project(project, projects_file_name=DEFAULT_PROJECTS_FILE_NAME):
     '''
     proj_dir = project.project_dir
     if project in list_project_instances(projects_file_name):
-        shutil.rmtree(projdir)
+        shutil.rmtree(proj_dir)
         with contextlib.closing(shelve.open(projects_file_name)) as projects:
-            projects.pop(projdir)
+            projects.pop(proj_dir)
     else:
         # project does not exist, therefore it cannot be removed
         raise NonexistingProject(
             'The project {0} with its belonging '
-            'directory {1} does not exist.'.format(project, projdir))
+            'directory {1} does not exist.'.format(project, proj_dir))
