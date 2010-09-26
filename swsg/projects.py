@@ -171,6 +171,16 @@ def list_project_instances(projects_file_name=DEFAULT_PROJECTS_FILE_NAME):
         return projects.values()
 
 
+def project_exists(project, projects_file_name=DEFAULT_PROJECTS_FILE_NAME):
+    '''check if the project is listed in the projects file and if its stored
+    project directory is really a directory and exists'''
+    return (
+        project in list_project_instances() and
+        os.path.exists(project.project_dir) and
+        os.path.isdir(project.project_dir)
+    )
+
+
 def remove_project(project, projects_file_name=DEFAULT_PROJECTS_FILE_NAME):
     '''remove both the project's directory and its entry in the projects file
 
