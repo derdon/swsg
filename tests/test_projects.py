@@ -5,6 +5,7 @@ from ConfigParser import SafeConfigParser, NoSectionError
 
 import py
 from swsg.templates import SimpleTemplate
+from swsg.sources import Source
 from swsg.projects import Project, remove_project, NonexistingProject
 
 
@@ -68,9 +69,19 @@ def test_render_project():
     pass
 
 
-def test_save_source():
+def test_save_source(temp_project):
     # TODO: test ``Project.save_source(source)``
-    pass
+    source_content = (
+        'headline\n'
+        '--------'
+        '*important* text'
+    )
+    source_filename = path.join(temp_project.source_dir, 'temp-source')
+    temp_project.init()
+    source = Source(source_content, 'rest')
+    temp_project.save_source(source, source_filename)
+    with open(source_filename) as fp:
+        assert fp.read() == source_content
 
 
 def test_save_template(temp_project):
