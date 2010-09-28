@@ -70,7 +70,6 @@ def test_render_project():
 
 
 def test_save_source(temp_project):
-    # TODO: test ``Project.save_source(source)``
     source_content = (
         'headline\n'
         '--------'
