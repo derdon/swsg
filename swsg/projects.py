@@ -167,8 +167,7 @@ class Project(object):
                 output_path = os.path.join(self.output_dir, filename) + '.html'
                 logger.info('{0} + {1} -> {2}'.format(
                     source.filename, template.filename, output_path))
-                with codecs.open(output_path, 'w', 'utf-8') as fp:
-                    fp.write(output)
+                yield output_path, output
         logger.notice('finishing the rendering process')
 
     def save_source(self, source, filename):
