@@ -9,6 +9,10 @@ from swsg.sources import Source
 from swsg.projects import Project, remove_project, NonexistingProject
 
 
+class Object(object):
+    pass
+
+
 def pytest_funcarg__temp_project(request):
     tmpdir = request.getfuncargvalue('tmpdir')
     projects_filename = str(tmpdir.join('projects.shelve'))
@@ -64,9 +68,21 @@ def test_update_config(temp_project):
     assert temp_project.config.get(section, 'template language') == 'jinja2'
 
 
-def test_render_project():
-    # TODO: test ``Project.render``
-    pass
+def test_render_project(temp_project, monkeypatch):
+    template = Object()
+    rendered_template = '<h1>A test title</h1><p>the test content</p>'
+    template.render = lambda: [[source, rendered_template]]
+    template.filename = 'test-template'
+    monkeypatch.setattr(type(temp_project), 'templates', [template])
+    temp_project.init()
+    source = Object()
+    source.filename = 'test-source.rest'
+    for output_path, output in temp_project.render():
+        expected_output_path = path.join(
+            temp_project.output_dir,
+            path.splitext(source.filename)[0]) + '.html'
+        assert output_path == expected_output_path
+        assert output == rendered_template
 
 
 def test_save_source(temp_project):
