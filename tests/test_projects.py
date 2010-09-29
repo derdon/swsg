@@ -80,7 +80,7 @@ def test_save_source(temp_project):
     source = Source(source_content, 'rest')
     temp_project.save_source(source, source_filename)
     with open(source_filename) as fp:
-        assert fp.read() == source_content
+        assert source_content == fp.read()
 
 
 def test_save_template(temp_project):
