@@ -1,34 +1,26 @@
 import py.test
-from swsg.sources import (Source, render_rest, render_creole, render_textile,
-        render_markdown)
+from swsg.sources import (ReSTSource, CreoleSource, TextileSource,
+    MarkdownSource)
 
 
 def test_source_render():
-    source = Source('**text**', 'rest')
+    source = ReSTSource('**text**')
     assert source.render() == u'<p><strong>text</strong></p>\n'
-
-
-def test_source_init():
-    # trying to use a markup language which does not exist should raise a
-    # ValueError
-    py.test.raises(ValueError, 'Source("", "invalid markup language")')
-    # FIXME: trying to use an uninstalled markup should log a critical error
-    #        message
 
 
 def test_render_rest():
     r'''
->>> render_rest(u'simple test')
+>>> ReSTSource(u'simple test').render()
 u'<p>simple test</p>\n'
->>> render_rest(u'**simple test**')
+>>> ReSTSource(u'**simple test**').render()
 u'<p><strong>simple test</strong></p>\n'
->>> render_rest(u'`simple test`')
+>>> ReSTSource(u'`simple test`').render()
 u'<p><cite>simple test</cite></p>\n'
->>> render_rest(u'``test``')
+>>> ReSTSource(u'``test``').render()
 u'<p><tt class="docutils literal">test</tt></p>\n'
->>> render_rest(u'`example`_\n\n.. _example: http://example.com')
+>>> ReSTSource(u'`example`_\n\n.. _example: http://example.com').render()
 u'<p><a class="reference external" href="http://example.com">example</a></p>\n'
->>> render_rest(u'`example <http://example.com>`_')
+>>> ReSTSource(u'`example <http://example.com>`_').render()
 u'<p><a class="reference external" href="http://example.com">example</a></p>\n'
     '''
     py.test.importorskip('docutils')
@@ -36,9 +28,9 @@ u'<p><a class="reference external" href="http://example.com">example</a></p>\n'
 
 def test_render_creole():
     r'''
->>> render_creole(u'test')
+>>> CreoleSource(u'test').render()
 u'<p>test</p>\n'
->>> render_creole(u'test\ntest')
+>>> CreoleSource(u'test\ntest').render()
 u'<p>test test</p>\n'
     '''
     py.test.importorskip('creole')
@@ -46,11 +38,11 @@ u'<p>test test</p>\n'
 
 def test_render_textile():
     r'''
->>> render_textile('_This_ is a *test.*')
+>>> TextileSource('_This_ is a *test.*').render()
 '<p><em>This</em> is a <strong>test.</strong></p>'
->>> render_textile('* One\n* Two\n* Three')
+>>> TextileSource('* One\n* Two\n* Three').render()
 '<ul>\n\t\t<li>One</li>\n\t\t<li>Two</li>\n\t\t<li>Three</li>\n\t</ul>'
->>> render_textile('Link to "Slashdot":http://slashdot.org/')
+>>> TextileSource('Link to "Slashdot":http://slashdot.org/').render()
 '<p>Link to <a href="http://slashdot.org/">Slashdot</a></p>'
     '''
     py.test.importorskip('textile')
@@ -58,11 +50,11 @@ def test_render_textile():
 
 def test_render_markdown():
     r'''
->>> render_markdown('[Slashdot](http://slashdot.org/ "Slashdot - News for nerds, stuff that matters")')
+>>> MarkdownSource('[Slashdot](http://slashdot.org/ "Slashdot - News for nerds, stuff that matters")').render()
 u'<p><a href="http://slashdot.org/" title="Slashdot - News for nerds, stuff that matters">Slashdot</a></p>'
->>> render_markdown('---------------------------------------')
+>>> MarkdownSource('---------------------------------------').render()
 u'<hr />'
->>> render_markdown('![Python](http://python.org/community/logos/python-logo.png "The Python Logo")')
+>>> MarkdownSource('![Python](http://python.org/community/logos/python-logo.png "The Python Logo")').render()
 u'<p><img alt="Python" src="http://python.org/community/logos/python-logo.png" title="The Python Logo" /></p>'
     '''
     py.test.importorskip('markdown')
