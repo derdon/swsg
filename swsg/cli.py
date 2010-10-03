@@ -3,8 +3,7 @@
 from __future__ import print_function
 
 import sys
-import platform
-from os import path
+from os import path, name as operating_system
 from itertools import imap
 
 from argparse import ArgumentParser
@@ -23,7 +22,7 @@ from swsg.utils import is_none
 
 def get_logging_handler(args):
     if args.logfile is None:
-        if platform.system() == 'Windows':
+        if operating_system == 'Windows':
             # FIXME: use the handler logbook.NTEventLogHandler for windows
             #        users
             raise OSError(
