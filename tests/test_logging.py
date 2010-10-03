@@ -1,5 +1,5 @@
 import py
-from logbook import FileHandler, INFO, DEBUG
+from logbook import FileHandler, INFO, DEBUG, ERROR
 from swsg.file_paths import LOGFILE as DEFAULT_LOGFILE
 from swsg.cli import get_logging_handler, set_logging_level
 
@@ -21,6 +21,7 @@ def test_get_logging_handler():
     handler = get_logging_handler(args)
     assert isinstance(handler, FileHandler)
     assert handler._filename == DEFAULT_LOGFILE
+    assert handler.level == ERROR
 
 
 def test_set_logging_level():
