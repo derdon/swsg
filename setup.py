@@ -101,7 +101,7 @@ setup(
     url='http://github.com/derdon/swsg',
     license='WTFPL',
     packages=['swsg'],
-    install_requires=['docutils', 'py', 'texttable'],
+    install_requires=['docutils', 'py', 'texttable', 'progressbar'],
     extras_require={
         'markdown': ['markdown'],
         'textile': ['textile'],
