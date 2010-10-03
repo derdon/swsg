@@ -3,6 +3,7 @@
 from __future__ import print_function
 
 import sys
+import codecs
 from os import path, name as operating_system
 from itertools import imap
 
@@ -10,6 +11,7 @@ from argparse import ArgumentParser
 from texttable import Texttable
 from py.io import TerminalWriter
 from logbook import FileHandler, INFO, DEBUG
+from progressbar import ProgressBar
 
 from swsg import __version__
 from swsg.loggers import swsg_logger as logger
@@ -84,10 +86,13 @@ def change_config(args):
 
 
 def render(args):
+    pbar = ProgressBar(maxval=100)
     # the project's directory is the current working directory
-    # TODO: add a progressbar
     project = Project(*path.split(path.abspath(path.curdir)))
-    project.render()
+    for i, (output_path, output) in enumerate(project.render()):
+        with codecs.open(output_path, 'w', 'utf-8') as fp:
+            fp.write(output)
+        pbar.update(i + 1)
 
 
 def parse_args(argv=sys.argv[1:]):
