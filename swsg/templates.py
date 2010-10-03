@@ -41,7 +41,7 @@ class BaseTemplate(object):
             markup_language = path.splitext(filename)[1].lstrip('.')
             ensure_markup_is_valid_and_installed(markup_language)
             # FIXME: it could be that this filename does not exist, i.e. an
-            # IOError will be raised then! -> What should happen in this case?
+            # IOError will be raised then! -> raise a custom exception
             with open(filename) as fp:
                 text = fp.read().decode('utf-8')
             SourceClass = get_source_class_by_markup(markup_language)
