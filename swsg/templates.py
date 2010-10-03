@@ -1,7 +1,8 @@
 import string
 from os import path
 
-from swsg.sources import Source
+from swsg.sources import (ensure_markup_is_valid_and_installed,
+    get_source_class_by_markup)
 
 
 SUPPORTED_TEMPLATE_ENGINES = frozenset(['simple', 'mako', 'jinja2', 'genshi'])
@@ -38,11 +39,13 @@ class BaseTemplate(object):
             # the markup language is the filename extension without the dot.
             # For example, the content of "foo.rest" will be rendered as ReST
             markup_language = path.splitext(filename)[1].lstrip('.')
+            ensure_markup_is_valid_and_installed(markup_language)
             # FIXME: it could be that this filename does not exist, i.e. an
             # IOError will be raised then! -> What should happen in this case?
             with open(filename) as fp:
                 text = fp.read().decode('utf-8')
-            yield source_name, Source(text, markup_language)
+            SourceClass = get_source_class_by_markup(markup_language)
+            yield SourceClass(text)
 
     def render(self, source):
         raise NotImplementedError
