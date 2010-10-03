@@ -31,7 +31,7 @@ def get_logging_handler(args):
         logfile = DEFAULT_LOGFILE
     else:
         logfile = args.logfile
-    return FileHandler(logfile)
+    return FileHandler(logfile, level=set_logging_level(args, logger))
 
 
 def format_list_of_projects():
@@ -165,7 +165,6 @@ def main(argv=sys.argv[1:]):
     args = parse_args(argv)
     if args.func == change_config:
         validate_change_config(args)
-    local_logger = set_logging_level(args, logger)
     handler = get_logging_handler(args)
     with handler.applicationbound():
         args.func(args)
