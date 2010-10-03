@@ -29,6 +29,7 @@ Requirements
 - either Python 2.7 or Python 2.6 with the python package argparse_ installed
 - texttable_
 - `py`_
+- `progressbar`_
 - at least one of the following markup languages:
 
   - ReST_
@@ -55,6 +56,7 @@ Requirements
 .. _argparse: http://code.google.com/p/argparse/
 .. _texttable: http://pypi.python.org/pypi/texttable
 .. _py: http://pypi.python.org/pypi/py
+.. _progressbar: http://code.google.com/p/python-progressbar/
 '''
 
 from __future__ import print_function

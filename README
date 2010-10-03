@@ -26,6 +26,7 @@ Requirements
     (http://pypi.python.org/pypi/argparse) installed
 - texttable -> http://pypi.python.org/pypi/texttable/
 - py -> http://pypi.python.org/pypi/py
+- progressbar -> http://code.google.com/p/python-progressbar/
 - at least one of the following markup languages, installed as a python package:
   - ReST (the corresponding python package is called "docutils")
       -> http://pypi.python.org/pypi/docutils

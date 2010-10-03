@@ -1,7 +1,7 @@
 0.1
 [ ] implement every prepared test
 [ ] fix all important TODO and FIXME comments in the *.py files!
-[ ] add an ASCII progress bar to visualize the rendering process
+[X] add an ASCII progress bar to visualize the rendering process
     -> new dependency: progressbar package (PyPI)
        -> mention it in the files setup.py and README
 - CLI
