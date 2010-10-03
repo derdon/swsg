@@ -23,6 +23,17 @@ SUPPORTED_MARKUP_LANGUAGES = frozenset(
     ['rest', 'creole', 'textile', 'markdown'])
 
 
+class UnsupportedMarkup(Exception):
+    def __init__(self, markup):
+        self.markup = markup
+
+    def __str__(self):
+        return 'the markup {0} is not supported'.format(self.markup)
+
+    def __repr__(self):
+        return '{0}({1})'.format(self.__class__.__name__, self.markup)
+
+
 class BaseSource(object):
     def __init__(self, text):
         self.text = text
@@ -48,3 +59,17 @@ class TextileSource(BaseSource):
 class MarkdownSource(BaseSource):
     def render(self):
         return markdown(self.text, output_format='xhtml')
+
+
+def get_source_class_by_markup(markup):
+    markups = {
+        'rest': ReSTSource,
+        'creole': CreoleSource,
+        'textile': TextileSource,
+        'markdown': MarkdownSource}
+    try:
+        SourceClass = markups[markup]
+    except KeyError:
+        raise UnsupportedMarkup(markup)
+    else:
+        return SourceClass
