@@ -22,7 +22,7 @@ from swsg.utils import is_none
 
 def get_logging_handler(args):
     if args.logfile is None:
-        if operating_system == 'Windows':
+        if operating_system == 'nt':
             # FIXME: use the handler logbook.NTEventLogHandler for windows
             #        users
             raise OSError(
