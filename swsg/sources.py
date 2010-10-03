@@ -17,8 +17,6 @@ try:
 except ImportError:
     pass
 
-from swsg.loggers import swsg_logger as logger
-
 SUPPORTED_MARKUP_LANGUAGES = frozenset(
     ['rest', 'creole', 'textile', 'markdown'])
 
