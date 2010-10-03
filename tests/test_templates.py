@@ -1,9 +1,10 @@
 import string
 import os
 import tempfile
+from StringIO import StringIO
 
 import py.test
-from swsg.templates import SimpleTemplate
+from swsg.templates import BaseTemplate, SimpleTemplate
 
 SOURCE_FILENAME = u'temp-source.rest'
 SOURCE_TEXT = u'some **important** text'
@@ -12,6 +13,24 @@ TEMPLATE_TEXT = string.Template(u'''sources: $temp_source
     temp_source=SOURCE_FILENAME)
 
 
+def test_base_template_init():
+    first_real_line = 'first real line of the template'
+    io = StringIO()
+    io.write('sources: foo.rest, bar.markdown\n' + first_real_line)
+    io.seek(0)
+    t = BaseTemplate(io)
+    source_names = t.source_names
+    assert source_names == ['foo.rest', 'bar.markdown']
+    assert t.text == first_real_line
+    io = StringIO()
+    io.write(first_real_line)
+    io.seek(0)
+    t = BaseTemplate(io)
+    source_names = t.source_names
+    assert source_names == []
+    assert t.text == first_real_line
+
+@py.test.mark.xfail
 def test_simple_template(tmpdir):
     template_filename = tempfile.mkstemp()[1]
     html_text = TEMPLATE_TEXT.format(title='$title', content='$content')
