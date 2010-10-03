@@ -34,8 +34,7 @@ class BaseTemplate(object):
     def __repr__(self):
         return '{0} "{1}"'.format(self.__class__.__name__, self.filename)
 
-    @property
-    def sources(self):
+    def get_sources(self):
         for source_name in self.source_names:
             filename = path.join(self.source_dir, source_name)
             # the markup language is the filename extension without the dot.
