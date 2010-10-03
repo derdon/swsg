@@ -12,7 +12,7 @@ class Object(object):
 def test_get_logging_handler_win():
     args = Object()
     args.logfile = None
-    py.test.raises(OSerror, 'get_logging_handler(args)')
+    py.test.raises(OSError, 'get_logging_handler(args)')
 
 @py.test.mark.skipif('os.name == "nt"')
 def test_get_logging_handler():
