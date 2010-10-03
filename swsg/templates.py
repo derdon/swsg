@@ -35,7 +35,7 @@ class BaseTemplate(object):
 
     def get_sources(self):
         for source_name in self.source_names:
-            filename = path.join(self.source_dir, source_name)
+            filename = path.abspath(source_name)
             # the markup language is the filename extension without the dot.
             # For example, the content of "foo.rest" will be rendered as ReST
             markup_language = path.splitext(filename)[1].lstrip('.')
