@@ -167,7 +167,7 @@ def main(argv=sys.argv[1:]):
         validate_change_config(args)
     local_logger = set_logging_level(args, logger)
     handler = get_logging_handler(args)
-    with handler.applicationbound(bubble=False):
+    with handler.applicationbound():
         args.func(args)
 
 if __name__ == '__main__':
