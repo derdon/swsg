@@ -1,7 +1,3 @@
-import string
-import os
-import tempfile
-
 import py.test
 from swsg.templates import BaseTemplate, SimpleTemplate
 from swsg.sources import ReSTSource, MarkdownSource
