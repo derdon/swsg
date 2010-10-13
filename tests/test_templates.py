@@ -23,11 +23,11 @@ def test_base_template_init():
 
 
 def test_base_template_get_sources(tmpdir):
-    rest_text = 'text in the ReST file'
+    rest_text = u'text in the ReST file'
     foo = tmpdir.ensure('foo.rest')
     foo.check(file=True)
     foo.write(rest_text)
-    markdown_text = 'text in the markdown file'
+    markdown_text = u'text in the markdown file'
     bar = tmpdir.ensure('bar.markdown')
     bar.check(file=True)
     bar.write(markdown_text)
