@@ -9,13 +9,12 @@ SUPPORTED_TEMPLATE_ENGINES = frozenset(['simple', 'mako', 'jinja2', 'genshi'])
 
 
 class BaseTemplate(object):
-    def __init__(self, fp):
+    def __init__(self, text):
         '''
         Abstract base class for implementing template classes.
         '''
-        self.fp = fp
-        first_line = fp.readline().decode('utf-8')
-        rest = fp.read().decode('utf-8')
+        self.text
+        first_line, sep, rest = text.partition('\n')
         # the directive "sources" is optional. Therefore, the first line is
         # checked whether it starts whith the string "sources:". If it does,
         # the string after "sources:" is first stripped by whitespace and then
