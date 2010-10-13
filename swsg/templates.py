@@ -30,9 +30,6 @@ class BaseTemplate(object):
             self.source_names = []
             self.text = first_line + rest
 
-    def __repr__(self):
-        return '{0} "{1}"'.format(self.__class__.__name__, self.filename)
-
     def get_sources(self, base_path):
         for source_name in self.source_names:
             filename = path.join(base_path, source_name)
