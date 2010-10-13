@@ -53,8 +53,8 @@ class BaseTemplate(object):
 
 class SimpleTemplate(BaseTemplate):
     'Render templates as described in :pep:`0292`'
-    def render(self):
-        for source_name, source in self.sources:
+    def render(self, source_path):
+        for source_name, source in self.get_sources(source_path):
             rendered_source_text = source.render()
             template = string.Template(self.text)
             rendered_template = template.safe_substitute(
@@ -64,15 +64,15 @@ class SimpleTemplate(BaseTemplate):
 
 
 class MakoTemplate(BaseTemplate):
-    def render(self, source):
+    def render(self, source_path):
         raise NotImplementedError
 
 
 class Jinja2Template(BaseTemplate):
-    def render(self, source):
+    def render(self, source_path):
         raise NotImplementedError
 
 
 class GenshiTemplate(BaseTemplate):
-    def render(self, source):
+    def render(self, source_path):
         raise NotImplementedError
