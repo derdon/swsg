@@ -38,6 +38,15 @@ class BaseSource(object):
     def __init__(self, text):
         self.text = text
 
+    def __eq__(self, other):
+        return type(self) == type(other) and self.text == other.text
+
+    def __ne__(self, other):
+        return not (self == other)
+
+    def __hash__(self):
+        return hash(self.text)
+
 
 class ReSTSource(BaseSource):
     def render(self):
