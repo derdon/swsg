@@ -50,11 +50,11 @@ class BaseTemplate(object):
 class SimpleTemplate(BaseTemplate):
     'Render templates as described in :pep:`0292`'
     def render(self, source_path):
-        for source_name, source in self.get_sources(source_path):
+        for source in self.get_sources(source_path):
             rendered_source_text = source.render()
             template = string.Template(self.text)
             rendered_template = template.safe_substitute(
-                title=source_name.rsplit('.', 1)[0],
+                title=source.title,
                 content=rendered_source_text)
             yield source, rendered_template
 
