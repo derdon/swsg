@@ -37,6 +37,19 @@ class UnsupportedMarkup(Exception):
 class BaseSource(object):
     def __init__(self, text):
         self.text = text
+        first_line, sep, rest = text.partition('\n')
+        if first_line.startswith('title:'):
+            self.title = first_line.lstrip('title:').strip()
+        else:
+            # if the title is not given, generate it by taking the first five
+            # words of the first line
+            splitted_first_line = first_line.split()
+            first_five_words = splitted_first_line[:5]
+            self.title = ' '.join(first_five_words)
+            # add a faked ellipsis to the title if there are more than 5 words
+            # in the first line, i.e. if it was truncated
+            if len(first_five_words) > 5:
+                self.title += ' ...'
 
     def __eq__(self, other):
         return type(self) == type(other) and self.text == other.text
