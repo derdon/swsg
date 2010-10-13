@@ -14,7 +14,7 @@ class BaseTemplate(object):
         '''
         Abstract base class for implementing template classes.
         '''
-        self.text
+        self.text = text
         first_line, sep, rest = text.partition('\n')
         # the directive "sources" is optional. Therefore, the first line is
         # checked whether it starts whith the string "sources:". If it does,
