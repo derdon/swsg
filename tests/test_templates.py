@@ -4,6 +4,7 @@ import tempfile
 
 import py.test
 from swsg.templates import BaseTemplate, SimpleTemplate
+from swsg.sources import ReSTSource, MarkdownSource
 
 SOURCE_FILENAME = u'temp-source.rest'
 SOURCE_TEXT = u'some **important** text'
@@ -23,6 +24,25 @@ def test_base_template_init():
     source_names = list(t.source_names)
     assert source_names == []
     assert t.text == FIRST_REAL_LINE
+
+
+def test_base_template_get_sources(tmpdir):
+    rest_text = 'text in the ReST file'
+    foo = tmpdir.ensure('foo.rest')
+    foo.check(file=True)
+    foo.write(rest_text)
+    markdown_text = 'text in the markdown file'
+    bar = tmpdir.ensure('bar.markdown')
+    bar.check(file=True)
+    bar.write(markdown_text)
+    t = BaseTemplate(TEMPLATE_TEXT_ONESOURCE)
+    sources = t.get_sources(str(tmpdir))
+    first_source = sources.next()
+    assumed_source = ReSTSource(rest_text)
+    assert first_source == assumed_source
+    second_source = sources.next()
+    assumed_source = MarkdownSource(markdown_text)
+    assert second_source == assumed_source
 
 
 @py.test.mark.xfail
