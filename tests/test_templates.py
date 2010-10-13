@@ -25,6 +25,7 @@ def test_base_template_init():
     assert source_names == []
     assert t.text == first_real_line
 
+
 @py.test.mark.xfail
 def test_simple_template(tmpdir):
     template_filename = tempfile.mkstemp()[1]
