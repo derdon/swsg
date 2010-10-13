@@ -1,6 +1,5 @@
 import string
 from os import path
-from itertools import imap
 
 from swsg.sources import (ensure_markup_is_valid_and_installed,
     get_source_class_by_markup)
@@ -22,7 +21,7 @@ class BaseTemplate(object):
         # splitted up by commas to get the file names which belong to the given
         # template
         if first_line.startswith('sources:'):
-            self.source_names = imap(
+            self.source_names = map(
                 unicode.strip,
                 first_line.lstrip('sources:').strip().split(','))
             self.text = rest
