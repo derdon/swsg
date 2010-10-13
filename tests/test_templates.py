@@ -59,14 +59,13 @@ def test_simple_template(tmpdir):
     expected_result = (
         u'<html>'
           u'<body>'
-            u'<h1>some **important** text ...</h1>'
+            u'<h1>some **important** text</h1>'
             u'<p>'
               u'<p>some <strong>important</strong> text</p>\n'
             u'</p>'
           u'</body>'
         u'</html>')
     rendered_templates = template.render(str(tmpdir))
-    print list(template.source_names)
     source, output = rendered_templates.next()
     # make sure that there was only one template rendered
     py.test.raises(StopIteration, 'rendered_templates.next()')
