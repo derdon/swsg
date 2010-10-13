@@ -33,9 +33,9 @@ class BaseTemplate(object):
     def __repr__(self):
         return '{0} "{1}"'.format(self.__class__.__name__, self.filename)
 
-    def get_sources(self):
+    def get_sources(self, base_path):
         for source_name in self.source_names:
-            filename = path.abspath(source_name)
+            filename = path.join(base_path, source_name)
             # the markup language is the filename extension without the dot.
             # For example, the content of "foo.rest" will be rendered as ReST
             markup_language = path.splitext(filename)[1].lstrip('.')
