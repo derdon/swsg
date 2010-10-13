@@ -1,7 +1,6 @@
 import string
 import os
 import tempfile
-from StringIO import StringIO
 
 import py.test
 from swsg.templates import BaseTemplate, SimpleTemplate
