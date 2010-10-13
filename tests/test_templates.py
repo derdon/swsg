@@ -13,7 +13,9 @@ TEMPLATE_TEXT = string.Template(u'''sources: $temp_source
     temp_source=SOURCE_FILENAME)
 
 FIRST_REAL_LINE = u'first real line of the template'
-TEMPLATE_TEXT_ONESOURCE = u'sources: foo.rest, bar.markdown\n' + FIRST_REAL_LINE
+TEMPLATE_TEXT_ONESOURCE = (
+    u'sources: foo.rest, bar.markdown\n' + FIRST_REAL_LINE)
+
 
 def test_base_template_init():
     t = BaseTemplate(TEMPLATE_TEXT_ONESOURCE)
