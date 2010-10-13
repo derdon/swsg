@@ -7,12 +7,12 @@ SIMPLE_TEMPLATE_TEXT = (u'''sources: temp-source.rest
 <html><body><h1>{title}</h1><p>{content}</p></body></html>''')
 
 FIRST_REAL_LINE = u'first real line of the template'
-TEMPLATE_TEXT_ONESOURCE = (
+TEMPLATE_TEXT_MULTIPLE_SOURCES = (
     u'sources: foo.rest, bar.markdown\n' + FIRST_REAL_LINE)
 
 
 def test_base_template_init():
-    t = BaseTemplate(TEMPLATE_TEXT_ONESOURCE)
+    t = BaseTemplate(TEMPLATE_TEXT_MULTIPLE_SOURCES)
     source_names = list(t.source_names)
     assert source_names == [u'foo.rest', u'bar.markdown']
     assert t.text == FIRST_REAL_LINE
@@ -31,7 +31,7 @@ def test_base_template_get_sources(tmpdir):
     bar = tmpdir.ensure('bar.markdown')
     bar.check(file=True)
     bar.write(markdown_text)
-    t = BaseTemplate(TEMPLATE_TEXT_ONESOURCE)
+    t = BaseTemplate(TEMPLATE_TEXT_MULTIPLE_SOURCES)
     sources = t.get_sources(str(tmpdir))
     first_source = sources.next()
     assumed_source = ReSTSource(rest_text)
