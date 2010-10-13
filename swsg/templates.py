@@ -43,6 +43,18 @@ class BaseTemplate(object):
             SourceClass = get_source_class_by_markup(markup_language)
             yield SourceClass(text)
 
+    def __eq__(self, other):
+        return (
+            type(self) == type(other) and
+            self.text == other.text and
+            self.source_names == other.source_names)
+
+    def __ne__(self, other):
+        return not (self == other)
+
+    def __hash__(self):
+        return hash(self.text) + hash(tuple(self.source_names))
+
     def render(self, source):
         raise NotImplementedError
 
