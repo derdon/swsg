@@ -14,19 +14,14 @@ TEMPLATE_TEXT = string.Template(u'''sources: $temp_source
 
 
 def test_base_template_init():
-    first_real_line = 'first real line of the template'
-    io = StringIO()
-    io.write('sources: foo.rest, bar.markdown\n' + first_real_line)
-    io.seek(0)
-    t = BaseTemplate(io)
-    source_names = t.source_names
-    assert source_names == ['foo.rest', 'bar.markdown']
+    first_real_line = u'first real line of the template'
+    template_text = u'sources: foo.rest, bar.markdown\n' + first_real_line
+    t = BaseTemplate(template_text)
+    source_names = list(t.source_names)
+    assert source_names == [u'foo.rest', u'bar.markdown']
     assert t.text == first_real_line
-    io = StringIO()
-    io.write(first_real_line)
-    io.seek(0)
-    t = BaseTemplate(io)
-    source_names = t.source_names
+    t = BaseTemplate(first_real_line)
+    source_names = list(t.source_names)
     assert source_names == []
     assert t.text == first_real_line
 
