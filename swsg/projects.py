@@ -92,11 +92,15 @@ class Project(object):
         self.read_config()
         template_language = self.config.get(
             self.CONFIG_SECTION, 'template language')
-        # FIXME: add more template classes and catch KeyError if the user
-        # tried a non-allowed template language
+        # FIXME: add more template classes
         templates = {
             'simple': SimpleTemplate}
-        TemplateClass = templates[template_language]
+        try:
+            TemplateClass = templates[template_language]
+        except KeyError:
+            logger.critical(
+                'the template language {0} does either '
+                'not exist or is not supported.')
         for template_name in os.listdir(self.template_dir):
             filename = os.path.join(self.template_dir, template_name)
             with open(filename) as fp:
