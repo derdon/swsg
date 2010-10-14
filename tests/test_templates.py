@@ -33,10 +33,10 @@ def test_base_template_get_sources(tmpdir):
     bar.write(markdown_text)
     t = BaseTemplate(TEMPLATE_TEXT_MULTIPLE_SOURCES)
     sources = t.get_sources(str(tmpdir))
-    first_source = sources.next()
+    first_source, first_source_name = sources.next()
     assumed_source = ReSTSource(rest_text)
     assert first_source == assumed_source
-    second_source = sources.next()
+    second_source, second_source_name = sources.next()
     assumed_source = MarkdownSource(markdown_text)
     assert second_source == assumed_source
 
