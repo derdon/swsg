@@ -84,17 +84,15 @@ class MarkdownSource(BaseSource):
 
 
 def get_source_class_by_markup(markup):
-    markups = {
-        'rest': ReSTSource,
-        'creole': CreoleSource,
-        'textile': TextileSource,
-        'markdown': MarkdownSource}
-    try:
-        SourceClass = markups[markup]
-    except KeyError:
-        raise UnsupportedMarkup(markup)
-    else:
-        return SourceClass
+    markups = [
+        (frozenset(('rest', 'rst')), ReSTSource),
+        (frozenset(('creole',)), CreoleSource),
+        (frozenset(('textile', 'tt')), TextileSource),
+        (frozenset(('markdown', 'md')), MarkdownSource)]
+    for markup_identifiers, SourceClass in markups:
+        if markup in markup_identifiers:
+            return SourceClass
+    raise UnsupportedMarkup(markup)
 
 
 def ensure_markup_is_valid_and_installed(markup_language, logger=swsg_logger):
