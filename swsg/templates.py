@@ -8,6 +8,17 @@ from swsg.sources import (ensure_markup_is_valid_and_installed,
 SUPPORTED_TEMPLATE_ENGINES = frozenset(['simple', 'mako', 'jinja2', 'genshi'])
 
 
+class NonexistingSource(Exception):
+    def __init__(self, source_path):
+        self.source_path = source_path
+
+    def __str__(self):
+        return 'the source {0} does not exist'.format(self.source_path)
+
+    def __repr__(self):
+        return '{0}({1})'.format(self.__class__.__name__, self.source_path)
+
+
 class BaseTemplate(object):
     def __init__(self, text):
         '''
@@ -36,10 +47,13 @@ class BaseTemplate(object):
             # For example, the content of "foo.rest" will be rendered as ReST
             markup_language = path.splitext(filename)[1].lstrip('.')
             ensure_markup_is_valid_and_installed(markup_language)
-            # FIXME: it could be that this filename does not exist, i.e. an
-            # IOError will be raised then! -> raise a custom exception
-            with open(filename) as fp:
-                text = fp.read().decode('utf-8')
+            # the filename mentioned in the template does not exist
+            # -> raise a custom exception
+            try:
+                with open(filename) as fp:
+                    text = fp.read().decode('utf-8')
+            except IOError:
+                raise NonexistingSource(filename)
             SourceClass = get_source_class_by_markup(markup_language)
             yield SourceClass(text), source_name
 
