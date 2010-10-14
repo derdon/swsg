@@ -41,7 +41,7 @@ class BaseTemplate(object):
             with open(filename) as fp:
                 text = fp.read().decode('utf-8')
             SourceClass = get_source_class_by_markup(markup_language)
-            yield SourceClass(text)
+            yield SourceClass(text), source_name
 
     def __eq__(self, other):
         return (
@@ -62,13 +62,13 @@ class BaseTemplate(object):
 class SimpleTemplate(BaseTemplate):
     'Render templates as described in :pep:`0292`'
     def render(self, source_path):
-        for source in self.get_sources(source_path):
+        for source, source_name in self.get_sources(source_path):
             rendered_source_text = source.render()
             template = string.Template(self.text)
             rendered_template = template.safe_substitute(
                 title=source.title,
                 content=rendered_source_text)
-            yield source, rendered_template
+            yield source_name, rendered_template
 
 
 class MakoTemplate(BaseTemplate):
