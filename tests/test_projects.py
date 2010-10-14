@@ -4,9 +4,17 @@ from datetime import datetime
 from ConfigParser import SafeConfigParser, NoSectionError
 
 import py
+from swsg.sources import ReSTSource
 from swsg.templates import SimpleTemplate
-from swsg.sources import Source
 from swsg.projects import Project, remove_project, NonexistingProject
+
+from test_templates import SIMPLE_TEMPLATE_TEXT
+
+SOURCE_CONTENT = (
+    u'headline\n'
+    u'--------\n'
+    u'*important* text'
+)
 
 
 class Object(object):
@@ -29,6 +37,50 @@ def test_make_project_directories(temp_project):
     assert path.exists(path_join('output'))
 
 
+def test_sources_property(temp_project):
+    temp_project.init()
+    list_of_sources = list(temp_project.sources)
+    assert list_of_sources == []
+    make_source = py.path.local(temp_project.source_dir).ensure
+    source1 = make_source('source1.rest')
+    source1.check(file=True)
+    source1_content = 'content of source1'
+    source1.write(source1_content)
+    source2 = make_source('source2.rest')
+    source2.check(file=True)
+    source2_content = 'content of source2'
+    source2.write(source2_content)
+    list_of_sources = list(temp_project.sources)
+    assert len(list_of_sources) == 2
+    assert list_of_sources == [
+        ReSTSource(source1_content),
+        ReSTSource(source2_content)]
+
+
+def test_templates_property(temp_project):
+    temp_project.init()
+    list_of_templates = list(temp_project.templates)
+    assert list_of_templates == []
+    make_template = py.path.local(temp_project.template_dir).ensure
+    template1 = make_template('template1.html')
+    template1.check(file=True)
+    template1_content = 'content of template1'
+    template1.write(template1_content)
+    template2 = make_template('template2.html')
+    template2.check(file=True)
+    template2_content = 'content of template2'
+    template2.write(template2_content)
+    list_of_templates = list(temp_project.templates)
+    assert len(list_of_templates) == 2
+    assert list_of_templates == [
+        (
+            SimpleTemplate(template1_content),
+            path.join(temp_project.template_dir, str(template1))),
+        (
+            SimpleTemplate(template2_content),
+            path.join(temp_project.template_dir, str(template2)))]
+
+
 def test_update_projects_file(temp_project):
     temp_project.make_project_directories()
     assert temp_project.created is None
@@ -47,15 +99,11 @@ def test_local_config(temp_project):
     get = partial(temp_project.config.get, section)
     assert isinstance(temp_project.config, SafeConfigParser)
     assert not temp_project.config.has_section(section)
-    assert not has_option('markup language')
     assert not has_option('template language')
-    py.test.raises(NoSectionError, "get('markup language') == 'rest'")
     py.test.raises(NoSectionError, "get('template language') == 'simple'")
     temp_project.init()
     assert temp_project.config.has_section(section)
-    assert has_option('markup language')
     assert has_option('template language')
-    assert get('markup language') == 'rest'
     assert get('template language') == 'simple'
 
 
@@ -68,48 +116,65 @@ def test_update_config(temp_project):
     assert temp_project.config.get(section, 'template language') == 'jinja2'
 
 
-def test_render_project(temp_project, monkeypatch):
-    template = Object()
-    rendered_template = '<h1>A test title</h1><p>the test content</p>'
-    template.render = lambda: [[source, rendered_template]]
-    template.filename = 'test-template'
-    monkeypatch.setattr(type(temp_project), 'templates', [template])
+def test_render_project(temp_project):
     temp_project.init()
-    source = Object()
-    source.filename = 'test-source.rest'
-    for output_path, output in temp_project.render():
-        expected_output_path = path.join(
-            temp_project.output_dir,
-            path.splitext(source.filename)[0]) + '.html'
-        assert output_path == expected_output_path
-        assert output == rendered_template
+    source_path = py.path.local(
+        temp_project.source_dir).ensure('temp-source.rest')
+    source_path.check(file=True)
+    source_path.write(SOURCE_CONTENT)
+    template_path = py.path.local(
+        temp_project.template_dir).ensure('template.html')
+    template_path.check(file=True)
+    template_path.write(SIMPLE_TEMPLATE_TEXT)
+    list_of_templates = list(temp_project.templates)
+    assert len(list(temp_project.sources)) == 1
+    assert len(list_of_templates) == 1
+
+    template, template_path = list_of_templates[0]
+    return_values = temp_project.render()
+    output_path, output = return_values.next()
+    source_name, rendered_template = template.render(
+        temp_project.source_dir).next()
+    assert source_name == 'temp-source.rest'
+    assert output == rendered_template
+    assert output_path == path.join(
+        temp_project.output_dir, 'temp-source.html')
+    # there is only one template which assigns to only one source, so there
+    # shouldn't be anything left in the generator
+    py.test.raises(StopIteration, 'return_values.next()')
 
 
 def test_save_source(temp_project):
-    source_content = (
-        'headline\n'
-        '--------'
-        '*important* text'
-    )
-    source_filename = path.join(temp_project.source_dir, 'temp-source')
+    assert not temp_project.updated_projects_file
     temp_project.init()
-    source = Source(source_content, 'rest')
+    # set ``updated_projects_file`` to False to check whether it is set to True
+    # after calling ``save_source``
+    temp_project.updated_projects_file = False
+    source_filename = 'temp-source'
+    absolute_source_filename = path.join(
+        temp_project.source_dir, source_filename)
+    source = ReSTSource(SOURCE_CONTENT)
     temp_project.save_source(source, source_filename)
-    with open(source_filename) as fp:
-        assert source_content == fp.read()
+    assert temp_project.updated_projects_file
+    with open(absolute_source_filename) as fp:
+        assert SOURCE_CONTENT == fp.read()
 
 
 def test_save_template(temp_project):
-    template_filename = path.join(temp_project.template_dir, 'temp-template')
+    assert not temp_project.updated_projects_file
     temp_project.init()
-    with open(template_filename, 'w') as fp:
-        fp.write('<h1>$title</h1><p>$content</p>')
-    template = SimpleTemplate(temp_project, template_filename)
-    temp_project.save_template(template)
-    assert template_filename == path.join(
-        temp_project.template_dir, template.filename)
-    with open(template_filename) as f:
-        assert template.text == f.read()
+    # set ``updated_projects_file`` to False to check whether it is set to True
+    # after calling ``save_source``
+    temp_project.updated_projects_file = False
+    template_content = 'the template text'
+    template_filename = 'template.html'
+    absolute_template_filename = path.join(
+        temp_project.template_dir, template_filename)
+    template = SimpleTemplate(template_content)
+    temp_project.save_template(template, template_filename)
+    assert temp_project.updated_projects_file
+    with open(absolute_template_filename) as fp:
+        assert template_content == fp.read()
 
 
 def test_project_exists(temp_project):

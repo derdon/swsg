@@ -1,7 +1,6 @@
 import os
 import shutil
 import shelve
-import codecs
 import contextlib
 from datetime import datetime
 from itertools import izip
@@ -10,7 +9,7 @@ from ConfigParser import SafeConfigParser, DuplicateSectionError
 from swsg.loggers import swsg_logger as logger
 from swsg.file_paths import DEFAULT_PROJECTS_FILE_NAME
 from swsg.templates import SimpleTemplate
-from swsg.sources import Source
+from swsg.sources import get_source_class_by_markup
 
 
 class NonexistingProject(Exception):
@@ -23,8 +22,6 @@ class Project(object):
     def __init__(self, path, name,
                  projects_file_name=DEFAULT_PROJECTS_FILE_NAME):
         self.path = os.path.abspath(path)
-        # TODO: be aware of non-ASCII characters in ``name`` and filter only
-        # the ASCII characters -> ask Trundle for his nice function :)
         self.name = name
         self.config = SafeConfigParser()
 
@@ -84,21 +81,27 @@ class Project(object):
             # the markup language is the filename extension without the dot.
             # For example, the content of "foo.rest" will be rendered as ReST
             markup_language = os.path.splitext(source_name)[1].lstrip('.')
-            with codecs.open(source_name, 'r', 'utf-8') as fp:
-                text = fp.read()
-            yield Source(text, markup_language)
+            source_path = os.path.join(self.source_dir, source_name)
+            with open(source_path) as fp:
+                text = fp.read().decode('utf-8')
+            SourceClass = get_source_class_by_markup(markup_language)
+            yield SourceClass(text)
 
     @property
     def templates(self):
         self.read_config()
         template_language = self.config.get(
             self.CONFIG_SECTION, 'template language')
+        # FIXME: add more template classes and catch KeyError if the user
+        # tried a non-allowed template language
         templates = {
             'simple': SimpleTemplate}
         TemplateClass = templates[template_language]
         for template_name in os.listdir(self.template_dir):
             filename = os.path.join(self.template_dir, template_name)
-            yield TemplateClass(self, filename)
+            with open(filename) as fp:
+                file_content = fp.read().decode('utf-8')
+            yield TemplateClass(file_content), filename
 
     def update_projects_file(self, new_created=False):
         now = datetime.now()
@@ -122,8 +125,8 @@ class Project(object):
 
     def reset_config(self):
         logger.notice('resetting the configuration file')
-        options = ['markup language', 'template language']
-        default_values = ['rest', 'simple']
+        options = ['template language']
+        default_values = ['simple']
         default_settings = izip(options, default_values)
         try:
             self.config.add_section(self.CONFIG_SECTION)
@@ -160,26 +163,28 @@ class Project(object):
 
     def render(self):
         logger.notice('starting the rendering process')
-        for template in self.templates:
-            for source, output in template.render():
-                head, tail = os.path.split(source.filename)
+        for template, template_filename in self.templates:
+            for source_name, output in template.render(self.source_dir):
+                head, tail = os.path.split(source_name)
                 filename = os.path.splitext(tail)[0]
                 output_path = os.path.join(self.output_dir, filename) + '.html'
                 logger.info('{0} + {1} -> {2}'.format(
-                    source.filename, template.filename, output_path))
+                    source_name, template_filename, output_path))
                 yield output_path, output
         logger.notice('finishing the rendering process')
 
-    def save_source(self, source, filename):
-        filename = os.path.join(self.source_dir, filename)
+    def save_source(self, source, name):
+        logger.notice('saving the source {0} in the directory {1}'.format(
+            name, self.source_dir))
+        filename = os.path.join(self.source_dir, name)
         with open(filename, 'w') as fp:
             fp.write(source.text)
         self.update_projects_file()
 
-    def save_template(self, template):
+    def save_template(self, template, name):
         logger.notice('saving the template {0} in the directory {1}'.format(
-            template.filename, self.template_dir))
-        filename = os.path.join(self.template_dir, template.filename)
+            name, self.template_dir))
+        filename = os.path.join(self.template_dir, name)
         with open(filename, 'w') as fp:
             fp.write(template.text)
         self.update_projects_file()
