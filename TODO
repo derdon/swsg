@@ -27,7 +27,6 @@
 - Templates:
   - functions ``sitemap`` gets the parameters depth, exclude
   - function ``breadcrumbs``
-  - add support for the template engines Jinja2, Mako, and Genshi
   - drop support for SimpleTemplate as soon as possible!
 
 - CSS (Design / Style):
