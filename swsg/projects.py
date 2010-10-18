@@ -169,7 +169,11 @@ class Project(object):
         logger.notice('starting the rendering process')
         for template, template_filename in self.templates:
             try:
-                for source_name, output in template.render(self.source_dir):
+                rendered_templates = template.render(self.source_dir)
+            except NonexistingSource, e:
+                logger.critical(str(e))
+            else:
+                for source_name, output in rendered_templates:
                     head, tail = os.path.split(source_name)
                     filename = os.path.splitext(tail)[0]
                     output_path = os.path.join(
@@ -177,8 +181,6 @@ class Project(object):
                     logger.info('{0} + {1} -> {2}'.format(
                         source_name, template_filename, output_path))
                     yield output_path, output
-            except NonexistingSource, e:
-                logger.critical(str(e))
         logger.notice('finishing the rendering process')
 
     def save_source(self, source, name):
