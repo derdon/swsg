@@ -83,7 +83,6 @@ class SimpleTemplate(BaseTemplate):
     'Render templates as described in :pep:`0292`'
     def render(self, source_path):
         for source, source_name in self.get_sources(source_path):
-            rendered_source_text = source.render()
             template = string.Template(self.text)
             rendered_template = template.safe_substitute(
                 **self.get_namespace(source))
