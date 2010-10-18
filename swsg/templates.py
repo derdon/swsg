@@ -57,6 +57,12 @@ class BaseTemplate(object):
             SourceClass = get_source_class_by_markup(markup_language)
             yield SourceClass(text), source_name
 
+    def get_namespace(self, source):
+        rendered_source_text = source.render()
+        return {
+            'title': source.title,
+            'content': rendered_source_text}
+
     def __eq__(self, other):
         return (
             type(self) == type(other) and
@@ -80,8 +86,7 @@ class SimpleTemplate(BaseTemplate):
             rendered_source_text = source.render()
             template = string.Template(self.text)
             rendered_template = template.safe_substitute(
-                title=source.title,
-                content=rendered_source_text)
+                **self.get_namespace(source))
             yield source_name, rendered_template
 
 
