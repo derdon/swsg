@@ -67,7 +67,7 @@ def test_simple_template(tmpdir):
         u'</html>')
     rendered_templates = template.render(str(tmpdir))
     source, output = rendered_templates.next()
-    # make sure that there was only one template rendered
+    # make sure that there was rendered only one template
     py.test.raises(StopIteration, 'rendered_templates.next()')
     assert output == expected_result
 
