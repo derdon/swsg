@@ -101,6 +101,8 @@ class MakoTemplate(BaseTemplate):
 
 class Jinja2Template(BaseTemplate):
     def render(self, source_path):
+        # TODO: pay attention to these parameters:
+        # http://jinja.pocoo.org/api/#jinja2.Environment
         # import jinja2 only here because this package is optional
         from jinja2 import Template
         template = Template(self.text)
