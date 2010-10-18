@@ -74,11 +74,14 @@ def test_simple_template(tmpdir):
 
 def test_mako_template():
     py.test.importorskip('mako')
+    # FIXME: test me!
 
 
 def test_jinja2_template():
     py.test.importorskip('jinja2')
+    # FIXME: test me!
 
 
 def test_genshi_template():
     py.test.importorskip('genshi')
+    # FIXME: test me!
