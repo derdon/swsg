@@ -13,3 +13,4 @@
 [X] do not only interpret the filename extensions like .markdown, but also
     common shorter ones like .md
 [ ] support the template languages Jinja2, Genshi and Mako
+[ ] catch more exceptions and print useful error messages
