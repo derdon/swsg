@@ -101,7 +101,12 @@ class MakoTemplate(BaseTemplate):
 
 class Jinja2Template(BaseTemplate):
     def render(self, source_path):
-        raise NotImplementedError
+        # import jinja2 only here because this package is optional
+        from jinja2 import Template
+        template = Template(self.text)
+        for source, source_name in self.get_sources(source_path):
+            rendered_template = template.render(**self.get_namespace(source))
+            yield source_name, rendered_template
 
 
 class GenshiTemplate(BaseTemplate):
