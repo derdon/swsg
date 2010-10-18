@@ -1,6 +1,5 @@
 - General
   - provide more interfaces (GTK+, Qt, CLI, (curses), (web), PIDA-Plugin)
-  - add example projects
 
 - Documentation
   - a seperate repo for the doc which uses swsg itself to be generated!
