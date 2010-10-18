@@ -113,4 +113,9 @@ class Jinja2Template(BaseTemplate):
 
 class GenshiTemplate(BaseTemplate):
     def render(self, source_path):
-        raise NotImplementedError
+        # import genshi only here because this package is optional
+        from genshi.template.markup import MarkupTemplate
+        template = MarkupTemplate(self.text)
+        for source, source_name in self.get_sources(source_path):
+            rendered_template = template.generate(**self.get_namespace(source))
+            yield source_name, rendered_template
