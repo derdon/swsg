@@ -82,8 +82,8 @@ class BaseTemplate(object):
 class SimpleTemplate(BaseTemplate):
     'Render templates as described in :pep:`0292`'
     def render(self, source_path):
+        template = string.Template(self.text)
         for source, source_name in self.get_sources(source_path):
-            template = string.Template(self.text)
             rendered_template = template.safe_substitute(
                 **self.get_namespace(source))
             yield source_name, rendered_template
@@ -93,8 +93,8 @@ class MakoTemplate(BaseTemplate):
     def render(self, source_path):
         # import mako only here because this package is optional
         from mako.template import Template
+        template = Template(self.text)
         for source, source_name in self.get_sources(source_path):
-            template = Template(self.text)
             rendered_template = template.render(**self.get_namespace(source))
             yield source_name, rendered_template
 
