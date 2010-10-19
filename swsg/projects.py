@@ -9,7 +9,7 @@ from ConfigParser import SafeConfigParser, DuplicateSectionError
 from swsg.loggers import swsg_logger as logger
 from swsg.file_paths import DEFAULT_PROJECTS_FILE_NAME
 from swsg.templates import (SimpleTemplate, MakoTemplate, Jinja2Template,
-    GenshiTemplate)
+    GenshiTemplate, get_template_class_by_template_language)
 from swsg.sources import get_source_class_by_markup
 
 
@@ -92,18 +92,12 @@ class Project(object):
     def templates(self):
         self.read_config()
         template_language = self.config.get(
-            self.CONFIG_SECTION, 'template language').lower()
-        templates = {
-            'simple': SimpleTemplate,
-            'mako': MakoTemplate,
-            'jinja': Jinja2Template,
-            'genshi': GenshiTemplate}
+            self.CONFIG_SECTION, 'template language')
         try:
-            TemplateClass = templates[template_language]
-        except KeyError:
-            logger.critical(
-                'the template language {0} does either '
-                'not exist or is not supported.')
+            TemplateClass = get_template_class_by_template_language(
+                template_language)
+        except UnsupportedTemplate, e:
+            logger.critical(str(e))
         for template_name in os.listdir(self.template_dir):
             filename = os.path.join(self.template_dir, template_name)
             with open(filename) as fp:

@@ -19,6 +19,20 @@ class NonexistingSource(Exception):
         return '{0}({1})'.format(self.__class__.__name__, self.source_path)
 
 
+class UnsupportedTemplate(Exception):
+    def __init__(self, template_language):
+        self.template_language = template_language
+
+    def __str__(self):
+        return (
+            'the template language {0} does either '
+            'not exist or is not supported.').format(self.template_language)
+
+    def __repr__(self):
+        return '{0}({1})'.format(
+            self.__class__.__name__, self.template_language)
+
+
 class BaseTemplate(object):
     def __init__(self, text):
         '''
@@ -119,3 +133,17 @@ class GenshiTemplate(BaseTemplate):
         for source, source_name in self.get_sources(source_path):
             rendered_template = template.generate(**self.get_namespace(source))
             yield source_name, rendered_template
+
+
+def get_template_class_by_template_language(template_language):
+    normalized_template_language = template_language.lower()
+    templates = [
+        (frozenset(('simple',)), SimpleTemplate),
+        (frozenset(('mako',)), MakoTemplate),
+        (frozenset(('jinja', 'jinja2')), Jinja2Template),
+        (frozenset(('genshi',)), GenshiTemplate),
+    ]
+    for template_identifiers, TemplateClass in templates:
+        if normalized_template_language in template_identifiers:
+            return TemplateClass
+    raise UnsupportedTemplate(normalized_template_language)
