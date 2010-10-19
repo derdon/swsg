@@ -8,7 +8,8 @@ from ConfigParser import SafeConfigParser, DuplicateSectionError
 
 from swsg.loggers import swsg_logger as logger
 from swsg.file_paths import DEFAULT_PROJECTS_FILE_NAME
-from swsg.templates import SimpleTemplate
+from swsg.templates import (SimpleTemplate, MakoTemplate, Jinja2Template,
+    GenshiTemplate)
 from swsg.sources import get_source_class_by_markup
 
 
@@ -91,10 +92,12 @@ class Project(object):
     def templates(self):
         self.read_config()
         template_language = self.config.get(
-            self.CONFIG_SECTION, 'template language')
-        # FIXME: add more template classes
+            self.CONFIG_SECTION, 'template language').lower()
         templates = {
-            'simple': SimpleTemplate}
+            'simple': SimpleTemplate,
+            'mako': MakoTemplate,
+            'jinja': Jinja2Template,
+            'genshi': GenshiTemplate}
         try:
             TemplateClass = templates[template_language]
         except KeyError:
