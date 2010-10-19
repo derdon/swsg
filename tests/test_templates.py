@@ -1,8 +1,9 @@
 import py.test
 from swsg.templates import (NonexistingSource, BaseTemplate, SimpleTemplate,
-    MakoTemplate)
+    MakoTemplate, Jinja2Template)
 from swsg.sources import ReSTSource, MarkdownSource
 
+SOURCE_NAME = u'temp-source.rest'
 SOURCE_TEXT = u'some **important** text'
 SIMPLE_TEMPLATE_TEXT = (u'''sources: temp-source.rest
 <html><body><h1>{title}</h1><p>{content}</p></body></html>''')
@@ -76,7 +77,7 @@ def test_simple_template(tmpdir):
 def test_mako_template(tmpdir):
     mako = py.test.importorskip('mako')
     from mako import template
-    source_name = u'temp-source.rest'
+    # almost completely copied from mako's homepage
     template_text = u'''<%
     rows = [[v for v in range(0,10)] for row in range(0,10)]
 %>
@@ -95,29 +96,51 @@ def test_mako_template(tmpdir):
 </%def>'''
     mako_template = template.Template(template_text)
     rendered_mako_template = mako_template.render()
-    text = u'sources: {0}\n{1}'.format(source_name, template_text)
+    text = u'sources: {0}\n{1}'.format(SOURCE_NAME, template_text)
     swsg_mako_template = MakoTemplate(text)
     assert swsg_mako_template.text == template_text
-    assert swsg_mako_template.source_names == [source_name]
+    assert swsg_mako_template.source_names == [SOURCE_NAME]
     nonworking_template_generator = swsg_mako_template.render(str(tmpdir))
     # the source does not exist yet, so it cannot be rendered
     py.test.raises(NonexistingSource, 'nonworking_template_generator.next()')
-    source_filename_path = tmpdir.ensure(source_name)
+    source_filename_path = tmpdir.ensure(SOURCE_NAME)
     source_filename_path.check(file=True)
     source_filename_path.write(SOURCE_TEXT)
     list_of_sources = list(swsg_mako_template.get_sources(str(tmpdir)))
-    assert list_of_sources == [(ReSTSource(SOURCE_TEXT), source_name)]
+    assert list_of_sources == [(ReSTSource(SOURCE_TEXT), SOURCE_NAME)]
     template_generator = swsg_mako_template.render(str(tmpdir))
     received_source_name, output = template_generator.next()
-    assert received_source_name == source_name
+    assert received_source_name == SOURCE_NAME
     # make sure that there was rendered only one template
     py.test.raises(StopIteration, 'template_generator.next()')
     assert output == rendered_mako_template
 
 
-def test_jinja2_template():
-    py.test.importorskip('jinja2')
-    # FIXME: test me!
+def test_jinja2_template(tmpdir):
+    jinja2 = py.test.importorskip('jinja2')
+    template_text = u'''{% for item in range(10) -%}
+        {{ item }}
+    {%- endfor %}'''
+    jinja_template = jinja2.Template(template_text)
+    rendered_jinja_template = jinja_template.render()
+    text = u'sources: {0}\n{1}'.format(SOURCE_NAME, template_text)
+    swsg_jinja_template = Jinja2Template(text)
+    assert swsg_jinja_template.text == template_text
+    assert swsg_jinja_template.source_names == [SOURCE_NAME]
+    nonworking_template_generator = swsg_jinja_template.render(str(tmpdir))
+    # the source does not exist yet, so it cannot be rendered
+    py.test.raises(NonexistingSource, 'nonworking_template_generator.next()')
+    source_filename_path = tmpdir.ensure(SOURCE_NAME)
+    source_filename_path.check(file=True)
+    source_filename_path.write(SOURCE_TEXT)
+    list_of_sources = list(swsg_jinja_template.get_sources(str(tmpdir)))
+    assert list_of_sources == [(ReSTSource(SOURCE_TEXT), SOURCE_NAME)]
+    template_generator = swsg_jinja_template.render(str(tmpdir))
+    received_source_name, output = template_generator.next()
+    assert received_source_name == SOURCE_NAME
+    # make sure that there was rendered only one template
+    py.test.raises(StopIteration, 'template_generator.next()')
+    assert output == rendered_jinja_template
 
 
 def test_genshi_template():
