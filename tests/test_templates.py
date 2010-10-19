@@ -1,6 +1,6 @@
 import py.test
 from swsg.templates import (NonexistingSource, BaseTemplate, SimpleTemplate,
-    MakoTemplate, Jinja2Template)
+    MakoTemplate, Jinja2Template, GenshiTemplate)
 from swsg.sources import ReSTSource, MarkdownSource
 
 SOURCE_NAME = u'temp-source.rest'
@@ -143,6 +143,35 @@ def test_jinja2_template(tmpdir):
     assert output == rendered_jinja_template
 
 
-def test_genshi_template():
-    py.test.importorskip('genshi')
-    # FIXME: test me!
+def test_genshi_template(tmpdir):
+    genshi = py.test.importorskip('genshi')
+    from genshi.template.markup import MarkupTemplate
+    # the following snippet is copied from
+    # http://genshi.edgewall.org/wiki/ApiDocs/genshi.template.markup
+    # and extended by an assignment at the beginning
+    template_text = '''<div xmlns:py="http://genshi.edgewall.org/">
+    <ul py:with="items=range(10)">
+        <li py:for="item in items">${item}</li>
+    </ul>
+</div>'''
+    genshi_template = MarkupTemplate(template_text)
+    stream = genshi_template.generate()
+    rendered_genshi_template = stream.render()
+    text = u'sources: {0}\n{1}'.format(SOURCE_NAME, template_text)
+    swsg_genshi_template = GenshiTemplate(text)
+    assert swsg_genshi_template.text == template_text
+    assert swsg_genshi_template.source_names == [SOURCE_NAME]
+    nonworking_template_generator = swsg_genshi_template.render(str(tmpdir))
+    # the source does not exist yet, so it cannot be rendered
+    py.test.raises(NonexistingSource, 'nonworking_template_generator.next()')
+    source_filename_path = tmpdir.ensure(SOURCE_NAME)
+    source_filename_path.check(file=True)
+    source_filename_path.write(SOURCE_TEXT)
+    list_of_sources = list(swsg_genshi_template.get_sources(str(tmpdir)))
+    assert list_of_sources == [(ReSTSource(SOURCE_TEXT), SOURCE_NAME)]
+    template_generator = swsg_genshi_template.render(str(tmpdir))
+    received_source_name, output = template_generator.next()
+    assert received_source_name == SOURCE_NAME
+    # make sure that there was rendered only one template
+    py.test.raises(StopIteration, 'template_generator.next()')
+    assert output == rendered_genshi_template
