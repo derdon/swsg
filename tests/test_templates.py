@@ -1,5 +1,6 @@
 import py.test
-from swsg.templates import BaseTemplate, SimpleTemplate
+from swsg.templates import (NonexistingSource, BaseTemplate, SimpleTemplate,
+    MakoTemplate)
 from swsg.sources import ReSTSource, MarkdownSource
 
 SOURCE_TEXT = u'some **important** text'
@@ -72,9 +73,46 @@ def test_simple_template(tmpdir):
     assert output == expected_result
 
 
-def test_mako_template():
-    py.test.importorskip('mako')
-    # FIXME: test me!
+def test_mako_template(tmpdir):
+    mako = py.test.importorskip('mako')
+    from mako import template
+    source_name = u'temp-source.rest'
+    template_text = u'''<%
+    rows = [[v for v in range(0,10)] for row in range(0,10)]
+%>
+<table>
+    % for row in rows:
+        ${makerow(row)}
+    % endfor
+</table>
+   
+<%def name="makerow(row)">
+    <tr>
+    % for name in row:
+        <td>${name}</td>
+    % endfor
+    </tr>
+</%def>'''
+    mako_template = template.Template(template_text)
+    rendered_mako_template = mako_template.render()
+    text = u'sources: {0}\n{1}'.format(source_name, template_text)
+    swsg_mako_template = MakoTemplate(text)
+    assert swsg_mako_template.text == template_text
+    assert swsg_mako_template.source_names == [source_name]
+    nonworking_template_generator = swsg_mako_template.render(str(tmpdir))
+    # the source does not exist yet, so it cannot be rendered
+    py.test.raises(NonexistingSource, 'nonworking_template_generator.next()')
+    source_filename_path = tmpdir.ensure(source_name)
+    source_filename_path.check(file=True)
+    source_filename_path.write(SOURCE_TEXT)
+    list_of_sources = list(swsg_mako_template.get_sources(str(tmpdir)))
+    assert list_of_sources == [(ReSTSource(SOURCE_TEXT), source_name)]
+    template_generator = swsg_mako_template.render(str(tmpdir))
+    received_source_name, output = template_generator.next()
+    assert received_source_name == source_name
+    # make sure that there was rendered only one template
+    py.test.raises(StopIteration, 'template_generator.next()')
+    assert output == rendered_mako_template
 
 
 def test_jinja2_template():
