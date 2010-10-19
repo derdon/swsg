@@ -27,7 +27,6 @@
 - Templates:
   - functions ``sitemap`` gets the parameters depth, exclude
   - function ``breadcrumbs``
-  - drop support for SimpleTemplate as soon as possible!
 
 - CSS (Design / Style):
   - support the following css constructors (and of course, CSS itself...):
