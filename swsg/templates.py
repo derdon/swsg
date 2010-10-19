@@ -131,7 +131,8 @@ class GenshiTemplate(BaseTemplate):
         from genshi.template.markup import MarkupTemplate
         template = MarkupTemplate(self.text)
         for source, source_name in self.get_sources(source_path):
-            rendered_template = template.generate(**self.get_namespace(source))
+            stream = template.generate(**self.get_namespace(source))
+            rendered_template = stream.render()
             yield source_name, rendered_template
 
 
