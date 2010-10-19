@@ -11,7 +11,7 @@
     - explain how to add custom template languages by subclassing
       ``swsg.templates.BaseTemplate``
     - only an idea: adding custom markup languages by subclassing
-      ``swsg.sources.Source``?
+      ``swsg.sources.BaseSource``?
     - HOWTO write a custom interface (!)
 
 - Preferences
