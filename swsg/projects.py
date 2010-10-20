@@ -3,13 +3,11 @@ import shutil
 import shelve
 import contextlib
 from datetime import datetime
-from itertools import izip
-from ConfigParser import RawConfigParser, DuplicateSectionError
+from ConfigParser import RawConfigParser
 
 from swsg.loggers import swsg_logger as logger
 from swsg.file_paths import DEFAULT_PROJECTS_FILE_NAME
-from swsg.templates import (SimpleTemplate, MakoTemplate, Jinja2Template,
-    GenshiTemplate, get_template_class_by_template_language)
+from swsg.templates import GenshiTemplate, get_template_class_by_template_language
 from swsg.sources import get_source_class_by_markup
 
 
