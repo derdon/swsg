@@ -8,8 +8,8 @@
   [X] rename the argument "list" to "list-projects"
 
 0.2
-[ ] add the argument "show-status" (or simply "status") which shows the files
-    to be rendered
+[ ] add the argument "status" which shows the files which have not been
+    rendered yet
 [X] do not only interpret the filename extensions like .markdown, but also
     common shorter ones like .md
 [X] support the template languages Jinja2, Genshi and Mako
