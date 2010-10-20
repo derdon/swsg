@@ -1,7 +1,7 @@
 from os import path
 from functools import partial
 from datetime import datetime
-from ConfigParser import SafeConfigParser, NoSectionError
+from ConfigParser import RawConfigParser, NoSectionError
 
 import py
 from swsg.sources import ReSTSource
@@ -96,12 +96,20 @@ def test_update_projects_file(temp_project):
 def test_local_config(temp_project):
     has_option = temp_project.config.has_option
     get = temp_project.config.get
-    assert isinstance(temp_project.config, SafeConfigParser)
+    assert isinstance(temp_project.config, RawConfigParser)
     assert not temp_project.config.has_section('general')
     assert not temp_project.config.has_section('genshi')
+    assert not temp_project.config.has_section('jinja')
     assert not has_option('general', 'template language')
     assert not has_option('genshi', 'method')
     assert not has_option('genshi', 'doctype')
+    assert not has_option('jinja2', 'block_start_string')
+    assert not has_option('jinja2', 'block_end_string')
+    assert not has_option('jinja2', 'variable_start_string')
+    assert not has_option('jinja2', 'variable_end_string')
+    assert not has_option('jinja2', 'comment_start_string')
+    assert not has_option('jinja2', 'comment_end_string')
+    assert not has_option('jinja2', 'trim_blocks')
     py.test.raises(
         NoSectionError,
         "get('general', 'template language') == 'simple'")
@@ -111,6 +119,13 @@ def test_local_config(temp_project):
     assert has_option('general', 'template language')
     assert has_option('genshi', 'method')
     assert has_option('genshi', 'doctype')
+    assert has_option('jinja', 'block_start_string')
+    assert has_option('jinja', 'block_end_string')
+    assert has_option('jinja', 'variable_start_string')
+    assert has_option('jinja', 'variable_end_string')
+    assert has_option('jinja', 'comment_start_string')
+    assert has_option('jinja', 'comment_end_string')
+    assert has_option('jinja', 'trim_blocks')
     assert get('general', 'template language') == 'simple'
     assert get('genshi', 'method') == 'html'
     assert get('genshi', 'doctype') == 'html5'

@@ -4,7 +4,7 @@ import shelve
 import contextlib
 from datetime import datetime
 from itertools import izip
-from ConfigParser import SafeConfigParser, DuplicateSectionError
+from ConfigParser import RawConfigParser, DuplicateSectionError
 
 from swsg.loggers import swsg_logger as logger
 from swsg.file_paths import DEFAULT_PROJECTS_FILE_NAME
@@ -23,7 +23,9 @@ class Project(object):
                  projects_file_name=DEFAULT_PROJECTS_FILE_NAME):
         self.path = os.path.abspath(path)
         self.name = name
-        self.config = SafeConfigParser()
+        # interpolation is not needed, it is only annoying with obscure errors
+        # -> take RawConfigParser instead of SafeConfigParser
+        self.config = RawConfigParser()
 
         # there is no empty value for datetime.datetime, so ``None`` is used
         self.created = None
@@ -134,7 +136,17 @@ class Project(object):
                     ('method', 'html'),
                     # can be one of the following values listed in this link:
                     # http://genshi.edgewall.org/browser/trunk/genshi/output.py#L82
-                    ('doctype', 'html5')]}
+                    ('doctype', 'html5')],
+            # see http://jinja.pocoo.org/api/#jinja2.Environment
+            'jinja':
+                [
+                    ('block_start_string', '{%'),
+                    ('block_end_string', '%}'),
+                    ('variable_start_string', '{{'),
+                    ('variable_end_string', '}}'),
+                    ('comment_start_string', '{#'),
+                    ('comment_end_string', '#}'),
+                    ('trim_blocks', 'false')]}
         for section, config_items in default_settings.iteritems():
             if not self.config.has_section(section):
                 logger.info('add the section {0}'.format(section))

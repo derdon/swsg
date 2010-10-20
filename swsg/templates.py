@@ -114,12 +114,11 @@ class MakoTemplate(BaseTemplate):
 
 
 class Jinja2Template(BaseTemplate):
-    def render(self, source_path):
-        # TODO: pay attention to these parameters:
-        # http://jinja.pocoo.org/api/#jinja2.Environment
+    def render(self, source_path, **options):
         # import jinja2 only here because this package is optional
-        from jinja2 import Template
-        template = Template(self.text)
+        from jinja2 import Environment
+        env = Environment(**options)
+        template = env.from_string(self.text)
         for source, source_name in self.get_sources(source_path):
             rendered_template = template.render(**self.get_namespace(source))
             yield source_name, rendered_template
