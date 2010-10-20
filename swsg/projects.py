@@ -184,10 +184,14 @@ class Project(object):
                 # a GenshiTemplate
                 if isinstance(template, GenshiTemplate):
                     options = self.config.items('genshi')
-                    rendered_templates = template.render(
+                    render_templates = lambda: template.render(
                         self.source_dir, **options)
                 else:
-                    rendered_templates = template.render(self.source_dir)
+                    render_templates = lambda: template.render(self.source_dir)
+                try:
+                    rendered_templates = render_templates()
+                except NoninstalledPackage, e:
+                    logger.critical(str(e))
             except NonexistingSource, e:
                 logger.critical(str(e))
             else:

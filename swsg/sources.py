@@ -17,7 +17,7 @@ try:
 except ImportError:
     pass
 
-from swsg.loggers import swsg_logger
+from swsg import NoninstalledPackage
 
 SUPPORTED_MARKUP_LANGUAGES = frozenset(
     ['rest', 'creole', 'textile', 'markdown'])
@@ -95,7 +95,7 @@ def get_source_class_by_markup(markup):
     raise UnsupportedMarkup(markup)
 
 
-def ensure_markup_is_valid_and_installed(markup_language, logger=swsg_logger):
+def ensure_markup_is_valid_and_installed(markup_language):
     if markup_language not in SUPPORTED_MARKUP_LANGUAGES:
         raise ValueError(
             '{0} is not an allowed value for "markup_language"; '
@@ -106,5 +106,4 @@ def ensure_markup_is_valid_and_installed(markup_language, logger=swsg_logger):
             missing_package = 'docutils'
         else:
             missing_package = markup_language
-        logger.critical('The package "{0}" is not installed.'.format(
-            missing_package))
+        raise NoninstalledPackage(missing_package)
