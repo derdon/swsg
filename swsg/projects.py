@@ -18,7 +18,6 @@ class NonexistingProject(Exception):
 
 
 class Project(object):
-    CONFIG_SECTION = 'local configuration'
 
     def __init__(self, path, name,
                  projects_file_name=DEFAULT_PROJECTS_FILE_NAME):
@@ -91,8 +90,7 @@ class Project(object):
     @property
     def templates(self):
         self.read_config()
-        template_language = self.config.get(
-            self.CONFIG_SECTION, 'template language')
+        template_language = self.config.get('general', 'template language')
         try:
             TemplateClass = get_template_class_by_template_language(
                 template_language)
@@ -126,40 +124,41 @@ class Project(object):
 
     def reset_config(self):
         logger.notice('resetting the configuration file')
-        options = ['template language']
-        default_values = ['simple']
-        default_settings = izip(options, default_values)
-        try:
-            self.config.add_section(self.CONFIG_SECTION)
-        except DuplicateSectionError:
-            # the sectiion does already exist, so it will be removed including
-            # all its entries before adding it as a new section
-            self.config.remove_section(self.CONFIG_SECTION)
-            for option in options:
-                self.config.remove_option(self.CONFIG_SECTION, option)
-            self.config.add_section(self.CONFIG_SECTION)
-        for option, value in default_settings:
-            self.config.set(self.CONFIG_SECTION, option, value)
+        default_settings = {
+            'general':
+                [('template language', 'simple')]}
+        for section, config_items in default_settings.iteritems():
+            for (option, value) in config_items:
+                try:
+                    self.config.add_section(section)
+                except DuplicateSectionError:
+                    # the sectiion does already exist, so it will be removed
+                    # including all its entries before adding it as a new
+                    # section
+                    self.config.remove_section(section)
+                    self.config.remove_option(section, option)
+                    self.config.add_section(section)
+                else:
+                    self.config.set(section, option, value)
+        # FIXME: use ``self.config_filename``
         with open(os.path.join(self.project_dir, 'config.ini'), 'w') as fp:
             self.config.write(fp)
 
-    def update_config(self, markup_language=None, template_language=None):
-        '''Set the values for "markup language" and "template language" to
-        ``markup_language`` or ``template_language``, respectively. If one of
-        the arguments is None (the default), its corresponding value in the
-        configuration file won't change.
+    def update_config(self, section, config_items):
+        '''Change the given values of ``config_items`` (a list of tuples) in
+        the section ``section`` and write them into the configuration file
+        ``self.config_filename``.
 
         '''
         self.read_config()
-        options = ('markup language', 'template language')
-        values = (markup_language, template_language)
-        for option, value in izip(options, values):
-            if value is not None:
-                logger.info('setting the option {0} to the value {1}'.format(
-                    option, value))
-                self.config.set(self.CONFIG_SECTION, option, value)
+        for option, value in config_items:
+            logger.info(
+                'section {0}: setting the option {1} to the value {2}'.format(
+                    section, option, value))
+            self.config.set(section, option, value)
         with open(self.config_filename, 'w') as fp:
             self.config.write(fp)
+        # FIXME: call ``self.update_projects_file()``
         self.updated_projects_file = True
 
     def render(self):

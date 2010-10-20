@@ -94,7 +94,7 @@ def test_update_projects_file(temp_project):
 
 
 def test_local_config(temp_project):
-    section = 'local configuration'
+    section = 'general'
     has_option = partial(temp_project.config.has_option, section)
     get = partial(temp_project.config.get, section)
     assert isinstance(temp_project.config, SafeConfigParser)
@@ -109,10 +109,8 @@ def test_local_config(temp_project):
 
 def test_update_config(temp_project):
     temp_project.init()
-    temp_project.update_config(
-        markup_language='markdown', template_language='jinja2')
-    section = 'local configuration'
-    assert temp_project.config.get(section, 'markup language') == 'markdown'
+    section = 'general'
+    temp_project.update_config(section, [('template language', 'jinja2')])
     assert temp_project.config.get(section, 'template language') == 'jinja2'
 
 
