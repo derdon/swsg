@@ -13,7 +13,7 @@ Features
 - supports many markup languages: Markdown_, Creole_, Textile_, ReST_
 - supports many template engines: Jinja2_, Mako_, Genshi_, and also a very
   simple template language for those who do not need control structures like
-  loops or if-conditions -> only the simple template language is supported yet.
+  loops or if-conditions
 - supports clevercss_ beside the usual CSS as a markup language for the
   stylesheets -> not yet!
 - provides multiple interfaces: until now, only a CLI is implemented, but
