@@ -5,9 +5,11 @@ import contextlib
 from datetime import datetime
 from ConfigParser import RawConfigParser
 
+from swsg import NoninstalledPackage
 from swsg.loggers import swsg_logger as logger
 from swsg.file_paths import DEFAULT_PROJECTS_FILE_NAME
-from swsg.templates import GenshiTemplate, get_template_class_by_template_language
+from swsg.templates import (UnsupportedTemplate, NonexistingSource,
+    GenshiTemplate, get_template_class_by_template_language)
 from swsg.sources import get_source_class_by_markup
 
 
