@@ -94,17 +94,26 @@ def test_update_projects_file(temp_project):
 
 
 def test_local_config(temp_project):
-    section = 'general'
-    has_option = partial(temp_project.config.has_option, section)
-    get = partial(temp_project.config.get, section)
+    has_option = temp_project.config.has_option
+    get = temp_project.config.get
     assert isinstance(temp_project.config, SafeConfigParser)
-    assert not temp_project.config.has_section(section)
-    assert not has_option('template language')
-    py.test.raises(NoSectionError, "get('template language') == 'simple'")
+    assert not temp_project.config.has_section('general')
+    assert not temp_project.config.has_section('genshi')
+    assert not has_option('general', 'template language')
+    assert not has_option('genshi', 'method')
+    assert not has_option('genshi', 'doctype')
+    py.test.raises(
+        NoSectionError,
+        "get('general', 'template language') == 'simple'")
     temp_project.init()
-    assert temp_project.config.has_section(section)
-    assert has_option('template language')
-    assert get('template language') == 'simple'
+    assert temp_project.config.has_section('general')
+    assert temp_project.config.has_section('genshi')
+    assert has_option('general', 'template language')
+    assert has_option('genshi', 'method')
+    assert has_option('genshi', 'doctype')
+    assert get('general', 'template language') == 'simple'
+    assert get('genshi', 'method') == 'html'
+    assert get('genshi', 'doctype') == 'html5'
 
 
 def test_update_config(temp_project):

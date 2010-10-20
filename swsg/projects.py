@@ -126,20 +126,24 @@ class Project(object):
         logger.notice('resetting the configuration file')
         default_settings = {
             'general':
-                [('template language', 'simple')]}
+                [('template language', 'simple')],
+            'genshi':
+                [
+                    # can be either 'htlm' or 'xhtml'. every other doesn't make
+                    # any sense for swsg
+                    ('method', 'html'),
+                    # can be one of the following values listed in this link:
+                    # http://genshi.edgewall.org/browser/trunk/genshi/output.py#L82
+                    ('doctype', 'html5')]}
         for section, config_items in default_settings.iteritems():
-            for (option, value) in config_items:
-                try:
-                    self.config.add_section(section)
-                except DuplicateSectionError:
-                    # the sectiion does already exist, so it will be removed
-                    # including all its entries before adding it as a new
-                    # section
-                    self.config.remove_section(section)
-                    self.config.remove_option(section, option)
-                    self.config.add_section(section)
-                else:
-                    self.config.set(section, option, value)
+            if not self.config.has_section(section):
+                logger.info('add the section {0}'.format(section))
+                self.config.add_section(section)
+            for option, value in config_items:
+                logger.info(
+                    'section {0}: setting the option {1} '
+                    'to the value {2}'.format(section, option, value))
+                self.config.set(section, option, value)
         # FIXME: use ``self.config_filename``
         with open(os.path.join(self.project_dir, 'config.ini'), 'w') as fp:
             self.config.write(fp)
