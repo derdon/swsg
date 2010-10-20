@@ -144,8 +144,7 @@ class Project(object):
                     'section {0}: setting the option {1} '
                     'to the value {2}'.format(section, option, value))
                 self.config.set(section, option, value)
-        # FIXME: use ``self.config_filename``
-        with open(os.path.join(self.project_dir, 'config.ini'), 'w') as fp:
+        with open(self.config_filename, 'w') as fp:
             self.config.write(fp)
 
     def update_config(self, section, config_items):
