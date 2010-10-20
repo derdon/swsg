@@ -161,8 +161,7 @@ class Project(object):
             self.config.set(section, option, value)
         with open(self.config_filename, 'w') as fp:
             self.config.write(fp)
-        # FIXME: call ``self.update_projects_file()``
-        self.updated_projects_file = True
+        self.update_projects_file()
 
     def render(self):
         logger.notice('starting the rendering process')
