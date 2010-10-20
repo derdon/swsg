@@ -8,8 +8,10 @@
   [X] rename the argument "list" to "list-projects"
 
 0.2
-[ ] add the argument "status" which shows the files which have not been
-    rendered yet
+[ ] add the argument "status" which shows ...
+    1. source files which have not been rendered yet
+    2. source files which have been rendered once, but have been changed
+    3. template files which have been changed
 [X] do not only interpret the filename extensions like .markdown, but also
     common shorter ones like .md
 [X] support the template languages Jinja2, Genshi and Mako
