@@ -126,13 +126,13 @@ class Jinja2Template(BaseTemplate):
 
 
 class GenshiTemplate(BaseTemplate):
-    def render(self, source_path):
+    def render(self, source_path, **options):
         # import genshi only here because this package is optional
         from genshi.template.markup import MarkupTemplate
         template = MarkupTemplate(self.text)
         for source, source_name in self.get_sources(source_path):
             stream = template.generate(**self.get_namespace(source))
-            rendered_template = stream.render()
+            rendered_template = stream.render(**options)
             yield source_name, rendered_template
 
 

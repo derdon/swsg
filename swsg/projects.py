@@ -165,9 +165,17 @@ class Project(object):
 
     def render(self):
         logger.notice('starting the rendering process')
+        self.read_config()
         for template, template_filename in self.templates:
             try:
-                rendered_templates = template.render(self.source_dir)
+                # pass the config settings of genshi if the template is
+                # a GenshiTemplate
+                if isinstance(template, GenshiTemplate):
+                    options = self.config.items('genshi')
+                    rendered_templates = template.render(
+                        self.source_dir, **options)
+                else:
+                    rendered_templates = template.render(self.source_dir)
             except NonexistingSource, e:
                 logger.critical(str(e))
             else:
