@@ -3,9 +3,7 @@ from logbook import FileHandler, INFO, DEBUG, ERROR
 from swsg.file_paths import LOGFILE as DEFAULT_LOGFILE
 from swsg.cli import get_logging_handler, set_logging_level
 
-
-class Object(object):
-    pass
+from utils import Object
 
 
 @py.test.mark.skipif('os.name != "nt"')
