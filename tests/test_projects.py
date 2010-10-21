@@ -17,10 +17,6 @@ SOURCE_CONTENT = (
 )
 
 
-class Object(object):
-    pass
-
-
 def pytest_funcarg__temp_project(request):
     tmpdir = request.getfuncargvalue('tmpdir')
     projects_filename = str(tmpdir.join('projects.shelve'))
