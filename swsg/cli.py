@@ -96,8 +96,6 @@ def render(args):
 
 
 def parse_args(argv=sys.argv[1:]):
-    # TODO: improve the help by using the method ``parser.add_argument_group``
-    #       which groups the help message by subarguments
     parser = ArgumentParser()
     parser.add_argument(
         '-v', '--verbose', action='store_true',
