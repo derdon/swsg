@@ -15,5 +15,5 @@
 [X] do not only interpret the filename extensions like .markdown, but also
     common shorter ones like .md
 [X] support the template languages Jinja2, Genshi and Mako
-[ ] catch more exceptions and print useful error messages
+[X] catch more exceptions and print useful error messages
 [ ] implement the subcommand "quickstart"
