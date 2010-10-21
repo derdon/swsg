@@ -179,30 +179,26 @@ class Project(object):
         logger.notice('starting the rendering process')
         self.read_config()
         for template, template_filename in self.templates:
-            try:
-                # pass the config settings of genshi if the template is
-                # a GenshiTemplate
-                if isinstance(template, GenshiTemplate):
-                    options = self.config.items('genshi')
-                    render_templates = lambda: template.render(
-                        self.source_dir, **options)
-                else:
-                    render_templates = lambda: template.render(self.source_dir)
-                try:
-                    rendered_templates = render_templates()
-                except NoninstalledPackage, e:
-                    logger.critical(str(e))
-            except NonexistingSource, e:
-                logger.critical(str(e))
+            # pass the config settings of genshi if the template is
+            # a GenshiTemplate
+            if isinstance(template, GenshiTemplate):
+                options = self.config.items('genshi')
+                render_templates = lambda: template.render(
+                    self.source_dir, **options)
             else:
-                for source_name, output in rendered_templates:
-                    head, tail = os.path.split(source_name)
-                    filename = os.path.splitext(tail)[0]
-                    output_path = os.path.join(
-                        self.output_dir, filename) + '.html'
-                    logger.info('{0} + {1} -> {2}'.format(
-                        source_name, template_filename, output_path))
-                    yield output_path, output
+                render_templates = lambda: template.render(self.source_dir)
+            try:
+                rendered_templates = render_templates()
+            except (NoninstalledPackage, NonexistingSource), e:
+                logger.critical(str(e))
+            for source_name, output in rendered_templates:
+                head, tail = os.path.split(source_name)
+                filename = os.path.splitext(tail)[0]
+                output_path = os.path.join(
+                    self.output_dir, filename) + '.html'
+                logger.info('{0} + {1} -> {2}'.format(
+                    source_name, template_filename, output_path))
+                yield output_path, output
         logger.notice('finishing the rendering process')
 
     def save_source(self, source, name):
