@@ -69,7 +69,7 @@ def perform_quickstart(args):
     prompts = [
         ('project directory', getcwd()),
         ('name of the project', None),
-        'template language', get_default_template_language()]
+        ('template language', get_default_template_language())]
     answers = []
     for prompt, default_value in prompts:
         try:
