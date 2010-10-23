@@ -59,7 +59,7 @@ def perform_quickstart(args):
     desired configuration automatically.
     '''
     def get_default_template_language():
-        for option, default_vale in DEFAULT_SETTINGS['general']:
+        for option, default_value in DEFAULT_SETTINGS['general']:
             if option == 'template language':
                 return default_value
     # the following instruction text is copied from
