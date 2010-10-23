@@ -88,10 +88,8 @@ def perform_quickstart(args):
             answers.append(answer)
         except EOFError:
             sys.exit('interrupted')
-
     template_language = answers.pop()
     project = Project(*answers)
-
     template_specific_prompts = DEFAULT_SETTINGS.get(template_language, [])
     template_specific_answers = []
     for option, default_value in template_specific_prompts:
