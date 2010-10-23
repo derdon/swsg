@@ -65,6 +65,7 @@ from setuptools.command.install import install
 from setuptools import setup
 
 import os
+import imp
 
 from swsg import __version__
 from swsg.file_paths import LOGFILE as DEFAULT_LOGFILE, PROJECT_DATA_DIR
@@ -91,6 +92,12 @@ class LogfileAndDirectoryInitializer(install):
 short_description = (
     'SWSG (Static Web Site Generator) is a tool to generate static web pages.')
 
+requirements = ['docutils', 'py', 'texttable', 'progressbar']
+try:
+    imp.find_module('argparse')
+except ImportError:
+    requirements.append('argparse')
+
 setup(
     name='swsg',
     description=short_description,
@@ -101,7 +108,7 @@ setup(
     url='http://github.com/derdon/swsg',
     license='WTFPL',
     packages=['swsg'],
-    install_requires=['docutils', 'py', 'texttable', 'progressbar'],
+    install_requires=requirements,
     extras_require={
         'markdown': ['markdown'],
         'textile': ['textile'],
