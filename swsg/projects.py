@@ -7,7 +7,7 @@ from ConfigParser import RawConfigParser
 
 from swsg import NoninstalledPackage
 from swsg.loggers import swsg_logger as logger
-from swsg.file_paths import DEFAULT_PROJECTS_FILE_NAME
+from swsg.file_paths import DEFAULT_PROJECTS_FILE_NAME, GLOBAL_CONFIGFILE
 from swsg.templates import (UnsupportedTemplate, NonexistingSource,
     GenshiTemplate, get_template_class_by_template_language)
 from swsg.sources import get_source_class_by_markup
@@ -148,6 +148,10 @@ class Project(object):
 
     def reset_config(self):
         logger.notice('resetting the configuration file')
+        # check if thee is a global config in CONFIGDIR
+        if os.path.exists(GLOBAL_CONFIGFILE):
+            shutil.copyfile(GLOBAL_CONFIGFILE, self.config_filename)
+            return None
         for section, config_items in DEFAULT_SETTINGS.iteritems():
             if not self.config.has_section(section):
                 logger.info('add the section {0}'.format(section))
