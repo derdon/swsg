@@ -1,3 +1,7 @@
+0.2.1
+- add the python package "argparse" to the list of requirements if it is not
+  installed yet
+
 0.2
 - use a global configuration file if it can be found as the default
   configuration for new projects
