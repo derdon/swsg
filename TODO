@@ -3,13 +3,8 @@
 
 - Preferences
   - project-dependent configuration (config.ini in the project directory):
-    - template language dependent configuration -> seperate section for each
-      template engine
     - boolean config item: guess markup language by filetype?
       -> use the configuration value if set to False
-  - global configuration (saved in the environment variable $XDG_CONFIG_HOME if
-    it exists, otherwise in $HOME/.config):
-    - default configuration for new projects
 
 - Templates:
   - functions ``sitemap`` gets the parameters depth, exclude
@@ -39,12 +34,6 @@
     - makes it possible to offer handy functions which yield the hierarchical
       structure with titles and targets so one can use these values in a
       template engine in navigations
-
-- CLI:
-  - new subcommand ``quickstart`` -> ask for the following values:
-    - configuration values (markup language, template language)
-    - project name
-    - project path
 
 - GUI:
   - multiple files (doesn't matter if content files, *.css or templates) can be
