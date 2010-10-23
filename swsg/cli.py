@@ -16,8 +16,8 @@ from progressbar import ProgressBar
 from swsg import __version__
 from swsg.loggers import swsg_logger as logger
 from swsg.file_paths import LOGFILE as DEFAULT_LOGFILE
-from swsg.projects import (DEFAULT_SETTINGS, Project, list_project_instances,
-    remove_project)
+from swsg.projects import (DEFAULT_SETTINGS, NonexistingProject, Project,
+    list_project_instances, remove_project)
 from swsg.sources import SUPPORTED_MARKUP_LANGUAGES
 from swsg.templates import SUPPORTED_TEMPLATE_ENGINES
 from swsg.utils import is_none
@@ -113,8 +113,12 @@ def init_project(args):
 
 def remove_project_(args):
     project = Project(args.project_directory, args.path)
-    remove_project(project)
-    print('removed the project {0}'.format(project.project_dir))
+    try:
+        remove_project(project)
+    except NonexistingProject, e:
+        print(e, file=sys.stderr)
+    else:
+        print('removed the project {0}'.format(project.project_dir))
 
 
 def validate_change_config(args):
