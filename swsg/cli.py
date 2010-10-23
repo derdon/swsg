@@ -230,8 +230,8 @@ def main(argv=sys.argv[1:]):
     args = parse_args(argv)
     if args.func == change_config:
         validate_change_config(args)
-    level = set_logging_level(args, logger)
-    handler = get_logging_handler(args, level)
+    new_logger = set_logging_level(args, logger)
+    handler = get_logging_handler(args, new_logger.level_name)
     with handler.applicationbound():
         args.func(args)
 
