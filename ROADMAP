@@ -13,7 +13,7 @@
 [X] support the template languages Jinja2, Genshi and Mako
 [X] catch more exceptions and print useful error messages
 [X] implement the subcommand "quickstart"
-[ ] global configuration (saved in the environment variable $XDG_CONFIG_HOME if
+[X] global configuration (saved in the environment variable $XDG_CONFIG_HOME if
     it exists, otherwise in $HOME/.config) is the default configuration for new
     projects, except when using the "quickstart" subcommand
 

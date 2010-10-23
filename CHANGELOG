@@ -1,3 +1,29 @@
+0.2
+- use a global configuration file if it can be found as the default
+  configuration for new projects
+- added the subcommand "quickstart"
+- print more useful error messages, e.g. if a source file mentioned in a
+  template cannot be found
+- added support for the template engines Mako, Jinja2 and Genshi:
+  - Genshi:
+    - added the configuration options "method" (can be either "html" or
+    "xhtml") and "doctype" to specify the behaviour of rendering
+  - Jinja2
+    - added the following configuration options:
+      - block_start_string
+      - block_end_string
+      - variable_start_string
+      - variable_end_string
+      - comment_start_string
+      - comment_end_string
+      - trim_blocks
+  - see http://jinja.pocoo.org/api/#jinja2.Environment for their meanings and
+    default values
+- renamed the section "local configuration" in the project-dependent
+  config.ini to "general"
+- interpret also short filename extensions of sources (new filename
+  extensions: *.rst for ReST, *.md for Markdown, and *.tt for Textile)
+
 0.1
 - fixed many bugs
 - added many tests and improved the existing ones
