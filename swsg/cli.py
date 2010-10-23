@@ -4,8 +4,8 @@ from __future__ import print_function
 
 import sys
 import codecs
-from os import path, name as operating_system
-from itertools import imap
+from os import path, getcwd, name as operating_system
+from itertools import imap, izip
 
 from argparse import ArgumentParser
 from texttable import Texttable
@@ -16,7 +16,8 @@ from progressbar import ProgressBar
 from swsg import __version__
 from swsg.loggers import swsg_logger as logger
 from swsg.file_paths import LOGFILE as DEFAULT_LOGFILE
-from swsg.projects import Project, list_project_instances, remove_project
+from swsg.projects import (DEFAULT_SETTINGS, Project, list_project_instances,
+    remove_project)
 from swsg.sources import SUPPORTED_MARKUP_LANGUAGES
 from swsg.templates import SUPPORTED_TEMPLATE_ENGINES
 from swsg.utils import is_none
@@ -51,6 +52,58 @@ def format_list_of_projects():
 
 def print_list_of_projects(args):
     print(format_list_of_projects())
+
+
+def perform_quickstart(args):
+    '''Ask the user for required information to initialize a project with the
+    desired configuration automatically.
+    '''
+    def get_default_template_language():
+        for option, default_vale in DEFAULT_SETTINGS['general']:
+            if option == 'template language':
+                return default_value
+    # the following instruction text is copied from
+    #http://bitbucket.org/birkenfeld/sphinx/src/tip/sphinx/quickstart.py#cl-788
+    print('''Please enter values for the following settings
+(just press Enter to accept a default value, if one is given in brackets).''')
+    prompts = [
+        ('project directory', getcwd()),
+        ('name of the project', None),
+        'template language', get_default_template_language()]
+    answers = []
+    for prompt, default_value in prompts:
+        try:
+            if default_value is None:
+                full_prompt = '{0} (required!)'.format(prompt)
+            else:
+                full_prompt = '{0} [{1}]: '.format(prompt, default_value)
+            answer = raw_input(full_prompt) or default_value
+            # give the user a 2nd chance to enter a value if the default value
+            # is None and the user hit enter anyway
+            if answer is None:
+                print('Error: the {0} is required'.format(prompt))
+                answer = raw_input(prompt)
+                if not answer:
+                    raise EOFError
+            answers.append(answer)
+        except EOFError:
+            sys.exit('interrupted')
+
+    template_language = answers.pop()
+    project = Project(*answers)
+
+    template_specific_prompts = DEFAULT_SETTINGS.get(template_language, [])
+    template_specific_answers = []
+    for option, default_value in template_specific_prompts:
+        try:
+            answer = raw_input(option) or default_value
+            template_specific_answers.append(answer)
+        except EOFError:
+            sys.exit('interrupted')
+    project.init()
+    project.update_config(
+        template_language,
+        izip(template_specific_prompts, template_specific_answers))
 
 
 def init_project(args):
@@ -115,6 +168,11 @@ def parse_args(argv=sys.argv[1:]):
     list_parser = subparsers.add_parser(
         'list-projects', help='List all projects in a fancy ASCII table.')
     list_parser.set_defaults(func=print_list_of_projects)
+    quickstart_parser = subparsers.add_parser(
+        'quickstart',
+        help=('answer some questions to get a '
+        'ready-to-use project with your desired settings'))
+    quickstart_parser.set_defaults(func=perform_quickstart)
     init_parser = subparsers.add_parser(
         'init', help='create and initialize a new project')
     init_parser.add_argument('name', help='The name of the project')
