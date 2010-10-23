@@ -12,6 +12,28 @@ from swsg.templates import (UnsupportedTemplate, NonexistingSource,
     GenshiTemplate, get_template_class_by_template_language)
 from swsg.sources import get_source_class_by_markup
 
+DEFAULT_SETTINGS = {
+    'general':
+        [('template language', 'simple')],
+    'genshi':
+        [
+            # can be either 'htlm' or 'xhtml'. every other doesn't make
+            # any sense for swsg
+            ('method', 'html'),
+            # can be one of the following values listed in this link:
+            # http://genshi.edgewall.org/browser/trunk/genshi/output.py#L82
+            ('doctype', 'html5')],
+    # see http://jinja.pocoo.org/api/#jinja2.Environment
+    'jinja':
+        [
+            ('block_start_string', '{%'),
+            ('block_end_string', '%}'),
+            ('variable_start_string', '{{'),
+            ('variable_end_string', '}}'),
+            ('comment_start_string', '{#'),
+            ('comment_end_string', '#}'),
+            ('trim_blocks', 'false')]}
+
 
 class NonexistingProject(Exception):
     pass
@@ -126,28 +148,7 @@ class Project(object):
 
     def reset_config(self):
         logger.notice('resetting the configuration file')
-        default_settings = {
-            'general':
-                [('template language', 'simple')],
-            'genshi':
-                [
-                    # can be either 'htlm' or 'xhtml'. every other doesn't make
-                    # any sense for swsg
-                    ('method', 'html'),
-                    # can be one of the following values listed in this link:
-                    # http://genshi.edgewall.org/browser/trunk/genshi/output.py#L82
-                    ('doctype', 'html5')],
-            # see http://jinja.pocoo.org/api/#jinja2.Environment
-            'jinja':
-                [
-                    ('block_start_string', '{%'),
-                    ('block_end_string', '%}'),
-                    ('variable_start_string', '{{'),
-                    ('variable_end_string', '}}'),
-                    ('comment_start_string', '{#'),
-                    ('comment_end_string', '#}'),
-                    ('trim_blocks', 'false')]}
-        for section, config_items in default_settings.iteritems():
+        for section, config_items in DEFAULT_SETTINGS.iteritems():
             if not self.config.has_section(section):
                 logger.info('add the section {0}'.format(section))
                 self.config.add_section(section)
