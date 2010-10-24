@@ -4,7 +4,7 @@ from __future__ import print_function
 
 import sys
 import codecs
-from os import path, getcwd, name as operating_system
+from os import makedirs, path, getcwd, name as operating_system
 from itertools import imap, izip
 
 from argparse import ArgumentParser
@@ -35,8 +35,11 @@ def get_logging_handler(args, logging_level=ERROR):
     else:
         logfile = args.logfile
     # make sure that the file exists
-    if not path.exists(logfile):
-        with open(logfile, 'w'):
+    path_, filename = path.split(logfile)
+    if not path.exists(path_):
+        makedirs(path_)
+    if not path.exists(filename):
+        with open(filename, 'w'):
             pass
     return FileHandler(logfile, level=logging_level)
 
