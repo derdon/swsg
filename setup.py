@@ -71,24 +71,6 @@ from swsg import __version__
 from swsg.file_paths import LOGFILE as DEFAULT_LOGFILE, PROJECT_DATA_DIR
 
 
-class LogfileAndDirectoryInitializer(install):
-    '''create the directories where the projects file and the logging file will
-    be saved if they do not exist yet and create an empty logfile'''
-    def initialize_dirs(self):
-        path = PROJECT_DATA_DIR
-        if not os.path.exists(path):
-            print('creating the directory {0}'.format(path))
-            os.makedirs(path)
-
-    def create_empty_logfile(self):
-        with open(DEFAULT_LOGFILE, 'w') as f:
-            print('creating the logfile {0}'.format(f.name))
-
-    def run(self):
-        self.initialize_dirs()
-        self.create_empty_logfile()
-        install.run(self)
-
 short_description = (
     'SWSG (Static Web Site Generator) is a tool to generate static web pages.')
 
@@ -132,8 +114,5 @@ setup(
         'console_scripts': [
             'swsg-cli = swsg.cli:main',
          ],
-    },
-    cmdclass={
-        'install': LogfileAndDirectoryInitializer
     },
 )

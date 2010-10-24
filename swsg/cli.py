@@ -34,6 +34,10 @@ def get_logging_handler(args, logging_level=ERROR):
         logfile = DEFAULT_LOGFILE
     else:
         logfile = args.logfile
+    # make sure that the file exists
+    if not path.exists(logfile):
+        with open(logfile, 'w'):
+            pass
     return FileHandler(logfile, level=logging_level)
 
 
