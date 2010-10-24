@@ -1,3 +1,6 @@
+0.2.3
+- make sure that the directories exist where the logfile is located
+
 0.2.2
 - fix install for easy_install and pip users
 
