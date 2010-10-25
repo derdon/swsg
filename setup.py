@@ -68,12 +68,9 @@ except ImportError:
     distribute_setup.use_setuptools()
     from setuptools import setup
 
-import os
 import imp
 
 from swsg import __version__
-from swsg.file_paths import LOGFILE as DEFAULT_LOGFILE, PROJECT_DATA_DIR
-
 
 short_description = (
     'SWSG (Static Web Site Generator) is a tool to generate static web pages.')
