@@ -61,8 +61,12 @@ Requirements
 
 from __future__ import print_function
 
-from setuptools.command.install import install
-from setuptools import setup
+try:
+    from setuptools import setup
+except ImportError:
+    import distribute_setup
+    distribute_setup.use_setuptools()
+    from setuptools import setup
 
 import os
 import imp
