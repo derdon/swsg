@@ -39,7 +39,7 @@ def get_logging_handler(args, logging_level=ERROR):
     if not path.exists(path_):
         makedirs(path_)
     if not path.exists(filename):
-        with open(filename, 'w'):
+        with open(logfile, 'w'):
             pass
     return FileHandler(logfile, level=logging_level)
 
