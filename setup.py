@@ -51,6 +51,7 @@ following Python packages:
 .. _texttable: http://pypi.python.org/pypi/texttable
 .. _py: http://pypi.python.org/pypi/py
 .. _progressbar: http://code.google.com/p/python-progressbar/
+.. _Python: http://python.org
 '''
 
 from __future__ import print_function
