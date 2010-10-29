@@ -26,22 +26,16 @@ Features
 
 Requirements
 ============
-- either Python 2.7 or Python 2.6 with the python package argparse_ installed
+In order to be able to install swsg, you need `Python`_ (version 2.7 or
+2.6 with the Python package `argparse`_ installed) and the
+following Python packages:
+
 - texttable_
 - `py`_
 - `progressbar`_
-- at least one of the following markup languages:
-
-  - ReST_
-  - markdown_
-  - creole_
-  - textile_
-- optional: one or more of the following template engines, also installed as
-  python packages:
-
-  - `jinja2`_
-  - `mako`_
-  - `genshi`_
+- at least one of the following markup languages: ReST_, markdown_,
+  creole_, textile_
+- optional: one or more of the following template engines: `jinja2`_, `mako`_, `genshi`_
 
 .. _ReST: http://docutils.sourceforge.net/rst.html
 .. _SR: http://bitbucket.org/tiax/sr/overview
