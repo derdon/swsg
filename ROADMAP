@@ -25,3 +25,4 @@
 [ ] new option in the config: "default template" to specify the template which
     will be used for a source if no template is given in its first line
 [ ] support searching whole projects
+[ ] support clevercss in all template languages
