@@ -1,3 +1,7 @@
+0.2.4
+- use an absolute path to create an empty logfile
+- make installation possible, even if distribute / setuptools is not installed
+
 0.2.3
 - make sure that the directories exist where the logfile is located
 
