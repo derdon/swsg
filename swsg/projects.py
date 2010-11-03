@@ -36,7 +36,14 @@ DEFAULT_SETTINGS = {
 
 
 class NonexistingProject(Exception):
-    pass
+    def __init__(self, project_name):
+        self.project_name = project_name
+
+    def __str__(self):
+        return ('The project {0!r} does not exist.'.format(self.project_name))
+
+    def __repr__(self):
+        return '{0}({1})'.format(self.__class__.__name__, self.project_name)
 
 
 class Project(object):
@@ -235,6 +242,15 @@ def list_project_instances(projects_file_name=DEFAULT_PROJECTS_FILE_NAME):
         return projects.values()
 
 
+def get_project_by_name(name, projects_file_name=DEFAULT_PROJECTS_FILE_NAME):
+    with contextlib.closing(shelve.open(projects_file_name)) as projects:
+        # FIXME: the key of the dict is the **full path**, not only the name!
+        project = projects.get(name)
+    if project is None:
+        raise NonexistingProject(name)
+    return project
+
+
 def remove_project(project):
     '''remove both the project's directory and its entry in the projects file
 
@@ -246,6 +262,4 @@ def remove_project(project):
             p.pop(proj_dir)
     else:
         # project does not exist, therefore it cannot be removed
-        raise NonexistingProject(
-            'The project {0} with its belonging '
-            'directory {1} does not exist.'.format(project, proj_dir))
+        raise NonexistingProject(project.name)
