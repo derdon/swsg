@@ -117,13 +117,15 @@ def init_project(args):
 
 
 def remove_project_(args):
-    project = Project(args.project_directory, args.path)
+    full_path = path.abspath(args.path)
     try:
-        remove_project(project)
+        remove_project(full_path)
     except NonexistingProject, e:
         print(e, file=sys.stderr)
     else:
-        print('removed the project {0}'.format(project.project_dir))
+        path_, project_name = path.split(full_path)
+        print('removed the project {0!r} from the directory {1!r}'.format(
+            project_name, path_))
 
 
 def validate_change_config(args):
@@ -196,7 +198,7 @@ def parse_args(argv=sys.argv[1:]):
     remove_parser.add_argument(
         'path',
         help='The path to the project directory which will be removed')
-    remove_parser.set_defaults(func=remove_project)
+    remove_parser.set_defaults(func=remove_project_)
     config_parser = subparsers.add_parser(
         'change-config',
         help=(

@@ -205,8 +205,10 @@ def test_remove_project(temp_project):
     assert not temp_project.exists
     py.test.raises(
         NonexistingProject,
-        'remove_project(temp_project)')
+        'remove_project('
+        '   temp_project.project_dir,'
+        '   temp_project.projects_file_name)')
     temp_project.init()
     assert temp_project.exists
-    remove_project(temp_project)
+    remove_project(temp_project.project_dir, temp_project.projects_file_name)
     assert not temp_project.exists
