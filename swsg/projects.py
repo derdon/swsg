@@ -244,15 +244,6 @@ def list_project_instances(projects_file_name=DEFAULT_PROJECTS_FILE_NAME):
         return projects.values()
 
 
-def get_project_by_name(name, projects_file_name=DEFAULT_PROJECTS_FILE_NAME):
-    with contextlib.closing(shelve.open(projects_file_name)) as projects:
-        # FIXME: the key of the dict is the **full path**, not only the name!
-        project = projects.get(name)
-    if project is None:
-        raise NonexistingProject(name)
-    return project
-
-
 def remove_project(project_directory,
     projects_file_name=DEFAULT_PROJECTS_FILE_NAME):
     '''remove both the project's directory and its entry in the projects file
