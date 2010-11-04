@@ -155,12 +155,14 @@ class Project(object):
         self.updated_projects_file = True
 
     def read_config(self):
-        logger.notice('reading the configuration file')
+        logger.notice(
+            'reading the configuration file {0}'.format(self.config_filename))
         with open(self.config_filename) as fp:
             self.config.readfp(fp)
 
     def reset_config(self):
-        logger.notice('resetting the configuration file')
+        logger.notice(
+            'resetting the configuration file {0}')
         # check if thee is a global config in CONFIGDIR
         if os.path.exists(GLOBAL_CONFIGFILE):
             shutil.copyfile(GLOBAL_CONFIGFILE, self.config_filename)
