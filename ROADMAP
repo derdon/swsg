@@ -22,8 +22,8 @@
     1. source files which have not been rendered yet
     2. source files which have been rendered once, but have been changed
     3. template files which have been changed
-[ ] new option in the config: "default template" to specify the template which
+[X] new option in the config: "default template" to specify the template which
     will be used for a source if no template is given in its first line
-[ ] add a default "default template"
+[X] add a default "default template"
 [ ] support searching whole projects
 [ ] support clevercss in all template languages
