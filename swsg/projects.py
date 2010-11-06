@@ -14,7 +14,9 @@ from swsg.sources import get_source_class_by_markup
 
 DEFAULT_SETTINGS = {
     'general':
-        [('template language', 'simple')],
+        [
+            ('template language', 'simple'),
+            ('default template', 'default.html')],
     'genshi':
         [
             # can be either 'htlm' or 'xhtml'. every other doesn't make
