@@ -162,7 +162,8 @@ class Project(object):
 
     def reset_config(self):
         logger.notice(
-            'resetting the configuration file {0}')
+            'resetting the configuration file {0}'.format(
+                self.config_filename))
         # check if thee is a global config in CONFIGDIR
         if os.path.exists(GLOBAL_CONFIGFILE):
             shutil.copyfile(GLOBAL_CONFIGFILE, self.config_filename)
