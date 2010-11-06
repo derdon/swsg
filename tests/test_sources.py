@@ -1,6 +1,6 @@
 import py.test
-from swsg.sources import (ReSTSource, CreoleSource, TextileSource,
-    MarkdownSource)
+from swsg.sources import (UnsupportedMarkup, ReSTSource, CreoleSource,
+    TextileSource, MarkdownSource, get_source_class_by_markup)
 
 
 def test_source_render():
@@ -58,3 +58,15 @@ u'<hr />'
 u'<p><img alt="Python" src="http://python.org/community/logos/python-logo.png" title="The Python Logo" /></p>'
     '''
     py.test.importorskip('markdown')
+
+
+def test_get_source_class_by_markup():
+    f = get_source_class_by_markup
+    assert f('rest') == ReSTSource
+    assert f('rst') == ReSTSource
+    assert f('creole') == CreoleSource
+    assert f('textile') == TextileSource
+    assert f('tt') == TextileSource
+    assert f('markdown') == MarkdownSource
+    assert f('md') == MarkdownSource
+    py.test.raises(UnsupportedMarkup, "f('does_not_exist')")
