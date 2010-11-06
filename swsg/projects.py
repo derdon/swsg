@@ -252,7 +252,6 @@ def remove_project(project_directory,
     '''
     full_project_path = os.path.abspath(project_directory)
     with contextlib.closing(shelve.open(projects_file_name)) as p:
-        print('p: {0}'.format(p))
         try:
             project = p[full_project_path]
         except KeyError:
