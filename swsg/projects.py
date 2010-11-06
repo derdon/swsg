@@ -259,7 +259,7 @@ def get_project_by_path(project_dir,
             project = p[full_project_path]
         except KeyError:
             # project does not exist, raise a proper exception
-            raise NonexistingProject(project_directory)
+            raise NonexistingProject(project_dir)
         else:
             return project
 
@@ -269,7 +269,6 @@ def remove_project(project_directory,
     '''remove both the project's directory and its entry in the projects file
 
     '''
-    project = get_project_by_path(full_project_path)
-    shutil.rmtree(full_project_path)
+    shutil.rmtree(project_directory)
     with contextlib.closing(shelve.open(projects_file_name)) as p:
-        del p[full_project_path]
+        del p[project_directory]
