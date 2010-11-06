@@ -7,6 +7,17 @@ from swsg.sources import (ensure_markup_is_valid_and_installed,
 
 SUPPORTED_TEMPLATE_ENGINES = frozenset(['simple', 'mako', 'jinja2', 'genshi'])
 
+DEFAULT_TEMPLATE = '''<!DOCTYPE HTML>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title>$title</title>
+  </head>
+  <body>
+    $content
+  </body>
+</html>'''
+
 
 class NonexistingSource(Exception):
     def __init__(self, source_path):

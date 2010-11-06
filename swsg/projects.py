@@ -8,8 +8,8 @@ from ConfigParser import RawConfigParser
 from swsg import NoninstalledPackage
 from swsg.loggers import swsg_logger as logger
 from swsg.file_paths import DEFAULT_PROJECTS_FILE_NAME, GLOBAL_CONFIGFILE
-from swsg.templates import (UnsupportedTemplate, NonexistingSource,
-    GenshiTemplate, get_template_class_by_template_language)
+from swsg.templates import (DEFAULT_TEMPLATE, UnsupportedTemplate,
+    NonexistingSource, GenshiTemplate, get_template_class_by_template_language)
 from swsg.sources import get_source_class_by_markup
 
 DEFAULT_SETTINGS = {
@@ -84,12 +84,18 @@ class Project(object):
         self.reset_config()
         self.read_config()
         self.update_projects_file(new_created=True)
+        self.create_default_template()
 
     def make_project_directories(self):
         logger.notice('creating project directories')
         for path_name in (self.source_dir, self.template_dir, self.output_dir):
             logger.info('creating the directory {0}'.format(path_name))
             os.makedirs(path_name)
+
+    def create_default_template(self):
+        default_template_path = os.path.join(self.template_dir, 'default.html')
+        with open(default_template_path) as fp:
+            fp.write(DEFAULT_TEMPLATE)
 
     @property
     def exists(self):
