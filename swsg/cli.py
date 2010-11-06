@@ -143,7 +143,7 @@ def validate_change_config(args):
 
 def change_config(args):
     # the project's directory is the current working directory
-    project = Project(*path.split(getcwd()))
+    project = get_project_by_path(getcwd())
     project.update_config(
         markup_language=args.markup_language,
         template_language=args.template_language)
@@ -152,7 +152,7 @@ def change_config(args):
 def render(args):
     pbar = ProgressBar(maxval=100)
     # the project's directory is the current working directory
-    project = Project(*path.split(getcwd()))
+    project = get_project_by_path(getcwd())
     for i, (output_path, output) in enumerate(project.render()):
         with codecs.open(output_path, 'w', 'utf-8') as fp:
             fp.write(output)

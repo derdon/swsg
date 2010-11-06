@@ -245,18 +245,25 @@ def list_project_instances(projects_file_name=DEFAULT_PROJECTS_FILE_NAME):
         return projects.values()
 
 
+def get_project_by_path(project_dir,
+    projects_file_name=DEFAULT_PROJECTS_FILE_NAME):
+    full_project_path = os.path.abspath(project_dir)
+    with contextlib.closing(shelve.open(projects_file_name)) as p:
+        try:
+            project = p[full_project_path]
+        except KeyError:
+            # project does not exist, raise a proper exception
+            raise NonexistingProject(project_directory)
+        else:
+            return project
+
+
 def remove_project(project_directory,
     projects_file_name=DEFAULT_PROJECTS_FILE_NAME):
     '''remove both the project's directory and its entry in the projects file
 
     '''
-    full_project_path = os.path.abspath(project_directory)
-    with contextlib.closing(shelve.open(projects_file_name)) as p:
-        try:
-            project = p[full_project_path]
-        except KeyError:
-            # project does not exist, therefore it cannot be removed
-            raise NonexistingProject(project_directory)
+    project = get_project_by_path(full_project_path)
     shutil.rmtree(full_project_path)
     with contextlib.closing(shelve.open(projects_file_name)) as p:
         del p[full_project_path]
