@@ -33,6 +33,7 @@ following Python packages:
 - texttable_
 - `py`_
 - `progressbar`_
+- Logbook_
 - at least one of the following markup languages: ReST_, markdown_,
   creole_, textile_
 - optional: one or more of the following template engines: `jinja2`_, `mako`_, `genshi`_
@@ -52,6 +53,7 @@ following Python packages:
 .. _py: http://pypi.python.org/pypi/py
 .. _progressbar: http://code.google.com/p/python-progressbar/
 .. _Python: http://python.org
+.. _Logbook: http://packages.python.org/Logbook
 '''
 
 from __future__ import print_function
@@ -70,7 +72,7 @@ from swsg import __version__
 short_description = (
     'SWSG (Static Web Site Generator) is a tool to generate static web pages.')
 
-requirements = ['docutils', 'py', 'texttable', 'progressbar']
+requirements = ['docutils', 'py', 'texttable', 'progressbar', 'logbook']
 try:
     imp.find_module('argparse')
 except ImportError:
