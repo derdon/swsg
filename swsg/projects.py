@@ -96,7 +96,7 @@ class Project(object):
 
     def create_default_template(self):
         default_template_path = os.path.join(self.template_dir, 'default.html')
-        with open(default_template_path) as fp:
+        with open(default_template_path, 'w') as fp:
             fp.write(DEFAULT_TEMPLATE)
 
     @property
