@@ -271,6 +271,9 @@ def remove_project(project_directory,
     '''remove both the project's directory and its entry in the projects file
 
     '''
-    shutil.rmtree(project_directory)
+    try:
+        shutil.rmtree(project_directory)
+    except OSError:
+        raise NonexistingProject(project_directory)
     with contextlib.closing(shelve.open(projects_file_name)) as p:
         del p[project_directory]
