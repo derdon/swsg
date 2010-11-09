@@ -150,13 +150,16 @@ def change_config(args):
 
 
 def render(args):
-    pbar = ProgressBar(maxval=100)
+    pbar = ProgressBar()
+    pbar.start()
     # the project's directory is the current working directory
     project = get_project_by_path(getcwd())
     for i, (output_path, output) in enumerate(project.render()):
         with codecs.open(output_path, 'w', 'utf-8') as fp:
             fp.write(output)
         pbar.update(i + 1)
+    pbar.finish()
+    print()
 
 
 def parse_args(argv=sys.argv[1:]):
