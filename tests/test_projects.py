@@ -11,8 +11,8 @@ from swsg.projects import Project, remove_project, NonexistingProject
 from test_templates import SIMPLE_TEMPLATE_TEXT
 
 SOURCE_CONTENT = (
-    u'headline\n'
-    u'--------\n'
+    u'template: foo.html\n'
+    u'title: the short title\n'
     u'*important* text'
 )
 
@@ -49,32 +49,8 @@ def test_sources_property(temp_project):
     list_of_sources = list(temp_project.sources)
     assert len(list_of_sources) == 2
     assert list_of_sources == [
-        ReSTSource(source1_content),
-        ReSTSource(source2_content)]
-
-
-def test_templates_property(temp_project):
-    temp_project.init()
-    list_of_templates = list(temp_project.templates)
-    assert list_of_templates == []
-    make_template = py.path.local(temp_project.template_dir).ensure
-    template1 = make_template('template1.html')
-    template1.check(file=True)
-    template1_content = 'content of template1'
-    template1.write(template1_content)
-    template2 = make_template('template2.html')
-    template2.check(file=True)
-    template2_content = 'content of template2'
-    template2.write(template2_content)
-    list_of_templates = list(temp_project.templates)
-    assert len(list_of_templates) == 2
-    assert list_of_templates == [
-        (
-            SimpleTemplate(template1_content),
-            path.join(temp_project.template_dir, str(template1))),
-        (
-            SimpleTemplate(template2_content),
-            path.join(temp_project.template_dir, str(template2)))]
+        ('source1.rest', ReSTSource('', '', source1_content)),
+        ('source2.rest', ReSTSource('', '', source2_content))]
 
 
 def test_update_projects_file(temp_project):
@@ -138,25 +114,25 @@ def test_render_project(temp_project):
     temp_project.init()
     source_path = py.path.local(
         temp_project.source_dir).ensure('temp-source.rest')
-    source_path.check(file=True)
+    assert source_path.check(file=True)
     source_path.write(SOURCE_CONTENT)
-    template_path = py.path.local(
-        temp_project.template_dir).ensure('template.html')
-    template_path.check(file=True)
+    template_path = py.path.local(temp_project.template_dir).ensure('foo.html')
+    assert template_path.check(file=True)
     template_path.write(SIMPLE_TEMPLATE_TEXT)
-    list_of_templates = list(temp_project.templates)
-    assert len(list(temp_project.sources)) == 1
-    assert len(list_of_templates) == 1
-
-    template, template_path = list_of_templates[0]
+    list_of_sources = list(temp_project.sources)
+    assert len(list_of_sources) == 1
+    source_name, source = list_of_sources[0]
+    assert source_name == 'temp-source.rest'
+    assert source == ReSTSource(
+        temp_project.template_dir, 'default.html', SOURCE_CONTENT)
     return_values = temp_project.render()
     output_path, output = return_values.next()
-    source_name, rendered_template = template.render(
-        temp_project.source_dir).next()
-    assert source_name == 'temp-source.rest'
-    assert output == rendered_template
     assert output_path == path.join(
         temp_project.output_dir, 'temp-source.html')
+    expected_rendered_content = '<p><em>important</em> text</p>\n'
+    assert output == SIMPLE_TEMPLATE_TEXT.replace(
+        '$title', 'the short title').replace(
+            '$content', expected_rendered_content)
     # there is only one template which assigns to only one source, so there
     # shouldn't be anything left in the generator
     py.test.raises(StopIteration, 'return_values.next()')
@@ -168,14 +144,18 @@ def test_save_source(temp_project):
     # set ``updated_projects_file`` to False to check whether it is set to True
     # after calling ``save_source``
     temp_project.updated_projects_file = False
-    source_filename = 'temp-source'
+    source_filename = 'temp-source.rest'
     absolute_source_filename = path.join(
         temp_project.source_dir, source_filename)
-    source = ReSTSource(SOURCE_CONTENT)
-    temp_project.save_source(source, source_filename)
+    source = ReSTSource(
+        temp_project.template_dir,
+        temp_project.config.get('general', 'default template'),
+        SOURCE_CONTENT)
+    temp_project.save_source(source, absolute_source_filename)
     assert temp_project.updated_projects_file
     with open(absolute_source_filename) as fp:
-        assert SOURCE_CONTENT == fp.read()
+        text = fp.read()
+    assert SOURCE_CONTENT == text
 
 
 def test_save_template(temp_project):

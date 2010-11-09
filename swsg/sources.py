@@ -1,3 +1,5 @@
+from os import path
+
 from docutils.core import publish_parts as rest
 installed_markups = set(['rest'])
 try:
@@ -35,21 +37,44 @@ class UnsupportedMarkup(Exception):
 
 
 class BaseSource(object):
-    def __init__(self, text):
-        self.text = text
-        first_line, sep, rest = text.partition('\n')
-        if first_line.startswith('title:'):
-            self.title = first_line.lstrip('title:').strip()
-        else:
-            # if the title is not given, generate it by taking the first five
-            # words of the first line
-            splitted_first_line = first_line.split()
-            first_five_words = splitted_first_line[:5]
-            self.title = ' '.join(first_five_words)
-            # add a faked ellipsis to the title if there are more than 5 words
-            # in the first line, i.e. if it was truncated
-            if len(first_five_words) > 5:
-                self.title += ' ...'
+    def __init__(self, template_dir, default_template, text):
+        splitted_text = text.split('\n', 2)
+        try:
+            first_line, second_line, rest = splitted_text
+            first_lines = [first_line, second_line]
+        except ValueError:
+            # there is only one newline or no newline at all
+            try:
+                first_line, rest = splitted_text
+                first_lines = [first_line]
+            except ValueError:
+                # there is no newline in the text, therefore there are no
+                # variable assignments
+                first_lines = []
+                rest = text
+        title = ''
+        template = ''
+        temp_first_lines = first_lines[:]
+        for line in first_lines:
+            # remove the line from the list of the first two lines where a
+            # variable assignment can be found
+            if line.startswith('title:'):
+                title = line.lstrip('title:').strip()
+                temp_first_lines.remove(line)
+            elif line.startswith('template:'):
+                template = line.lstrip('template:').strip()
+                temp_first_lines.remove(line)
+        # if the title is not set, "unknown" will be used. That means that
+        # setting the title is highly recommended!
+        self.title = title or 'unknown'
+        # the directive "template" is optional. If it is set, its assigned
+        # value is used as the template for this source. Otherwise, the default
+        # template will be used
+        self.template_path = path.join(
+            template_dir,
+            template or default_template)
+        self.full_text = text
+        self.text = '\n'.join(temp_first_lines + [rest])
 
     def __eq__(self, other):
         return type(self) == type(other) and self.text == other.text
@@ -60,26 +85,43 @@ class BaseSource(object):
     def __hash__(self):
         return hash(self.text)
 
+    def get_namespace(self):
+        rendered_source = self.render_templateless()
+        return {
+            'title': self.title,
+            'content': rendered_source
+        }
+
+    def render_templateless(self):
+        raise NotImplementedError
+
+    def render(self, TemplateClass, **template_options):
+        # render the template with the source's namespace
+        with open(self.template_path) as fp:
+            text = fp.read().decode('utf-8')
+        template = TemplateClass(text)
+        return template.render(self.get_namespace(), **template_options)
+
 
 class ReSTSource(BaseSource):
-    def render(self):
+    def render_templateless(self):
         return rest(self.text, writer_name='html')['body']
 
 
 class CreoleSource(BaseSource):
-    def render(self):
+    def render_templateless(self):
         return creole2html.HtmlEmitter(creole.Parser(self.text).parse()).emit()
 
 
 class TextileSource(BaseSource):
-    def render(self):
+    def render_templateless(self):
         # the function textile.textile adds a tab character at the start of the
         # output, so we remove it to normalize the return value
         return textile(self.text).lstrip('\t')
 
 
 class MarkdownSource(BaseSource):
-    def render(self):
+    def render_templateless(self):
         return markdown(self.text, output_format='xhtml')
 
 

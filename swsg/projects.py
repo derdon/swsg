@@ -5,11 +5,10 @@ import contextlib
 from datetime import datetime
 from ConfigParser import RawConfigParser
 
-from swsg import NoninstalledPackage
 from swsg.loggers import swsg_logger as logger
 from swsg.file_paths import DEFAULT_PROJECTS_FILE_NAME, GLOBAL_CONFIGFILE
-from swsg.templates import (DEFAULT_TEMPLATE, UnsupportedTemplate,
-    NonexistingSource, GenshiTemplate, get_template_class_by_template_language)
+from swsg.templates import (DEFAULT_TEMPLATE, GenshiTemplate,
+    get_template_class_by_template_language)
 from swsg.sources import get_source_class_by_markup
 
 DEFAULT_SETTINGS = {
@@ -116,6 +115,10 @@ class Project(object):
 
     @property
     def sources(self):
+        self.read_config()
+        default_template = os.path.join(
+            self.template_dir,
+            self.config.get('general', 'default template'))
         for source_name in os.listdir(self.source_dir):
             # the markup language is the filename extension without the dot.
             # For example, the content of "foo.rest" will be rendered as ReST
@@ -124,22 +127,8 @@ class Project(object):
             with open(source_path) as fp:
                 text = fp.read().decode('utf-8')
             SourceClass = get_source_class_by_markup(markup_language)
-            yield SourceClass(text)
-
-    @property
-    def templates(self):
-        self.read_config()
-        template_language = self.config.get('general', 'template language')
-        try:
-            TemplateClass = get_template_class_by_template_language(
-                template_language)
-        except UnsupportedTemplate, e:
-            logger.critical(str(e))
-        for template_name in os.listdir(self.template_dir):
-            filename = os.path.join(self.template_dir, template_name)
-            with open(filename) as fp:
-                file_content = fp.read().decode('utf-8')
-            yield TemplateClass(file_content), filename
+            yield source_name, SourceClass(
+                self.template_dir, default_template, text)
 
     def update_projects_file(self, new_created=False):
         # create the directories where the projects file will be saved if they
@@ -207,27 +196,24 @@ class Project(object):
     def render(self):
         logger.notice('starting the rendering process')
         self.read_config()
-        for template, template_filename in self.templates:
+        template_language = self.config.get('general', 'template language')
+        TemplateClass = get_template_class_by_template_language(
+            template_language)
+        for source_name, source in self.sources:
             # pass the config settings of genshi if the template is
             # a GenshiTemplate
-            if isinstance(template, GenshiTemplate):
+            if TemplateClass == GenshiTemplate:
                 options = self.config.items('genshi')
-                render_templates = lambda: template.render(
-                    self.source_dir, **options)
             else:
-                render_templates = lambda: template.render(self.source_dir)
-            try:
-                rendered_templates = render_templates()
-            except (NoninstalledPackage, NonexistingSource), e:
-                logger.critical(str(e))
-            for source_name, output in rendered_templates:
-                head, tail = os.path.split(source_name)
-                filename = os.path.splitext(tail)[0]
-                output_path = os.path.join(
-                    self.output_dir, filename) + '.html'
-                logger.info('{0} + {1} -> {2}'.format(
-                    source_name, template_filename, output_path))
-                yield output_path, output
+                options = {}
+            output = source.render(TemplateClass, **options)
+            head, tail = os.path.split(source_name)
+            filename = os.path.splitext(tail)[0]
+            output_path = os.path.join(
+                self.output_dir, filename) + '.html'
+            logger.info('{0} + {1} -> {2}'.format(
+                source_name, source.template_path, output_path))
+            yield output_path, output
         logger.notice('finishing the rendering process')
 
     def save_source(self, source, name):
@@ -235,7 +221,7 @@ class Project(object):
             name, self.source_dir))
         filename = os.path.join(self.source_dir, name)
         with open(filename, 'w') as fp:
-            fp.write(source.text)
+            fp.write(source.full_text)
         self.update_projects_file()
 
     def save_template(self, template, name):
