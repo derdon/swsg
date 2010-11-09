@@ -200,10 +200,12 @@ class Project(object):
         TemplateClass = get_template_class_by_template_language(
             template_language)
         for source_name, source in self.sources:
-            # pass the config settings of genshi if the template is
-            # a GenshiTemplate
+            # pass the config settings of the template language being used
+            # if there are settings for it in the config file
             if TemplateClass == GenshiTemplate:
                 options = self.config.items('genshi')
+            elif TemplateClass == Jinja2Template:
+                options = self.config.items('jinja')
             else:
                 options = {}
             output = source.render(TemplateClass, **options)
