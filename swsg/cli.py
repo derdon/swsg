@@ -10,7 +10,7 @@ from itertools import imap, izip
 from argparse import ArgumentParser
 from texttable import Texttable
 from py.io import TerminalWriter
-from logbook import FileHandler, INFO, DEBUG, ERROR
+from logbook import FileHandler, INFO, DEBUG
 
 from swsg import __version__
 from swsg.loggers import swsg_logger as logger
@@ -22,7 +22,7 @@ from swsg.templates import SUPPORTED_TEMPLATE_ENGINES
 from swsg.utils import is_none
 
 
-def get_logging_handler(args, logging_level=ERROR):
+def get_logging_handler(args, logging_level):
     if args.logfile is None:
         if operating_system == 'nt':
             # FIXME: use the handler logbook.NTEventLogHandler for windows

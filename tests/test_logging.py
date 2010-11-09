@@ -17,7 +17,7 @@ def test_get_logging_handler_win():
 def test_get_logging_handler():
     args = Object()
     args.logfile = None
-    handler = get_logging_handler(args)
+    handler = get_logging_handler(args, ERROR)
     assert isinstance(handler, FileHandler)
     assert handler._filename == DEFAULT_LOGFILE
     assert handler.level == ERROR
