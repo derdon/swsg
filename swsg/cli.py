@@ -11,7 +11,6 @@ from argparse import ArgumentParser
 from texttable import Texttable
 from py.io import TerminalWriter
 from logbook import FileHandler, INFO, DEBUG, ERROR
-from progressbar import ProgressBar
 
 from swsg import __version__
 from swsg.loggers import swsg_logger as logger
@@ -150,16 +149,11 @@ def change_config(args):
 
 
 def render(args):
-    pbar = ProgressBar()
-    pbar.start()
     # the project's directory is the current working directory
     project = get_project_by_path(getcwd())
-    for i, (output_path, output) in enumerate(project.render()):
+    for output_path, output in project.render():
         with codecs.open(output_path, 'w', 'utf-8') as fp:
             fp.write(output)
-        pbar.update(i + 1)
-    pbar.finish()
-    print()
 
 
 def parse_args(argv=sys.argv[1:]):

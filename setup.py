@@ -31,12 +31,11 @@ In order to be able to install swsg, you need `Python`_ (version 2.7 or
 following Python packages:
 
 - texttable_
-- `py`_
-- `progressbar`_
+- py_
 - Logbook_
 - at least one of the following markup languages: ReST_, markdown_,
   creole_, textile_
-- optional: one or more of the following template engines: `jinja2`_, `mako`_, `genshi`_
+- optional: one or more of the following template engines: jinja2_, mako_, genshi_
 
 .. _ReST: http://docutils.sourceforge.net/rst.html
 .. _SR: http://bitbucket.org/tiax/sr/overview
@@ -51,7 +50,6 @@ following Python packages:
 .. _argparse: http://code.google.com/p/argparse/
 .. _texttable: http://pypi.python.org/pypi/texttable
 .. _py: http://pypi.python.org/pypi/py
-.. _progressbar: http://code.google.com/p/python-progressbar/
 .. _Python: http://python.org
 .. _Logbook: http://packages.python.org/Logbook
 '''
