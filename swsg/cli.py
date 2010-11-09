@@ -17,7 +17,7 @@ from swsg import __version__
 from swsg.loggers import swsg_logger as logger
 from swsg.file_paths import LOGFILE as DEFAULT_LOGFILE
 from swsg.projects import (DEFAULT_SETTINGS, NonexistingProject, Project,
-    list_project_instances, remove_project)
+    list_project_instances, get_project_by_path, remove_project)
 from swsg.sources import SUPPORTED_MARKUP_LANGUAGES
 from swsg.templates import SUPPORTED_TEMPLATE_ENGINES
 from swsg.utils import is_none

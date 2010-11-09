@@ -7,7 +7,7 @@ from ConfigParser import RawConfigParser
 
 from swsg.loggers import swsg_logger as logger
 from swsg.file_paths import DEFAULT_PROJECTS_FILE_NAME, GLOBAL_CONFIGFILE
-from swsg.templates import (DEFAULT_TEMPLATE, GenshiTemplate,
+from swsg.templates import (DEFAULT_TEMPLATE, GenshiTemplate, Jinja2Template,
     get_template_class_by_template_language)
 from swsg.sources import get_source_class_by_markup
 
