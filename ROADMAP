@@ -18,7 +18,7 @@
     projects, except when using the "quickstart" subcommand
 
 0.3
-[ ] cache the following information to save re-rendering when the output won't
+[X] cache the following information to save re-rendering when the output won't
     change:
     1. source files which have not been rendered yet
     2. source files which have been rendered once, but have been changed
