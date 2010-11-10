@@ -18,7 +18,8 @@
     projects, except when using the "quickstart" subcommand
 
 0.3
-[ ] add the argument "status" which shows ...
+[ ] cache the following information to save re-rendering when the output won't
+    change:
     1. source files which have not been rendered yet
     2. source files which have been rendered once, but have been changed
     3. template files which have been changed
