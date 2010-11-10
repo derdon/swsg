@@ -77,13 +77,13 @@ class BaseSource(object):
         self.text = '\n'.join(temp_first_lines + [rest])
 
     def __eq__(self, other):
-        return type(self) == type(other) and self.text == other.text
+        return type(self) == type(other) and self.full_text == other.full_text
 
     def __ne__(self, other):
         return not (self == other)
 
     def __hash__(self):
-        return hash(self.text)
+        return hash(self.full_text)
 
     def get_namespace(self):
         rendered_source = self.render_templateless()
