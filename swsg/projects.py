@@ -1,6 +1,7 @@
 import os
 import shutil
 import shelve
+import hashlib
 import contextlib
 from datetime import datetime
 from ConfigParser import RawConfigParser
@@ -10,6 +11,7 @@ from swsg.file_paths import DEFAULT_PROJECTS_FILE_NAME, GLOBAL_CONFIGFILE
 from swsg.templates import (DEFAULT_TEMPLATE, GenshiTemplate, Jinja2Template,
     get_template_class_by_template_language)
 from swsg.sources import get_source_class_by_markup
+from swsg.utils import hash_file
 
 DEFAULT_SETTINGS = {
     'general':
@@ -72,6 +74,12 @@ class Project(object):
 
         # True after the projects file was updated
         self.updated_projects_file = False
+
+        # key is the path to the file, value is its md5 hash
+        self.rendered_sources = {}
+        self.rendered_templates = {}
+
+        self.config_hash = ''
 
     def __repr__(self):
         return '{0} "{1}"'.format(self.__class__.__name__, self.name)
@@ -176,6 +184,7 @@ class Project(object):
                 self.config.set(section, option, value)
         with open(self.config_filename, 'w') as fp:
             self.config.write(fp)
+        self.update_projects_file()
 
     def update_config(self, section, config_items):
         '''Change the given values of ``config_items`` (a list of tuples) in
@@ -200,6 +209,33 @@ class Project(object):
         TemplateClass = get_template_class_by_template_language(
             template_language)
         for source_name, source in self.sources:
+            sha256_source = hashlib.sha256(source.full_text).hexdigest()
+            template_path = os.path.join(self.template_dir, source.template)
+            sha256_template = hash_file(template_path)
+            head, tail = os.path.split(source_name)
+            filename = os.path.splitext(tail)[0]
+            output_path = os.path.join(self.output_dir, filename) + '.html'
+            if source_name in self.rendered_sources:
+                # source ehas already been rendered once -> this is a necessary
+                # but not sufficient requirement to skip rendering for
+                # this source
+                if self.rendered_sources.get(output_path) == sha256_source:
+                    # source file has not chnaged -> may require rendering if
+                    # the configuration file or the source's template has been
+                    # changed
+                    # compare the new calculated template's hash with the old
+                    # one, if it exists. otherwise, rendering will be
+                    # necessary
+                    source_hash = self.rendered_templates.get(template_path)
+                    if source_hash == sha256_template:
+                        # check if the config file has been changed since the
+                        # last rendering
+                        config_hash = hash_file(self.config_filename)
+                        if config_hash == self.config_hash:
+                            # skip the rendering process, because neither the
+                            # source nor its template file nor the config file
+                            # have been changed
+                            continue
             # pass the config settings of the template language being used
             # if there are settings for it in the config file
             if TemplateClass == GenshiTemplate:
@@ -209,12 +245,11 @@ class Project(object):
             else:
                 options = {}
             output = source.render(TemplateClass, **options)
-            head, tail = os.path.split(source_name)
-            filename = os.path.splitext(tail)[0]
-            output_path = os.path.join(
-                self.output_dir, filename) + '.html'
             logger.info('{0} + {1} -> {2}'.format(
                 source_name, source.template_path, output_path))
+            self.rendered_sources[output_path] = sha256_source
+            self.rendered_templates[template_path] = sha256_template
+            self.config_hash = hash_file(self.config_filename)
             yield output_path, output
         logger.notice('finishing the rendering process')
 
