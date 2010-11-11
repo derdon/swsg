@@ -89,7 +89,7 @@ def perform_quickstart(args):
             # is None and the user hit enter anyway
             if answer is None:
                 print('Error: the {0} is required'.format(prompt))
-                answer = raw_input(prompt)
+                answer = raw_input(full_prompt)
                 if not answer:
                     raise EOFError
             answers.append(answer)
