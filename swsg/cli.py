@@ -110,7 +110,7 @@ def perform_quickstart(args):
     config_items = izip(template_specific_prompts, template_specific_answers)
     defaultless_config_items = map(itemgetter(0), config_items)
     project.update_config(
-        'general', [('template_language', template_language)])
+        'general', [('template language', template_language)])
     project.update_config(template_language, defaultless_config_items)
 
 
