@@ -8,7 +8,9 @@ from ConfigParser import RawConfigParser
 
 from swsg.loggers import swsg_logger as logger
 from swsg.file_paths import DEFAULT_PROJECTS_FILE_NAME, GLOBAL_CONFIGFILE
-from swsg.templates import (DEFAULT_TEMPLATE, GenshiTemplate, Jinja2Template,
+from swsg.templates import (SUPPORTED_TEMPLATE_ENGINES,
+    DEFAULT_SIMPLE_TEMPLATE, DEFAULT_MAKO_TEMPLATE, DEFAULT_GENSHI_TEMPLATE,
+    DEFAULT_JINJA_TEMPLATE, GenshiTemplate, Jinja2Template,
     get_template_class_by_template_language)
 from swsg.sources import get_source_class_by_markup
 from swsg.utils import hash_file
@@ -36,6 +38,10 @@ DEFAULT_SETTINGS = {
             ('comment_start_string', '{#'),
             ('comment_end_string', '#}'),
             ('trim_blocks', 'false')]}
+
+
+class InvalidConfigOption(Exception):
+    pass
 
 
 class NonexistingProject(Exception):
@@ -102,9 +108,23 @@ class Project(object):
             os.makedirs(path_name)
 
     def create_default_template(self):
+        self.read_config()
+        template_language = self.config.get('general', 'template language')
+        default_templates = {
+            'simple': DEFAULT_SIMPLE_TEMPLATE,
+            'mako': DEFAULT_MAKO_TEMPLATE,
+            'genshi': DEFAULT_GENSHI_TEMPLATE,
+            'jinja': DEFAULT_JINJA_TEMPLATE
+        }
+        try:
+            default_template = default_templates[template_language]
+        except KeyError:
+            raise InvalidConfigOption(
+                'the option "template language" has to be one of the '
+                'following values: ' + ', '.join(SUPPORTED_TEMPLATE_ENGINES))
         default_template_path = os.path.join(self.template_dir, 'default.html')
         with open(default_template_path, 'w') as fp:
-            fp.write(DEFAULT_TEMPLATE)
+            fp.write(default_template)
 
     @property
     def exists(self):

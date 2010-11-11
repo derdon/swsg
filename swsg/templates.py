@@ -2,14 +2,38 @@ import string
 
 SUPPORTED_TEMPLATE_ENGINES = frozenset(['simple', 'mako', 'jinja2', 'genshi'])
 
-DEFAULT_TEMPLATE = '''<!DOCTYPE HTML>
+DEFAULT_SIMPLE_TEMPLATE = '''<!DOCTYPE HTML>
 <html>
   <head>
     <meta charset="utf-8">
-    <title>$title</title>
+    <title>${title}</title>
   </head>
   <body>
-    $content
+    ${content}
+  </body>
+</html>'''
+
+DEFAULT_MAKO_TEMPLATE = DEFAULT_SIMPLE_TEMPLATE
+
+DEFAULT_GENSHI_TEMPLATE = '''<!DOCTYPE HTML>
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <title>${title}</title>
+  </head>
+  <body>
+    ${Markup(content)}
+  </body>
+</html>'''
+
+DEFAULT_JINJA_TEMPLATE = '''<!DOCTYPE HTML>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title>{{ title }}</title>
+  </head>
+  <body>
+    {{ content }}
   </body>
 </html>'''
 
