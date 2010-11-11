@@ -210,7 +210,8 @@ class Project(object):
             template_language)
         for source_name, source in self.sources:
             sha256_source = hashlib.sha256(source.full_text).hexdigest()
-            template_path = os.path.join(self.template_dir, source.template)
+            template_path = os.path.join(
+                self.template_dir, source.template_path)
             sha256_template = hash_file(template_path)
             head, tail = os.path.split(source_name)
             filename = os.path.splitext(tail)[0]
