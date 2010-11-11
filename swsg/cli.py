@@ -100,7 +100,7 @@ def perform_quickstart(args):
     template_specific_answers = []
     for option, default_value in template_specific_prompts:
         try:
-            answer = raw_input(option) or default_value
+            answer = raw_input('{0}: '.format(option)) or default_value
             template_specific_answers.append(answer)
         except EOFError:
             sys.exit('interrupted')
