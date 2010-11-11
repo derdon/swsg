@@ -112,6 +112,7 @@ def perform_quickstart(args):
     project.update_config(
         'general', [('template language', template_language)])
     project.update_config(template_language, defaultless_config_items)
+    project.create_default_template()
 
 
 def init_project(args):
