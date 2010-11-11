@@ -240,9 +240,9 @@ class Project(object):
             # pass the config settings of the template language being used
             # if there are settings for it in the config file
             if TemplateClass == GenshiTemplate:
-                options = self.config.items('genshi')
+                options = dict(self.config.items('genshi'))
             elif TemplateClass == Jinja2Template:
-                options = self.config.items('jinja')
+                options = dict(self.config.items('jinja'))
             else:
                 options = {}
             output = source.render(TemplateClass, **options)
