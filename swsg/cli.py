@@ -80,7 +80,7 @@ def perform_quickstart(args):
     for prompt, default_value in prompts:
         try:
             if default_value is None:
-                full_prompt = '{0} (required!)'.format(prompt)
+                full_prompt = '{0} (required!): '.format(prompt)
             else:
                 full_prompt = '{0} [{1}]: '.format(prompt, default_value)
             answer = raw_input(full_prompt) or default_value
