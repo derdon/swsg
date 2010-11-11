@@ -6,6 +6,7 @@ import sys
 import codecs
 from os import makedirs, path, getcwd, name as operating_system
 from itertools import imap, izip
+from operator import itemgetter
 
 from argparse import ArgumentParser
 from texttable import Texttable
@@ -106,9 +107,11 @@ def perform_quickstart(args):
         except EOFError:
             sys.exit('interrupted')
     project.init()
+    config_items = izip(template_specific_prompts, template_specific_answers)
+    defaultless_config_items = map(itemgetter(0), config_items)
     project.update_config(
-        template_language,
-        izip(template_specific_prompts, template_specific_answers))
+        'general', [('template_language', template_language)])
+    project.update_config(template_language, defaultless_config_items)
 
 
 def init_project(args):
