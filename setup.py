@@ -15,7 +15,7 @@ Features
   simple template language for those who do not need control structures like
   loops or if-conditions
 - supports clevercss_ beside the usual CSS as a markup language for the
-  stylesheets -> not yet!
+  stylesheets
 - provides multiple interfaces: until now, only a CLI is implemented, but
   others are planned:
 
@@ -33,6 +33,7 @@ following Python packages:
 - texttable_
 - py_
 - Logbook_
+- CleverCSS_
 - at least one of the following markup languages: ReST_, markdown_,
   creole_, textile_
 - optional: one or more of the following template engines: jinja2_, mako_, genshi_
@@ -70,7 +71,8 @@ from swsg import __version__
 short_description = (
     'SWSG (Static Web Site Generator) is a tool to generate static web pages.')
 
-requirements = ['docutils', 'py', 'texttable', 'progressbar', 'logbook']
+requirements = [
+    'docutils', 'py', 'texttable', 'progressbar', 'logbook', 'clevercss']
 try:
     imp.find_module('argparse')
 except ImportError:

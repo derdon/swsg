@@ -12,7 +12,7 @@ Features
   template language for those who do not need control structures like loops or
   if-conditions
 - supports clevercss and sass beside the usual CSS as a markup language for the
-  stylesheets -> not yet!
+  stylesheets
 - provides multiple interfaces: until now, only a CLI is implemented, but others
   are planned:
     - PIDA-Plugin (PIDA: http://pida.co.uk/)
