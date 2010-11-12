@@ -20,6 +20,7 @@ except ImportError:
     pass
 
 from swsg import NoninstalledPackage
+from swsg.template_functions import clevercss
 
 SUPPORTED_MARKUP_LANGUAGES = frozenset(
     ['rest', 'creole', 'textile', 'markdown'])
@@ -89,7 +90,8 @@ class BaseSource(object):
         rendered_source = self.render_templateless()
         return {
             'title': self.title,
-            'content': rendered_source
+            'content': rendered_source,
+            'clevercss': clevercss
         }
 
     def render_templateless(self):
