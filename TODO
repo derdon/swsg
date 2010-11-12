@@ -10,11 +10,6 @@
   - function ``sitemap`` gets the parameters depth, exclude
   - function ``breadcrumbs``
 
-- CSS (Design / Style):
-  - support the following css constructors (and of course, CSS itself...):
-    - clevercss, nss (nested style sheets)
-    - provide a function for the templates to convert these files to CSS files
-
 - sources:
   - virtual folders (directories), implemented as a datastructure (JSON):
     - example content::
