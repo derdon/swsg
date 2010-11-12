@@ -9,6 +9,7 @@
 - Templates:
   - function ``sitemap`` gets the parameters depth, exclude
   - function ``breadcrumbs``
+  - add a possibility for the user to add / register custom template functions!
 
 - sources:
   - virtual folders (directories), implemented as a datastructure (JSON):
