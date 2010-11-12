@@ -57,6 +57,5 @@
            - delete an already deleted object
            - undelete an existing object
   - man page for the CLI of swsg; is the -h --help option not enough?!
-  - add Windows support (logging)
   - i18n support
   - support a HAML-like template language beside usual HTML for the templates
