@@ -59,5 +59,4 @@
   - man page for the CLI of swsg; is the -h --help option not enough?!
   - add Windows support (logging)
   - i18n support
-  - store and reload a backup
-  - support HAML beside usual HTML for the templates
+  - support a HAML-like template language beside usual HTML for the templates
