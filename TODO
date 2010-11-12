@@ -7,7 +7,7 @@
       -> use the configuration value if set to False
 
 - Templates:
-  - functions ``sitemap`` gets the parameters depth, exclude
+  - function ``sitemap`` gets the parameters depth, exclude
   - function ``breadcrumbs``
 
 - CSS (Design / Style):
