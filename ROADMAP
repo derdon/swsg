@@ -30,3 +30,7 @@
 [X] support clevercss in all template languages
 [ ] suppress the output of the timestamp when printing logging messages to STDERR
 [ ] support logging on Windows machines
+
+0.4
+[ ] add the template function "sitemap"
+[ ] add the template function "breadcrumbs"
