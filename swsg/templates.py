@@ -27,7 +27,7 @@ DEFAULT_GENSHI_TEMPLATE = BASE_DEFAULT_TEMPLATE.format(
 
 DEFAULT_JINJA_TEMPLATE = BASE_DEFAULT_TEMPLATE.format(
     title='{{ title }}',
-    head='<meta charset="utf-8">'
+    head='<meta charset="utf-8">',
     content='{{ content }}')
 
 
