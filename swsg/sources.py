@@ -78,9 +78,13 @@ class BaseSource(object):
         self.full_text = text
         self.text = '\n'.join(temp_first_lines + [rest])
 
+        try:
+            rendered_source = self.render_templateless()
+        except NotImplementedError:
+            rendered_source = ''
         self.namespace = {
             'title': self.title,
-            'get_content': self.render_templateless,
+            'content': rendered_source,
             'clevercss': clevercss}
 
     def __eq__(self, other):
