@@ -40,7 +40,7 @@ class UnsupportedMarkup(Exception):
 
 class BaseSource(object):
     def __init__(self, template_dir, default_template, text):
-        splitted_text = text.split('\n', 2)
+        splitted_text = text.split(u'\n', 2)
         try:
             first_line, second_line, rest = splitted_text
             first_lines = [first_line, second_line]
@@ -54,21 +54,21 @@ class BaseSource(object):
                 # variable assignments
                 first_lines = []
                 rest = text
-        title = ''
-        template = ''
+        title = u''
+        template = u''
         temp_first_lines = first_lines[:]
         for line in first_lines:
             # remove the line from the list of the first two lines where a
             # variable assignment can be found
-            if line.startswith('title:'):
-                title = line.lstrip('title:').strip()
+            if line.startswith(u'title:'):
+                title = line.lstrip(u'title:').strip()
                 temp_first_lines.remove(line)
-            elif line.startswith('template:'):
-                template = line.lstrip('template:').strip()
+            elif line.startswith(u'template:'):
+                template = line.lstrip(u'template:').strip()
                 temp_first_lines.remove(line)
         # if the title is not set, "unknown" will be used. That means that
         # setting the title is highly recommended!
-        self.title = title or 'unknown'
+        self.title = title or u'unknown'
         # the directive "template" is optional. If it is set, its assigned
         # value is used as the template for this source. Otherwise, the default
         # template will be used
@@ -81,7 +81,7 @@ class BaseSource(object):
         try:
             rendered_source = self.render_templateless()
         except NotImplementedError:
-            rendered_source = ''
+            rendered_source = u''
         self.namespace = {
             'title': self.title,
             'content': rendered_source,
