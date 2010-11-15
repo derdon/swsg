@@ -78,7 +78,7 @@ class BaseSource(object):
         self.full_text = text
         self.text = '\n'.join(temp_first_lines + [rest])
 
-        namespace = {
+        self.namespace = {
             'title': self.title,
             'get_content': self.render_templateless,
             'clevercss': clevercss}
@@ -100,7 +100,7 @@ class BaseSource(object):
         with open(self.template_path) as fp:
             text = fp.read().decode('utf-8')
         template = TemplateClass(text)
-        return template.render(self.get_namespace(), **template_options)
+        return template.render(self.namespace, **template_options)
 
 
 class ReSTSource(BaseSource):
