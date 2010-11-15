@@ -1,4 +1,5 @@
 from os import path
+from functools import partial
 
 from docutils.core import publish_parts as rest
 installed_markups = set(['rest'])
@@ -77,6 +78,11 @@ class BaseSource(object):
         self.full_text = text
         self.text = '\n'.join(temp_first_lines + [rest])
 
+        namespace = {
+            'title': self.title,
+            'get_content': self.render_templateless,
+            'clevercss': clevercss}
+
     def __eq__(self, other):
         return type(self) == type(other) and self.full_text == other.full_text
 
@@ -85,14 +91,6 @@ class BaseSource(object):
 
     def __hash__(self):
         return hash(self.full_text)
-
-    def get_namespace(self):
-        rendered_source = self.render_templateless()
-        return {
-            'title': self.title,
-            'content': rendered_source,
-            'clevercss': clevercss
-        }
 
     def render_templateless(self):
         raise NotImplementedError
