@@ -76,7 +76,7 @@ class BaseSource(object):
             template_dir,
             template or default_template)
         self.full_text = text
-        self.text = '\n'.join(temp_first_lines + [rest])
+        self.text = u'\n'.join(temp_first_lines + [rest])
 
         try:
             rendered_source = self.render_templateless()

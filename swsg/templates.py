@@ -106,6 +106,8 @@ class GenshiTemplate(BaseTemplate):
         from genshi.template.markup import MarkupTemplate
         template = MarkupTemplate(self.text)
         stream = template.generate(**namespace)
+        # enforce conversion to unicode
+        options['encoding'] = None
         rendered_template = stream.render(**options)
         return rendered_template
 
