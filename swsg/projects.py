@@ -273,6 +273,7 @@ class Project(object):
             self.config_hash = hash_file(self.config_filename)
             yield output_path, output
         logger.notice('finishing the rendering process')
+        self.update_projects_file()
 
     def save_source(self, source, name):
         logger.notice('saving the source {0} in the directory {1}'.format(
