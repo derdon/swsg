@@ -3,3 +3,7 @@
 - add a new version number tag to the git repository
 - update CHANGELOG
 - update the PyPi site
+  - call ``python setup.py sdist --formats=gztar,zip``
+  - call ``python setup.py bdist_egg``
+  - upload the generated files (*.tar.gz, *.zip, *.egg)
+  - update the PKG-INFO
