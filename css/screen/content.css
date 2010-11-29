@@ -15,6 +15,8 @@
  * @appdef yaml
  */
 
+@import url(fonts.css);
+
 @media all
 {
  /**
@@ -55,7 +57,7 @@
   /* Headings */
   h1,h2,h3,h4,h5,h6 {
     /*font-family:"Times New Roman", Times, serif;*/
-    font-family: "Gentium Italic", Georgia, serif;
+    font-family: Gentium;
     font-weight:normal;
     color:#222;
     margin:0 0 0.25em 0;
