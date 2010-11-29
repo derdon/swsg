@@ -1,3 +1,20 @@
+0.3
+- use the variable "content" instead of "get_content" for accessing rendered
+  sources within templates 
+- added CleverCSS support
+- fixed some bugs in the command "quickstart" and improved the prompts
+- implemented a caching algorithm to save unnecessary rendering processes
+- do not only pay attention to the Genshi settings, but also to the Jinja
+  settings for the rendering process
+- removed the progressbar which used to appear during the rendering process
+  -> removed the dependeny "progressbar"
+- assign one template to each source file instead of assigning a list of
+  source files to each templaze
+  - use a default template, whose file name is given in the config file, if no
+    template is assigned in a source file
+    - the content of this template depends on the value of "template language"
+    in the config file
+
 0.2.5
 - use more verbose logging messages
 - fix removing projects
