@@ -1,0 +1,77 @@
+<!DOCTYPE HTML>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title>SWSG &mdash; Static WebSite Generator</title>
+    <link rel="stylesheet" type="text/css" href="docs/themes/bottlepost/static/css/1col_layout.css">
+  </head>
+  <body>
+    <ul id="skiplinks">
+      <li>
+        <a class="skip" href="#nav">Skip to navigation (Press Enter).</a>
+      </li>
+      <li>
+        <a class="skip" href="#main">Skip to main content (Press Enter).</a>
+      </li>
+    </ul>
+    <div class="page_margins">
+      <div class="page">
+        <header role="banner">
+          <h1>SWSG &mdash; Static WebSite Generator</h1>
+          <nav role="navigation">
+            <ul>
+              <li class="active"><a href="index.html">About</a></li>
+              <li><a href="download.html">Get it!</a></li>
+              <li><a href="docs/build/html/index.html">Documentation</a></li>
+              <li><a href="support.html">Support & Contact</a></li>
+            </ul>
+          </nav>
+        </header>
+        <div id="main">
+          <h2>About</h2>
+          <p>
+            SWSG is a tool to create static websites using (X)HTML templates and
+            human-readable markup languages for the content. It was
+            highly-inspired by <a href="http://bitbucket.org/tiax/sr/overview">
+            SR</a>. The advantage of SWSG against directly coding (X)HTML files
+            is that you have one (or more) templates and do not have to rewrite
+            your main layout on every single site. You can concentrate on the
+            main content: the text. The content is seperated from the templates.
+            <p><abbr>todo</abbr>: mention the license!</p>
+          </p>
+          <h2>Features</h2>
+            <ul>
+              <li>
+                supports the following markup languages:
+                <a href="http://pypi.python.org/pypi/Markdown">Markdown</a>,
+                <a href="http://pypi.python.org/pypi/creole">Creole</a>,
+                <a href="http://pypi.python.org/pypi/textile">Textile</a>,
+                <a href="http://pypi.python.org/pypi/docutils">ReST</a>
+              </li>
+              <li>
+                supports the template engines
+                <a href="http://pypi.python.org/pypi/Jinja2/">Jinja2</a>,
+                <a href="http://pypi.python.org/pypi/Mako">Mako</a>,
+                <a href="http://pypi.python.org/pypi/Genshi">Genshi</a>
+                and also a very simple template language for those users who do
+                not need control structures like loops or if-conditions
+              </li>
+              <li>
+                supports <a href="http://sandbox.pocoo.org/clevercss/">clevercss
+                </a> beside the usual CSS as a markup language for the
+                stylesheets
+              </li>
+            </ul>
+
+          </p>
+        </div>
+        <footer role="contentinfo">
+          Layout based on <a href="http://www.yaml.de/">YAML</a>
+        </footer>
+      </div>
+    </div>
+    <!-- full skiplink functionality in webkit browsers -->
+    <script type="text/javascript" src="./yaml/core/js/webkit-focusfix.js">
+    </script>
+  </body>
+</html>

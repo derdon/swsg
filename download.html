@@ -1,0 +1,108 @@
+<!DOCTYPE HTML>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title>SWSG &mdash; Static WebSite Generator &dash; Download</title>
+    <link rel="stylesheet" type="text/css" href="docs/themes/bottlepost/static/css/1col_layout.css">
+  </head>
+  <body>
+    <ul id="skiplinks">
+      <li>
+        <a class="skip" href="#nav">Skip to navigation (Press Enter).</a>
+      </li>
+      <li>
+        <a class="skip" href="#main">Skip to main content (Press Enter).</a>
+      </li>
+    </ul>
+    <div class="page_margins">
+      <div class="page">
+        <header role="banner">
+          <h1>SWSG &mdash; Static WebSite Generator</h1>
+          <nav role="navigation">
+            <ul>
+              <li><a href="index.html">About</a></li>
+              <li class="active"><a href="download.html">Get it!</a></li>
+              <li><a href="docs/build/html/index.html">Documentation</a></li>
+              <li><a href="support.html">Support & Contact</a></li>
+            </ul>
+          </nav>
+        </header>
+        <div id="main">
+          <h2>Download</h2>
+          <h3>For Linux users only</h3>
+          <dl>
+          <dt>DEB package</dt>
+          <dd><a href="">swsg-0.2.5.deb</a></dd>
+          <dt>RPM package</dt>
+          <dd><a href="">swsg-0.2.5.rpm</a></dd>
+          </dl>
+          <h3>Getting the source code</h3>
+          <dl>
+            <dt>compressed tarball</dt>
+            <dd><a href="">swsg-0.2.5.tar.gz</a></dd>
+            <dt>zip file</dt>
+            <dd><a href="">swsg-0.2.5.zip</a></dd>
+          </dl>
+          <h3>Taking the latest version</h3>
+          <p>
+            To use the latest version from the git repository, you have to enter
+            the following command:
+            <pre>git clone git://github.com/derdon/swsg.git</pre>
+          </p>
+          
+          <h2>Requirements</h2>
+          <p>
+            In order to be able to install SWSG, you need
+            <a href="http://python.org">Python</a> (version 2.7 or 2.6 with the
+            Python package <a href="http://code.google.com/p/argparse/">argparse
+            </a> installed) and the following Python packages:
+          </p>
+          <ul>
+            <li>
+              <a href="http://pypi.python.org/pypi/texttable">texttable</a>
+            </li>
+            <li><a href="http://pypi.python.org/pypi/py">py</a></li>
+            <li>
+              <a href="http://code.google.com/p/python-progressbar/">
+                progressbar
+              </a>
+            </li>
+            <li>at least one of the following markup languages:
+              <a href="http://docutils.sourceforge.net/rst.html">ReST</a>,
+              <a href="http://daringfireball.net/projects/markdown/">
+                markdown
+              </a>,
+              <a href="http://www.wikicreole.org/">creole</a>,
+              <a href="http://textile.thresholdstate.com/">textile</a>
+            </li>
+            <li>(optional) one or more of the following template engines:
+              <a href="http://jinja.pocoo.org/2/">jinja2</a>,
+              <a href="http://www.makotemplates.org/">mako</a>,
+              <a href="http://genshi.edgewall.org/">genshi</a>
+            </li>
+          </ul>
+          <h2>Installation</h2>
+          <h3>Using pip / easy_install</h3>
+          <p>If you are using <a href="http://pip.openplans.org/">pip</a> or
+          <a href="http://packages.python.org/distribute/easy_install.html">
+          easy_install</a>, you may use one of the following commands to
+          download and install SWSG:</p>
+          <pre>pip install swsg</pre>
+          <pre>easy_install swsg</pre>
+          <h3>Calling setup.py</h3>
+          <p>After having downloaded the source (either an archive or a cloned
+          repository), you have to enter the following command to install SWSG
+          (may require root privileges):
+          </p>
+          <pre>python setup.py install</pre>
+        </div>
+        <footer role="contentinfo">
+          Layout based on <a href="http://www.yaml.de/">YAML</a>
+        </footer>
+      </div>
+    </div>
+    <!-- full skiplink functionality in webkit browsers -->
+    <script type="text/javascript" src="./yaml/core/js/webkit-focusfix.js">
+    </script>
+  </body>
+</html>
