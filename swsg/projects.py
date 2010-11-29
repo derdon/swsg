@@ -268,6 +268,7 @@ class Project(object):
             output = source.render(TemplateClass, **options)
             logger.info('{0} + {1} -> {2}'.format(
                 source_name, source.template_path, output_path))
+            # update the hashes after having rendered the sources
             self.rendered_sources[output_path] = sha256_source
             self.rendered_templates[template_path] = sha256_template
             self.config_hash = hash_file(self.config_filename)
