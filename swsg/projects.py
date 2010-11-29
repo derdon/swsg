@@ -160,7 +160,7 @@ class Project(object):
 
     def update_projects_file(self, new_created=False):
         # create the directories where the projects file will be saved if they
-        # does not exist yet
+        # do not exist yet
         path, file = os.path.split(self.projects_file_name)
         if not os.path.exists(path):
             logger.notice('creating the directory {0}'.format(path))
