@@ -1,0 +1,277 @@
+
+<!DOCTYPE HTML>
+
+  
+<html>
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <meta charset="utf-8">    
+    
+    <title>Changelog &mdash; SWSG &mdash; Static WebSite Generator</title>
+    
+    <link rel="stylesheet" href="_static/css/2col_layout.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '',
+        VERSION:     '0.3',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <link rel="top" title="SWSG &amp;mdash; Static WebSite Generator" href="index.html" />
+    <link rel="prev" title="Information for developers" href="fordevs.html" /> 
+  </head>
+  <body>
+        <ul id="skiplinks">
+          <li>
+            <a class="skip" href="#nav">Skip to navigation (Press Enter).</a>
+          </li>
+          <li>
+            <a class="skip" href="#col3">Skip to main content (Press Enter).</a>
+          </li>
+        </ul>
+
+    <div class="page_margins">
+      <div class="page">
+        <header role="banner">
+          <h1>SWSG &mdash; Static WebSite Generator</h1>
+          <nav role="navigation">
+            <ul>
+              <li><a href="/">About</a></li>
+              <li><a href="../../download.html">Get it!</a></li>
+              <li class="active"><a href="index.html">Documentation</a></li>
+              <li><a href="../../support.html">Support & Contact</a></li>
+            </ul>
+          </nav>
+        </header>
+
+        <!-- start of #main -->
+        <div id="main">
+      
+      <!-- <div class="sphinxsidebar"> -->
+      <!-- start: #col1 -->
+      <div id="col1" role="complementary">
+        <!-- start: #col1_content -->
+        <div id="col1_content" class="clearfix">
+        <!-- <div class="sphinxsidebarwrapper"> -->
+  <h3><a href="index.html">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">Changelog</a><ul>
+<li><a class="reference internal" href="#id1">0.3</a></li>
+<li><a class="reference internal" href="#id2">0.2.5</a></li>
+<li><a class="reference internal" href="#id3">0.2.4</a></li>
+<li><a class="reference internal" href="#id4">0.2.3</a></li>
+<li><a class="reference internal" href="#id5">0.2.2</a></li>
+<li><a class="reference internal" href="#id6">0.2.1</a></li>
+<li><a class="reference internal" href="#id7">0.2</a></li>
+<li><a class="reference internal" href="#id8">0.1</a></li>
+<li><a class="reference internal" href="#a">0.1a</a></li>
+</ul>
+</li>
+</ul>
+
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="fordevs.html"
+                        title="previous chapter">Information for developers</a></p>
+  <h3>This Page</h3>
+  <ul class="this-page-menu">
+    <li><a href="_sources/changelog.txt"
+           rel="nofollow">Show Source</a></li>
+  </ul>
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" size="18" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        <!-- end: #col1_content -->
+        </div>
+      <!-- end: #col1 -->
+      </div>
+    
+        <!-- begin: #col3 -->
+        <div id="col3" role="main">
+          <!-- begin: #col3_content -->
+          <div id="col3_content" class="clearfix">
+            <div class="section" id="changelog">
+<h1>Changelog<a class="headerlink" href="#changelog" title="Permalink to this headline">#</a></h1>
+<div class="section" id="id1">
+<h2>0.3<a class="headerlink" href="#id1" title="Permalink to this headline">#</a></h2>
+<ul class="simple">
+<li>use the variable <tt class="docutils literal"><span class="pre">content</span></tt> instead of <tt class="docutils literal"><span class="pre">get_content</span></tt> for accessing rendered
+sources within templates</li>
+<li>added CleverCSS support</li>
+<li>fixed some bugs in the command <tt class="docutils literal"><span class="pre">quickstart</span></tt> and improved the prompts</li>
+<li>implemented a caching algorithm to save unnecessary rendering processes</li>
+<li>do not only pay attention to the Genshi settings, but also to the Jinja
+settings for the rendering process</li>
+<li>removed the progressbar which used to appear during the rendering process
+&amp;rarr; removed the dependeny &#8220;progressbar&#8221;</li>
+<li>assign one template to each source file instead of assigning a list of
+source files to each templaze<ul>
+<li>use a default template, whose file name is given in the config file, if no
+template is assigned in a source file<ul>
+<li>the content of this template depends on the value of <tt class="docutils literal"><span class="pre">template</span> <span class="pre">language</span></tt>
+in the config file</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</div>
+<div class="section" id="id2">
+<h2>0.2.5<a class="headerlink" href="#id2" title="Permalink to this headline">#</a></h2>
+<ul class="simple">
+<li>use more verbose logging messages</li>
+<li>fix removing projects</li>
+</ul>
+</div>
+<div class="section" id="id3">
+<h2>0.2.4<a class="headerlink" href="#id3" title="Permalink to this headline">#</a></h2>
+<ul class="simple">
+<li>use an absolute path to create an empty logfile</li>
+<li>make installation possible, even if distribute / setuptools is not installed</li>
+</ul>
+</div>
+<div class="section" id="id4">
+<h2>0.2.3<a class="headerlink" href="#id4" title="Permalink to this headline">#</a></h2>
+<ul class="simple">
+<li>make sure that the directories exist where the logfile is located</li>
+</ul>
+</div>
+<div class="section" id="id5">
+<h2>0.2.2<a class="headerlink" href="#id5" title="Permalink to this headline">#</a></h2>
+<ul class="simple">
+<li>fix install for easy_install and pip users</li>
+</ul>
+</div>
+<div class="section" id="id6">
+<h2>0.2.1<a class="headerlink" href="#id6" title="Permalink to this headline">#</a></h2>
+<ul class="simple">
+<li>add the python package &#8220;argparse&#8221; to the list of requirements if it is not
+installed yet</li>
+</ul>
+</div>
+<div class="section" id="id7">
+<h2>0.2<a class="headerlink" href="#id7" title="Permalink to this headline">#</a></h2>
+<ul class="simple">
+<li>use a global configuration file if it can be found as the default
+configuration for new projects</li>
+<li>added the subcommand &#8220;quickstart&#8221;</li>
+<li>print more useful error messages, e.g. if a source file mentioned in a
+template cannot be found</li>
+<li>added support for the template engines Mako, Jinja2 and Genshi:<ul>
+<li>Genshi:<ul>
+<li>added the configuration options <tt class="docutils literal"><span class="pre">method</span></tt> (can be either &#8220;html&#8221; or
+&#8220;xhtml&#8221;) and <tt class="docutils literal"><span class="pre">doctype</span></tt> to specify the behaviour of rendering</li>
+</ul>
+</li>
+<li>Jinja2<ul>
+<li>added the following configuration options (see <a class="reference external" href="http://jinja.pocoo.org/api/#jinja2.Environment">the Jinja
+documentation about Jinja2.Environment</a> for their meanings and
+default values):<ul>
+<li>block_start_string</li>
+<li>block_end_string</li>
+<li>variable_start_string</li>
+<li>variable_end_string</li>
+<li>comment_start_string</li>
+<li>comment_end_string</li>
+<li>trim_blocks</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>renamed the section &#8220;local configuration&#8221; in the project-dependent
+config.ini to &#8220;general&#8221;</li>
+<li>interpret also short filename extensions of sources (new filename
+extensions: <tt class="docutils literal"><span class="pre">*.rst</span></tt> for ReST, <tt class="docutils literal"><span class="pre">*.md</span></tt> for Markdown, and <tt class="docutils literal"><span class="pre">*.tt</span></tt> for
+Textile)</li>
+</ul>
+</div>
+<div class="section" id="id8">
+<h2>0.1<a class="headerlink" href="#id8" title="Permalink to this headline">#</a></h2>
+<ul class="simple">
+<li>fixed many bugs</li>
+<li>added many tests and improved the existing ones</li>
+<li>source files can have titles now (it is highly recommended that you set a
+title for each source file; the fallback for titleless source files will
+generate a rather useless title (it simply takes the first five words of the
+source file&#8217;s first line))</li>
+<li>print a progressbar during the rednering process</li>
+<li>create required directories and an empty logfile directly after the
+installation process</li>
+<li>the encoding UTF-8 for reading template files and source files is used</li>
+<li>additional packages from PyPi are required: texttable, py and logbook</li>
+<li>added logging features:<ul>
+<li>new global CLI option <em class="xref std std-option">-l --logfile</em> determines the location of the
+logfile
+(default is $XDG_DATA_HOME/swsg/swsg.log if this environment variable is
+set; otherwise it is ~/.local/share/swsg/swsg.log</li>
+<li>new global CLI options <em class="xref std std-option">-v --verbose</em> and <em class="xref std std-option">-d --debug</em> set
+the logging levels where the debug option will overwrite the verbose option
+in the case where both are set</li>
+</ul>
+</li>
+<li>general changes to the command line interface (swsg-cli):<ul>
+<li>added many help messages to arguments and options</li>
+<li>new CLI argument &#8220;list-projects&#8221; lists all created projects in a pretty
+ASCII table</li>
+<li>added an argument for removing projects: remove-project path/to/the/project</li>
+<li>added a function to validate the use of the argument change-config: an error
+message is written to STDERR and the script will be quit if neither a markup
+language nor a template language was given</li>
+<li>restricted the set of possible values for the options
+<em class="xref std std-option">--markup-language</em>
+and <em class="xref std std-option">--template-language</em> for the argument <tt class="docutils literal"><span class="pre">change-config</span></tt></li>
+</ul>
+</li>
+</ul>
+</div>
+<div class="section" id="a">
+<h2>0.1a<a class="headerlink" href="#a" title="Permalink to this headline">#</a></h2>
+<ul class="simple">
+<li>initial release</li>
+</ul>
+</div>
+</div>
+
+          <!-- end: #col3_content -->
+          </div>
+          <!-- IE column clearing -->
+          <div id="ie_clearing">&nbsp;</div>
+        <!-- end: #col3 -->
+        </div>
+
+
+        <!-- end of #main -->
+        </div>
+        <footer>
+          &copy; Copyright 2010, Simon Liedtke.
+          Created using <a href="http://sphinx.pocoo.org/">Sphinx</a>
+          1.1pre.
+          | Layout based on <a href="http://www.yaml.de/">YAML</a>
+          <!-- full skiplink functionality in webkit browsers -->
+          <script type="text/javascript" src="./yaml/core/js/webkit-focusfix.js">
+          </script>
+        </footer>
+      <!-- end of .page -->
+      </div>
+    <!-- end of .page_margins -->
+    </div>
+  </body>
+</html>

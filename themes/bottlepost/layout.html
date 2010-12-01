@@ -1,0 +1,27 @@
+{% extends "base_layout.html" %}
+{% block skiplinks %}
+        <ul id="skiplinks">
+          <li>
+            <a class="skip" href="#nav">Skip to navigation (Press Enter).</a>
+          </li>
+          <li>
+            <a class="skip" href="#col3">Skip to main content (Press Enter).</a>
+          </li>
+        </ul>
+{% endblock %}
+{% block header %}
+        <header role="banner">
+          <h1>SWSG &mdash; Static WebSite Generator</h1>
+          <nav role="navigation">
+            <ul>
+              <li><a href="/">About</a></li>
+              <li><a href="../../download.html">Get it!</a></li>
+              <li class="active"><a href="index.html">Documentation</a></li>
+              <li><a href="../../support.html">Support & Contact</a></li>
+            </ul>
+          </nav>
+        </header>
+{% endblock %}
+{# swap the two side bars #}
+{% block sidebar1 %}{{ sidebar() }}{% endblock %}
+{% block sidebar2 %}{% endblock %}

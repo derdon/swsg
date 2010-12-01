@@ -1,0 +1,24 @@
+Structure:
+├── About (index.html)
+    ├── About
+    └── Features
+├── Get it! (download.html)
+    ├── Download (download.html)
+    │   ├── For Linux users (download/forlinux.html)
+    |   |   ├── DEB packages (download/forlinux.html)
+    |   |   └── RPM packages (download/forlinux.html)
+    │   └── Getting the source code (download/source.html)
+    |       ├── Compressed archives (*.tar.gz and *.zip) (download/source.html)
+    |       └── Take the latest version (download/source.html)
+    ├── Requirements (requirements.html)
+    └── Installation (installation.html)
+        ├── Using pip / easy_install (installation.html)
+        └── Calling setup.py (installation.html)
+├── Documentation (documentation.html)
+│   ├── ...
+│   └── ...
+└── Support & Contact (support.html)
+    ├── Bugtracker (support.html)
+    ├── IRC (support.html)
+    ├── Jabber (support.html)
+    └── E-Mail (support.html)
