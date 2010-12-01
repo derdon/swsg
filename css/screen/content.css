@@ -266,7 +266,7 @@
   a.headerlink {
     color: #ddd;
     visibility: hidden;
-    padding-right; 2em;
+    margin-left: 0.2em;
   }
 
   h1:hover > a.headerlink,
