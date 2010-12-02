@@ -31,3 +31,4 @@
 0.4
 [ ] add the template function "sitemap"
 [ ] add the template function "breadcrumbs"
+[ ] make the directories "sources", "templates" and "output" adjustable
