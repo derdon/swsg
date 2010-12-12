@@ -155,7 +155,7 @@ def change_config(args):
 
 def render(args):
     # the project's directory is the current working directory
-    project = get_project_by_path(getcwd())
+    project = get_project_by_path(getcwd(), look_at_parent_dir=True)
     for output_path, output in project.render():
         with codecs.open(output_path, 'w', 'utf-8') as fp:
             fp.write(output)

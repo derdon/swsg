@@ -300,9 +300,17 @@ def list_project_instances(projects_file_name=DEFAULT_PROJECTS_FILE_NAME):
 
 
 def get_project_by_path(project_dir,
-    projects_file_name=DEFAULT_PROJECTS_FILE_NAME):
+    projects_file_name=DEFAULT_PROJECTS_FILE_NAME,
+    look_at_parent_dir=False):
     full_project_path = os.path.abspath(project_dir)
     with contextlib.closing(shelve.open(projects_file_name)) as p:
+        if look_at_parent_dir:
+            # Look whether some parent directory is a project
+            key_func = lambda x: os.path.commonprefix([x, full_project_path])
+            possible_paths = sorted(p, key=key_func, reverse=True)
+            if (possible_paths and
+                os.path.dirname(full_project_path) == possible_paths[0]):
+                full_project_path = possible_paths[0]
         try:
             project = p[full_project_path]
         except KeyError:
